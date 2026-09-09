@@ -15,7 +15,6 @@ const links = document.getElementById('navLinks');
 ham.addEventListener('click', () => {
   ham.classList.toggle('open');
   links.classList.toggle('open');
-  // Toggle language selector open state for mobile
   const langSelector = document.querySelector('.language-selector');
   langSelector.classList.toggle('open');
 });
@@ -61,86 +60,7 @@ function createFloatingWords() {
 }
 createFloatingWords();
 
-// ── CARROSSEL DE AVALIAÇÕES ──
-const track = document.getElementById('carouselTrack');
-const prevBtn = document.getElementById('carouselPrev');
-const nextBtn = document.getElementById('carouselNext');
-const dotsContainer = document.getElementById('carouselDots');
-
-let currentSlide = 0;
-let totalSlides = document.querySelectorAll('.avaliacao-card').length;
-let autoSlideInterval;
-
-function updateCarousel() {
-  track.style.transform = `translateX(-${currentSlide * 100}%)`;
-  document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-    dot.classList.toggle('active', index === currentSlide);
-  });
-}
-
-function createDots() {
-  dotsContainer.innerHTML = '';
-  for (let i = 0; i < totalSlides; i++) {
-    const dot = document.createElement('button');
-    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    dot.addEventListener('click', () => {
-      currentSlide = i;
-      updateCarousel();
-      resetAutoSlide();
-    });
-    dotsContainer.appendChild(dot);
-  }
-}
-
-function nextSlide() {
-  currentSlide = (currentSlide + 1) % totalSlides;
-  updateCarousel();
-}
-
-function prevSlide() {
-  currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-  updateCarousel();
-}
-
-function resetAutoSlide() {
-  clearInterval(autoSlideInterval);
-  autoSlideInterval = setInterval(nextSlide, 5000);
-}
-
-prevBtn.addEventListener('click', () => {
-  prevSlide();
-  resetAutoSlide();
-});
-
-nextBtn.addEventListener('click', () => {
-  nextSlide();
-  resetAutoSlide();
-});
-
-let touchStartX = 0;
-let touchEndX = 0;
-
-track.addEventListener('touchstart', (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-});
-
-track.addEventListener('touchend', (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  const diff = touchStartX - touchEndX;
-  if (Math.abs(diff) > 50) {
-    if (diff > 0) {
-      nextSlide();
-    } else {
-      prevSlide();
-    }
-    resetAutoSlide();
-  }
-});
-
-createDots();
-autoSlideInterval = setInterval(nextSlide, 5000);
-
-// ── CARROSSEL DE MÓDULOS ──
+// ── CARROSSEL DE MÓDULOS (INFINITO) ──
 const modulosTrack = document.getElementById('modulosTrack');
 const modulosPrev = document.getElementById('modulosPrev');
 const modulosNext = document.getElementById('modulosNext');
@@ -150,6 +70,27 @@ let currentModulo = 0;
 let totalModulos = document.querySelectorAll('.modulo-card').length;
 let modulosPerView = 3;
 let autoModuloInterval;
+let isTransitioning = false;
+
+// Clonar cards para efeito infinito
+function setupInfiniteCarousel() {
+  const track = modulosTrack;
+  const cards = track.querySelectorAll('.modulo-card');
+  const totalCards = cards.length;
+  
+  // Clonar primeiro e último card
+  const firstClone = cards[0].cloneNode(true);
+  const lastClone = cards[totalCards - 1].cloneNode(true);
+  
+  track.appendChild(firstClone);
+  track.insertBefore(lastClone, cards[0]);
+  
+  // Ajustar posição inicial
+  const cardWidth = cards[0].offsetWidth + 20;
+  track.style.transform = `translateX(-${cardWidth}px)`;
+  
+  return totalCards;
+}
 
 function getModulosPerView() {
   if (window.innerWidth <= 600) return 1;
@@ -157,30 +98,47 @@ function getModulosPerView() {
   return 3;
 }
 
-function updateModulosCarousel() {
+function getCardWidth() {
+  const card = document.querySelector('.modulo-card');
+  return card ? card.offsetWidth + 20 : 320;
+}
+
+function updateModulosCarousel(animate = true) {
+  if (isTransitioning) return;
+  
   modulosPerView = getModulosPerView();
-  const total = Math.ceil(totalModulos / modulosPerView);
-  const maxSlide = Math.max(0, total - 1);
-  if (currentModulo > maxSlide) currentModulo = maxSlide;
+  const cardWidth = getCardWidth();
+  const totalSlides = totalModulos + 2; // +2 pelos clones
   
-  const cardWidth = document.querySelector('.modulo-card').offsetWidth + 20;
-  const offset = currentModulo * (cardWidth * modulosPerView);
-  modulosTrack.style.transform = `translateX(-${offset}px)`;
+  // Ajusta o índice para considerar os clones
+  let displayIndex = currentModulo + 1;
   
+  modulosTrack.style.transition = animate ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
+  modulosTrack.style.transform = `translateX(-${displayIndex * cardWidth}px)`;
+  
+  // Atualizar dots (ignorando os clones)
+  const dotCount = Math.ceil(totalModulos / modulosPerView);
   document.querySelectorAll('.modulos-carousel-dot').forEach((dot, index) => {
-    dot.classList.toggle('active', index === currentModulo);
+    dot.classList.toggle('active', index === currentModulo % dotCount);
   });
+}
+
+function goToSlide(index, animate = true) {
+  if (isTransitioning) return;
+  
+  const dotCount = Math.ceil(totalModulos / modulosPerView);
+  currentModulo = ((index % dotCount) + dotCount) % dotCount;
+  updateModulosCarousel(animate);
 }
 
 function createModulosDots() {
   modulosDots.innerHTML = '';
-  const total = Math.ceil(totalModulos / getModulosPerView());
-  for (let i = 0; i < total; i++) {
+  const dotCount = Math.ceil(totalModulos / getModulosPerView());
+  for (let i = 0; i < dotCount; i++) {
     const dot = document.createElement('button');
     dot.className = 'modulos-carousel-dot' + (i === 0 ? ' active' : '');
     dot.addEventListener('click', () => {
-      currentModulo = i;
-      updateModulosCarousel();
+      goToSlide(i);
       resetModulosAutoSlide();
     });
     modulosDots.appendChild(dot);
@@ -188,22 +146,71 @@ function createModulosDots() {
 }
 
 function nextModulo() {
-  const total = Math.ceil(totalModulos / getModulosPerView());
-  currentModulo = (currentModulo + 1) % total;
-  updateModulosCarousel();
+  if (isTransitioning) return;
+  
+  const dotCount = Math.ceil(totalModulos / modulosPerView);
+  const cardWidth = getCardWidth();
+  const displayIndex = currentModulo + 2; // +2 por causa dos clones
+  
+  isTransitioning = true;
+  
+  // Ir para o próximo slide
+  currentModulo = (currentModulo + 1) % dotCount;
+  updateModulosCarousel(true);
+  
+  // Verificar se chegou no clone
+  setTimeout(() => {
+    if (displayIndex >= totalModulos + 1) {
+      // Voltou ao início (loop infinito)
+      isTransitioning = true;
+      currentModulo = 0;
+      modulosTrack.style.transition = 'none';
+      modulosTrack.style.transform = `translateX(-${1 * cardWidth}px)`;
+      setTimeout(() => {
+        isTransitioning = false;
+        updateModulosCarousel(true);
+      }, 50);
+    } else {
+      isTransitioning = false;
+    }
+  }, 650);
 }
 
 function prevModulo() {
-  const total = Math.ceil(totalModulos / getModulosPerView());
-  currentModulo = (currentModulo - 1 + total) % total;
-  updateModulosCarousel();
+  if (isTransitioning) return;
+  
+  const dotCount = Math.ceil(totalModulos / modulosPerView);
+  const cardWidth = getCardWidth();
+  const displayIndex = currentModulo + 1;
+  
+  isTransitioning = true;
+  
+  currentModulo = (currentModulo - 1 + dotCount) % dotCount;
+  updateModulosCarousel(true);
+  
+  setTimeout(() => {
+    if (displayIndex <= 0) {
+      // Foi para o último (loop infinito)
+      isTransitioning = true;
+      currentModulo = dotCount - 1;
+      modulosTrack.style.transition = 'none';
+      modulosTrack.style.transform = `translateX(-${totalModulos * cardWidth}px)`;
+      setTimeout(() => {
+        isTransitioning = false;
+        updateModulosCarousel(true);
+      }, 50);
+    } else {
+      isTransitioning = false;
+    }
+  }, 650);
 }
 
 function resetModulosAutoSlide() {
   clearInterval(autoModuloInterval);
-  autoModuloInterval = setInterval(nextModulo, 6000);
+  autoModuloInterval = setInterval(nextModulo, 5000);
 }
 
+// Event listeners para os botões
 modulosPrev.addEventListener('click', () => {
   prevModulo();
   resetModulosAutoSlide();
@@ -214,65 +221,143 @@ modulosNext.addEventListener('click', () => {
   resetModulosAutoSlide();
 });
 
-window.addEventListener('resize', () => {
-  updateModulosCarousel();
+// ── TOUCH / SWIPE SUPPORT ──
+let touchStartX = 0;
+let touchEndX = 0;
+let isSwiping = false;
+
+modulosTrack.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+  isSwiping = true;
+  clearInterval(autoModuloInterval);
+}, { passive: true });
+
+modulosTrack.addEventListener('touchmove', (e) => {
+  if (!isSwiping) return;
+  touchEndX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+modulosTrack.addEventListener('touchend', (e) => {
+  if (!isSwiping) return;
+  isSwiping = false;
+  const diff = touchStartX - touchEndX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) {
+      nextModulo();
+    } else {
+      prevModulo();
+    }
+    resetModulosAutoSlide();
+  } else {
+    resetModulosAutoSlide();
+  }
+}, { passive: true });
+
+// Mouse drag support para desktop
+let isDragging = false;
+let startX = 0;
+let currentX = 0;
+
+modulosTrack.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  startX = e.clientX;
+  modulosTrack.style.cursor = 'grabbing';
+  clearInterval(autoModuloInterval);
 });
 
-createModulosDots();
-setTimeout(updateModulosCarousel, 150);
-autoModuloInterval = setInterval(nextModulo, 6000);
+document.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  currentX = e.clientX;
+});
+
+document.addEventListener('mouseup', (e) => {
+  if (!isDragging) return;
+  isDragging = false;
+  modulosTrack.style.cursor = 'grab';
+  const diff = startX - currentX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) {
+      nextModulo();
+    } else {
+      prevModulo();
+    }
+    resetModulosAutoSlide();
+  } else {
+    resetModulosAutoSlide();
+  }
+});
+
+// ── INICIALIZAÇÃO ──
+function initCarousel() {
+  totalModulos = document.querySelectorAll('.modulo-card').length;
+  setupInfiniteCarousel();
+  createModulosDots();
+  setTimeout(() => {
+    updateModulosCarousel(false);
+  }, 100);
+  resetModulosAutoSlide();
+}
+
+// Re-inicializar em resize
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    const newPerView = getModulosPerView();
+    if (newPerView !== modulosPerView) {
+      modulosPerView = newPerView;
+      createModulosDots();
+      updateModulosCarousel(false);
+    }
+  }, 250);
+});
+
+// Iniciar carrossel quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(initCarousel, 200);
+});
 
 // ── MODAL ──
 const modalData = {
   modulo1: {
     title: 'Sistema Interno Empresarial',
-    desc: 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais. Ideal para empresas que buscam organizar seus processos internos de forma eficiente e integrada.',
-    techs: ['HTML', 'CSS', 'JavaScript', 'SQL', 'APIs', 'Git']
+    desc: 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais. Ideal para empresas que buscam organizar seus processos internos de forma eficiente e integrada.'
   },
   modulo2: {
     title: 'Controle de Frete',
-    desc: 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa. Perfeito para empresas de logística e transportes.',
-    techs: ['JavaScript', 'Node.js', 'Render', '.env', 'Git', 'APIs']
+    desc: 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa. Perfeito para empresas de logística e transportes.'
   },
   modulo3: {
     title: 'Contas a Pagar',
-    desc: 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária. Mantenha as finanças da sua empresa em ordem.',
-    techs: ['HTML', 'CSS', 'JavaScript', 'SQL', 'server.js', 'package.json']
+    desc: 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária. Mantenha as finanças da sua empresa em ordem.'
   },
   modulo4: {
     title: 'Contas a Receber',
-    desc: 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa. Tenha visibilidade total das suas finanças.',
-    techs: ['Node.js', 'SQL', 'server.js', 'package.json', '.env', 'APIs']
+    desc: 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa. Tenha visibilidade total das suas finanças.'
   },
   modulo5: {
     title: 'Tabela de Preços',
-    desc: 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real. Ideal para comércios e empresas com muitos produtos.',
-    techs: ['HTML', 'CSS', 'JavaScript', 'APIs', 'Git', 'SQL']
+    desc: 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real. Ideal para comércios e empresas com muitos produtos.'
   },
   modulo6: {
     title: 'Estoque',
-    desc: 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais. Mantenha seu estoque sempre atualizado.',
-    techs: ['Node.js', 'Render', '.env', 'Git', 'SQL', 'APIs']
+    desc: 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais. Mantenha seu estoque sempre atualizado.'
   },
   modulo7: {
     title: 'Login e Autenticação',
-    desc: 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso. Garanta a segurança da sua aplicação.',
-    techs: ['JavaScript', 'Node.js', 'server.js', 'package.json', 'JWT', '.env']
+    desc: 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso. Garanta a segurança da sua aplicação.'
   },
   modulo8: {
     title: 'Jornada Acadêmica',
-    desc: 'Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico. Ideal para instituições de ensino.',
-    techs: ['HTML', 'CSS', 'JavaScript', 'SQL', 'APIs', 'Git']
+    desc: 'Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico. Ideal para instituições de ensino.'
   },
   modulo9: {
     title: 'Fornecedores',
-    desc: 'Gerencie fornecedores, contratos, avaliações e histórico de compras. Perfeito para empresas que precisam controlar sua cadeia de suprimentos.',
-    techs: ['Node.js', 'Render', '.env', 'Git', 'SQL', 'APIs']
+    desc: 'Gerencie fornecedores, contratos, avaliações e histórico de compras. Perfeito para empresas que precisam controlar sua cadeia de suprimentos.'
   },
   modulo10: {
     title: 'Transportadoras',
-    desc: 'Gerencie transportadoras, contratos, rotas e acompanhamento de entregas. Ideal para empresas de logística.',
-    techs: ['JavaScript', 'Node.js', 'server.js', 'package.json', 'APIs', 'SQL']
+    desc: 'Gerencie transportadoras, contratos, rotas e acompanhamento de entregas. Ideal para empresas de logística.'
   }
 };
 
@@ -283,16 +368,6 @@ function openModal(moduloId) {
   document.getElementById('modalTitle').textContent = data.title;
   document.getElementById('modalBody').textContent = data.desc;
   
-  // Add tech tags
-  const techContainer = document.getElementById('modalTechTags');
-  techContainer.innerHTML = '';
-  data.techs.forEach(tech => {
-    const tag = document.createElement('span');
-    tag.className = 'modal-tech-tag';
-    tag.textContent = tech;
-    techContainer.appendChild(tag);
-  });
-  
   document.getElementById('modalOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -301,6 +376,11 @@ function closeModal() {
   document.getElementById('modalOverlay').classList.remove('active');
   document.body.style.overflow = '';
 }
+
+// Fechar modal com ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
 
 // ── LANGUAGE SYSTEM ──
 const translations = {
@@ -324,12 +404,6 @@ const translations = {
     'projetos-text': 'Soluções personalizadas para cada cliente',
     'diferencial': 'Planejamento · Entrega · Suporte',
     'diferencial-text': 'Da concepção à implementação, com qualidade e compromisso',
-    'avaliacoes-label': 'Avaliações',
-    'avaliacoes-title': 'O que nossos <span>clientes dizem</span>',
-    'avaliacao1': '"Excelente trabalho! A MALVSCODE entregou um sistema completo e sob medida para nossa empresa. Profissionalismo e qualidade impecáveis."',
-    'avaliacao2': '"O site institucional ficou incrível! Design moderno, responsivo e com ótima performance. Superou todas as expectativas."',
-    'avaliacao3': '"Profissionalismo e pontualidade impressionantes. A MALVSCODE entendeu nossas necessidades e entregou além do esperado."',
-    'avaliacao4': '"A equipe da MALVSCODE é extremamente capacitada. Recomendo para qualquer empresa que busque qualidade e inovação."',
     'sistemas-label': 'Sistemas desenvolvidos',
     'sistemas-title': 'Projetos & <span>Sistemas Web</span>',
     'modulo1-nome': 'Sistema Interno Empresarial',
@@ -386,12 +460,6 @@ const translations = {
     'projetos-text': 'Custom solutions for each client',
     'diferencial': 'Planning · Delivery · Support',
     'diferencial-text': 'From conception to implementation, with quality and commitment',
-    'avaliacoes-label': 'Reviews',
-    'avaliacoes-title': 'What our <span>clients say</span>',
-    'avaliacao1': '"Excellent work! MALVSCODE delivered a complete custom system for our company. Impeccable professionalism and quality."',
-    'avaliacao2': '"The institutional website turned out amazing! Modern design, responsive, and great performance. Exceeded all expectations."',
-    'avaliacao3': '"Impressive professionalism and punctuality. MALVSCODE understood our needs and delivered beyond expectations."',
-    'avaliacao4': '"The MALVSCODE team is highly skilled. I recommend them to any company seeking quality and innovation."',
     'sistemas-label': 'Developed Systems',
     'sistemas-title': 'Projects & <span>Web Systems</span>',
     'modulo1-nome': 'Business Management System',
@@ -448,12 +516,6 @@ const translations = {
     'projetos-text': 'Soluciones personalizadas para cada cliente',
     'diferencial': 'Planificación · Entrega · Soporte',
     'diferencial-text': 'Desde la concepción hasta la implementación, con calidad y compromiso',
-    'avaliacoes-label': 'Evaluaciones',
-    'avaliacoes-title': 'Lo que nuestros <span>clientes dicen</span>',
-    'avaliacao1': '"¡Excelente trabajo! MALVSCODE entregó un sistema completo y a medida para nuestra empresa. Profesionalismo y calidad impecables."',
-    'avaliacao2': '"¡El sitio institucional quedó increíble! Diseño moderno, responsive y con gran rendimiento. Superó todas las expectativas."',
-    'avaliacao3': '"Profesionalismo y puntualidad impresionantes. MALVSCODE entendió nuestras necesidades y entregó más de lo esperado."',
-    'avaliacao4': '"El equipo de MALVSCODE es extremadamente capacitado. Lo recomiendo para cualquier empresa que busque calidad e innovación."',
     'sistemas-label': 'Sistemas desarrollados',
     'sistemas-title': 'Proyectos & <span>Sistemas Web</span>',
     'modulo1-nome': 'Sistema Interno Empresarial',
@@ -493,9 +555,20 @@ const translations = {
 };
 
 let currentLang = 'pt';
+let isLangOpen = false;
 
-function changeLanguage(lang) {
+function toggleLanguage(lang) {
+  if (lang === currentLang) {
+    // Toggle dropdown
+    const selector = document.querySelector('.language-selector');
+    isLangOpen = !isLangOpen;
+    selector.classList.toggle('open', isLangOpen);
+    return;
+  }
+  
   currentLang = lang;
+  isLangOpen = false;
+  document.querySelector('.language-selector').classList.remove('open');
   
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
@@ -505,13 +578,11 @@ function changeLanguage(lang) {
     const key = el.dataset.key;
     if (translations[lang] && translations[lang][key]) {
       if (key === 'hero-role' || key === 'sobre-title' || key === 'sobre-text1' || 
-          key === 'sobre-text2' || key === 'avaliacoes-title' || key === 'sistemas-title' || 
-          key === 'sites-title' || key === 'contato-title' || key === 'avaliacao1' ||
-          key === 'avaliacao2' || key === 'avaliacao3' || key === 'avaliacao4' ||
-          key === 'modulo1-desc' || key === 'modulo2-desc' || key === 'modulo3-desc' ||
-          key === 'modulo4-desc' || key === 'modulo5-desc' || key === 'modulo6-desc' ||
-          key === 'modulo7-desc' || key === 'modulo8-desc' || key === 'modulo9-desc' ||
-          key === 'modulo10-desc') {
+          key === 'sobre-text2' || key === 'sistemas-title' || key === 'sites-title' || 
+          key === 'contato-title' || key === 'modulo1-desc' || key === 'modulo2-desc' || 
+          key === 'modulo3-desc' || key === 'modulo4-desc' || key === 'modulo5-desc' ||
+          key === 'modulo6-desc' || key === 'modulo7-desc' || key === 'modulo8-desc' ||
+          key === 'modulo9-desc' || key === 'modulo10-desc') {
         el.innerHTML = translations[lang][key];
       } else {
         el.textContent = translations[lang][key];
@@ -520,6 +591,20 @@ function changeLanguage(lang) {
   });
 }
 
+// Fechar dropdown ao clicar fora
+document.addEventListener('click', (e) => {
+  const selector = document.querySelector('.language-selector');
+  if (!selector.contains(e.target)) {
+    selector.classList.remove('open');
+    isLangOpen = false;
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   changeLanguage('pt');
 });
+
+// Função para mudar idioma (mantida para compatibilidade)
+function changeLanguage(lang) {
+  toggleLanguage(lang);
+}
