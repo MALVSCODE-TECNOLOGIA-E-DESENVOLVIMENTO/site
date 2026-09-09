@@ -12,16 +12,19 @@ window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY
 // Hamburger
 const ham = document.getElementById('hamburger');
 const links = document.getElementById('navLinks');
+const langSelector = document.getElementById('langSelector');
+
 ham.addEventListener('click', () => {
   ham.classList.toggle('open');
   links.classList.toggle('open');
-  const langSelector = document.querySelector('.language-selector');
-  langSelector.classList.toggle('open');
+  if (!links.classList.contains('open')) {
+    langSelector.classList.remove('open');
+  }
 });
 links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
   ham.classList.remove('open');
   links.classList.remove('open');
-  document.querySelector('.language-selector').classList.remove('open');
+  langSelector.classList.remove('open');
 }));
 
 // Scroll reveal
@@ -60,37 +63,33 @@ function createFloatingWords() {
 }
 createFloatingWords();
 
-// ── CARROSSEL DE MÓDULOS (INFINITO COM AUTOPLAY) ──
+// ══════════════════════════════════════════════════════════
+// ── CARROSSEL DE MÓDULOS — INFINITO (com clones) + SWIPE ──
+// ══════════════════════════════════════════════════════════
 const modulosTrack = document.getElementById('modulosTrack');
-const modulosPrev = document.getElementById('modulosPrev');
-const modulosNext = document.getElementById('modulosNext');
+const modulosPrevBtn = document.getElementById('modulosPrev');
+const modulosNextBtn = document.getElementById('modulosNext');
 const modulosDots = document.getElementById('modulosDots');
 
-let currentModulo = 0;
-let totalModulos = document.querySelectorAll('.modulo-card').length;
-let modulosPerView = 3;
-let autoModuloInterval;
-let isTransitioning = false;
-let userInteracted = false;
-let interactionTimeout = null;
+const originalModuloCards = Array.from(modulosTrack.children);
+const totalModulos = originalModuloCards.length;
 
-// Clonar cards para efeito infinito
-function setupInfiniteCarousel() {
-  const track = modulosTrack;
-  const cards = track.querySelectorAll('.modulo-card');
-  const totalCards = cards.length;
-  
-  const firstClone = cards[0].cloneNode(true);
-  const lastClone = cards[totalCards - 1].cloneNode(true);
-  
-  track.appendChild(firstClone);
-  track.insertBefore(lastClone, cards[0]);
-  
-  const cardWidth = cards[0].offsetWidth + 20;
-  track.style.transform = `translateX(-${cardWidth}px)`;
-  
-  return totalCards;
-}
+// Clona o conjunto original e insere uma cópia ANTES e outra DEPOIS,
+// formando 3 blocos idênticos em sequência: [clone][original][clone].
+// Assim é possível "avançar" ou "voltar" infinitamente: ao atingir a
+// borda de um bloco, a posição é ajustada em blocos de 10 sem transição,
+// caindo exatamente em conteúdo idêntico — o salto fica imperceptível.
+const beforeFrag = document.createDocumentFragment();
+originalModuloCards.forEach(card => beforeFrag.appendChild(card.cloneNode(true)));
+modulosTrack.insertBefore(beforeFrag, modulosTrack.firstChild);
+
+const afterFrag = document.createDocumentFragment();
+originalModuloCards.forEach(card => afterFrag.appendChild(card.cloneNode(true)));
+modulosTrack.appendChild(afterFrag);
+
+let cardIndex = totalModulos; // começa no início do bloco "original" (do meio)
+let modulosPerView = getModulosPerView();
+let autoModuloInterval;
 
 function getModulosPerView() {
   if (window.innerWidth <= 600) return 1;
@@ -99,155 +98,106 @@ function getModulosPerView() {
 }
 
 function getCardWidth() {
-  const card = document.querySelector('.modulo-card');
-  return card ? card.offsetWidth + 20 : 320;
+  const card = modulosTrack.querySelector('.modulo-card');
+  if (!card) return 0;
+  return card.offsetWidth + 20; // 20px = gap
 }
 
-function updateModulosCarousel(animate = true) {
-  if (isTransitioning) return;
-  
-  modulosPerView = getModulosPerView();
-  const cardWidth = getCardWidth();
-  
-  let displayIndex = currentModulo + 1;
-  
-  modulosTrack.style.transition = animate ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
-  modulosTrack.style.transform = `translateX(-${displayIndex * cardWidth}px)`;
-  
-  const dotCount = Math.ceil(totalModulos / modulosPerView);
-  document.querySelectorAll('.modulos-carousel-dot').forEach((dot, index) => {
-    dot.classList.toggle('active', index === currentModulo % dotCount);
+function updateDots() {
+  const totalDots = Math.ceil(totalModulos / modulosPerView);
+  let rel = (cardIndex - totalModulos) % totalModulos;
+  if (rel < 0) rel += totalModulos;
+  const activeDot = Math.min(totalDots - 1, Math.round(rel / modulosPerView) % totalDots);
+  document.querySelectorAll('.modulos-carousel-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === activeDot);
   });
+}
+
+function setTrackPosition(instant) {
+  const cardWidth = getCardWidth();
+  if (instant) {
+    modulosTrack.style.transition = 'none';
+  }
+  modulosTrack.style.transform = `translateX(-${cardIndex * cardWidth}px)`;
+  if (instant) {
+    void modulosTrack.offsetHeight; // força reflow
+    modulosTrack.style.transition = '';
+  }
+  updateDots();
 }
 
 function createModulosDots() {
   modulosDots.innerHTML = '';
-  const dotCount = Math.ceil(totalModulos / getModulosPerView());
-  for (let i = 0; i < dotCount; i++) {
+  const totalDots = Math.ceil(totalModulos / modulosPerView);
+  for (let i = 0; i < totalDots; i++) {
     const dot = document.createElement('button');
     dot.className = 'modulos-carousel-dot' + (i === 0 ? ' active' : '');
     dot.addEventListener('click', () => {
-      userInteracted = true;
-      clearTimeout(interactionTimeout);
-      currentModulo = i;
-      updateModulosCarousel();
+      cardIndex = totalModulos + (i * modulosPerView);
+      setTrackPosition(false);
       resetModulosAutoSlide();
-      interactionTimeout = setTimeout(() => {
-        userInteracted = false;
-        resetModulosAutoSlide();
-      }, 8000);
     });
     modulosDots.appendChild(dot);
   }
 }
 
+function wrapIfNeeded() {
+  // Se saiu do bloco "original" para o bloco clonado depois, volta 1 bloco (sem transição)
+  if (cardIndex >= totalModulos * 2) {
+    cardIndex -= totalModulos;
+    setTrackPosition(true);
+  } else if (cardIndex < totalModulos) {
+    // Se saiu do bloco "original" para o bloco clonado antes, avança 1 bloco (sem transição)
+    cardIndex += totalModulos;
+    setTrackPosition(true);
+  }
+}
+modulosTrack.addEventListener('transitionend', wrapIfNeeded);
+
 function nextModulo() {
-  if (isTransitioning) return;
-  
-  const dotCount = Math.ceil(totalModulos / modulosPerView);
-  const cardWidth = getCardWidth();
-  const displayIndex = currentModulo + 2;
-  
-  isTransitioning = true;
-  
-  currentModulo = (currentModulo + 1) % dotCount;
-  updateModulosCarousel(true);
-  
-  setTimeout(() => {
-    if (displayIndex >= totalModulos + 1) {
-      isTransitioning = true;
-      currentModulo = 0;
-      modulosTrack.style.transition = 'none';
-      modulosTrack.style.transform = `translateX(-${1 * cardWidth}px)`;
-      setTimeout(() => {
-        isTransitioning = false;
-        updateModulosCarousel(true);
-      }, 50);
-    } else {
-      isTransitioning = false;
-    }
-  }, 650);
+  modulosPerView = getModulosPerView();
+  cardIndex += modulosPerView;
+  setTrackPosition(false);
 }
 
 function prevModulo() {
-  if (isTransitioning) return;
-  
-  const dotCount = Math.ceil(totalModulos / modulosPerView);
-  const cardWidth = getCardWidth();
-  const displayIndex = currentModulo + 1;
-  
-  isTransitioning = true;
-  
-  currentModulo = (currentModulo - 1 + dotCount) % dotCount;
-  updateModulosCarousel(true);
-  
-  setTimeout(() => {
-    if (displayIndex <= 0) {
-      isTransitioning = true;
-      currentModulo = dotCount - 1;
-      modulosTrack.style.transition = 'none';
-      modulosTrack.style.transform = `translateX(-${totalModulos * cardWidth}px)`;
-      setTimeout(() => {
-        isTransitioning = false;
-        updateModulosCarousel(true);
-      }, 50);
-    } else {
-      isTransitioning = false;
-    }
-  }, 650);
+  modulosPerView = getModulosPerView();
+  cardIndex -= modulosPerView;
+  setTrackPosition(false);
 }
 
 function resetModulosAutoSlide() {
   clearInterval(autoModuloInterval);
-  const delay = userInteracted ? 8000 : 5000;
-  autoModuloInterval = setInterval(nextModulo, delay);
+  autoModuloInterval = setInterval(nextModulo, 6000);
 }
 
-modulosPrev.addEventListener('click', () => {
-  userInteracted = true;
-  clearTimeout(interactionTimeout);
+modulosPrevBtn.addEventListener('click', () => {
   prevModulo();
   resetModulosAutoSlide();
-  interactionTimeout = setTimeout(() => {
-    userInteracted = false;
-    resetModulosAutoSlide();
-  }, 8000);
 });
 
-modulosNext.addEventListener('click', () => {
-  userInteracted = true;
-  clearTimeout(interactionTimeout);
+modulosNextBtn.addEventListener('click', () => {
   nextModulo();
   resetModulosAutoSlide();
-  interactionTimeout = setTimeout(() => {
-    userInteracted = false;
-    resetModulosAutoSlide();
-  }, 8000);
 });
 
-// ── TOUCH / SWIPE SUPPORT ──
-let touchStartX = 0;
-let touchEndX = 0;
-let isSwiping = false;
+// Navegação por deslize (swipe) em telas touch — pausa o autoplay
+// enquanto o usuário interage e retoma automaticamente depois.
+let modTouchStartX = 0;
+let modIsSwiping = false;
 
 modulosTrack.addEventListener('touchstart', (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-  isSwiping = true;
-  userInteracted = true;
-  clearTimeout(interactionTimeout);
+  modTouchStartX = e.changedTouches[0].screenX;
+  modIsSwiping = true;
   clearInterval(autoModuloInterval);
-}, { passive: true });
-
-modulosTrack.addEventListener('touchmove', (e) => {
-  if (!isSwiping) return;
-  touchEndX = e.changedTouches[0].screenX;
 }, { passive: true });
 
 modulosTrack.addEventListener('touchend', (e) => {
-  if (!isSwiping) return;
-  isSwiping = false;
-  const diff = touchStartX - touchEndX;
-  if (Math.abs(diff) > 50) {
+  if (!modIsSwiping) return;
+  modIsSwiping = false;
+  const touchEndX = e.changedTouches[0].screenX;
+  const diff = modTouchStartX - touchEndX;
+  if (Math.abs(diff) > 40) {
     if (diff > 0) {
       nextModulo();
     } else {
@@ -255,78 +205,26 @@ modulosTrack.addEventListener('touchend', (e) => {
     }
   }
   resetModulosAutoSlide();
-  interactionTimeout = setTimeout(() => {
-    userInteracted = false;
-    resetModulosAutoSlide();
-  }, 8000);
-}, { passive: true });
-
-// Mouse drag support
-let isDragging = false;
-let startX = 0;
-let currentX = 0;
-
-modulosTrack.addEventListener('mousedown', (e) => {
-  isDragging = true;
-  startX = e.clientX;
-  modulosTrack.style.cursor = 'grabbing';
-  userInteracted = true;
-  clearTimeout(interactionTimeout);
-  clearInterval(autoModuloInterval);
 });
 
-document.addEventListener('mousemove', (e) => {
-  if (!isDragging) return;
-  currentX = e.clientX;
-});
-
-document.addEventListener('mouseup', (e) => {
-  if (!isDragging) return;
-  isDragging = false;
-  modulosTrack.style.cursor = 'grab';
-  const diff = startX - currentX;
-  if (Math.abs(diff) > 50) {
-    if (diff > 0) {
-      nextModulo();
-    } else {
-      prevModulo();
-    }
-  }
-  resetModulosAutoSlide();
-  interactionTimeout = setTimeout(() => {
-    userInteracted = false;
-    resetModulosAutoSlide();
-  }, 8000);
-});
-
-// ── INICIALIZAÇÃO ──
-function initCarousel() {
-  totalModulos = document.querySelectorAll('.modulo-card').length;
-  setupInfiniteCarousel();
-  createModulosDots();
-  setTimeout(() => {
-    updateModulosCarousel(false);
-  }, 100);
-  userInteracted = false;
-  resetModulosAutoSlide();
-}
-
-let resizeTimeout;
+let modulosResizeTimeout;
 window.addEventListener('resize', () => {
-  clearTimeout(resizeTimeout);
-  resizeTimeout = setTimeout(() => {
+  clearTimeout(modulosResizeTimeout);
+  modulosResizeTimeout = setTimeout(() => {
     const newPerView = getModulosPerView();
     if (newPerView !== modulosPerView) {
       modulosPerView = newPerView;
       createModulosDots();
-      updateModulosCarousel(false);
     }
-  }, 250);
+    setTrackPosition(true);
+  }, 120);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(initCarousel, 200);
-});
+createModulosDots();
+setTimeout(() => {
+  setTrackPosition(true);
+  resetModulosAutoSlide();
+}, 150);
 
 // ── MODAL ──
 const modalData = {
@@ -372,13 +270,28 @@ const modalData = {
   }
 };
 
+const modalTopics = [
+  'Esta é uma demonstração do módulo.',
+  'O cliente pode solicitar ajustes e novas funcionalidades durante o planejamento.',
+  'Personalize conforme as necessidades do seu negócio.'
+];
+
 function openModal(moduloId) {
   const data = modalData[moduloId];
   if (!data) return;
-  
+
   document.getElementById('modalTitle').textContent = data.title;
   document.getElementById('modalBody').textContent = data.desc;
-  
+
+  const topicsContainer = document.getElementById('modalTopics');
+  topicsContainer.innerHTML = '';
+  modalTopics.forEach(topic => {
+    const line = document.createElement('p');
+    line.className = 'modal-topic-line';
+    line.textContent = '- ' + topic;
+    topicsContainer.appendChild(line);
+  });
+
   document.getElementById('modalOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -388,11 +301,20 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closeModal();
+// ── LANGUAGE SYSTEM ──
+const langCurrent = document.getElementById('langCurrent');
+const langLabels = { pt: 'PT-BR', en: 'EN', es: 'ES' };
+
+langCurrent.addEventListener('click', (e) => {
+  e.stopPropagation();
+  langSelector.classList.toggle('open');
+});
+document.addEventListener('click', (e) => {
+  if (!langSelector.contains(e.target)) {
+    langSelector.classList.remove('open');
+  }
 });
 
-// ── LANGUAGE SYSTEM ──
 const translations = {
   pt: {
     'nav-sobre': 'A Empresa',
@@ -410,10 +332,9 @@ const translations = {
     'sobre-title': 'Tecnologia que<br><span>entrega resultado.</span>',
     'sobre-text1': 'A <strong>MALVSCODE</strong> desenvolve sites e soluções de software robustas, escaláveis e seguras. Atuamos desde o desenvolvimento de interfaces até a arquitetura de sistemas e infraestrutura em nuvem, unindo <strong>engenharia de software</strong>, tecnologia e <strong>visão estratégica de negócio</strong>.',
     'sobre-text2': 'Com foco em performance, segurança e experiência do usuário, desenvolvemos soluções digitais pensadas para atender necessidades reais e contribuir para a evolução de negócios e projetos.',
-    'sede': 'Com sede em Serra, ES',
-    'projetos-text': 'Soluções personalizadas para cada cliente',
-    'diferencial': 'Planejamento · Entrega · Suporte',
-    'diferencial-text': 'Da concepção à implementação, com qualidade e compromisso',
+    'feat1': '+2 anos de experiência',
+    'feat2': 'Planejamento, Entrega e Suporte',
+    'feat3': 'Desenvolvimento Moderno',
     'sistemas-label': 'Sistemas desenvolvidos',
     'sistemas-title': 'Projetos & <span>Sistemas Web</span>',
     'modulo1-nome': 'Sistema Interno Empresarial',
@@ -466,10 +387,9 @@ const translations = {
     'sobre-title': 'Technology that<br><span>delivers results.</span>',
     'sobre-text1': '<strong>MALVSCODE</strong> develops robust, scalable and secure websites and software solutions. We work from interface development to system architecture and cloud infrastructure, combining <strong>software engineering</strong>, technology and <strong>strategic business vision</strong>.',
     'sobre-text2': 'With a focus on performance, security and user experience, we develop digital solutions designed to meet real needs and contribute to the evolution of businesses and projects.',
-    'sede': 'Based in Serra, ES',
-    'projetos-text': 'Custom solutions for each client',
-    'diferencial': 'Planning · Delivery · Support',
-    'diferencial-text': 'From conception to implementation, with quality and commitment',
+    'feat1': '+2 years of experience',
+    'feat2': 'Planning, Delivery and Support',
+    'feat3': 'Modern Development',
     'sistemas-label': 'Developed Systems',
     'sistemas-title': 'Projects & <span>Web Systems</span>',
     'modulo1-nome': 'Business Management System',
@@ -522,10 +442,9 @@ const translations = {
     'sobre-title': 'Tecnología que<br><span>entrega resultados.</span>',
     'sobre-text1': '<strong>MALVSCODE</strong> desarrolla sitios web y soluciones de software robustas, escalables y seguras. Actuamos desde el desarrollo de interfaces hasta la arquitectura de sistemas e infraestructura en la nube, uniendo <strong>ingeniería de software</strong>, tecnología y <strong>visión estratégica de negocio</strong>.',
     'sobre-text2': 'Con enfoque en rendimiento, seguridad y experiencia de usuario, desarrollamos soluciones digitales pensadas para atender necesidades reales y contribuir a la evolución de negocios y proyectos.',
-    'sede': 'Con sede en Serra, ES',
-    'projetos-text': 'Soluciones personalizadas para cada cliente',
-    'diferencial': 'Planificación · Entrega · Soporte',
-    'diferencial-text': 'Desde la concepción hasta la implementación, con calidad y compromiso',
+    'feat1': '+2 años de experiencia',
+    'feat2': 'Planificación, Entrega y Soporte',
+    'feat3': 'Desarrollo Moderno',
     'sistemas-label': 'Sistemas desarrollados',
     'sistemas-title': 'Proyectos & <span>Sistemas Web</span>',
     'modulo1-nome': 'Sistema Interno Empresarial',
@@ -565,53 +484,36 @@ const translations = {
 };
 
 let currentLang = 'pt';
-let isLangOpen = false;
 
-function toggleLanguage(lang) {
-  if (lang === currentLang) {
-    const selector = document.querySelector('.language-selector');
-    isLangOpen = !isLangOpen;
-    selector.classList.toggle('open', isLangOpen);
-    return;
-  }
-  
+function changeLanguage(lang) {
   currentLang = lang;
-  isLangOpen = false;
-  document.querySelector('.language-selector').classList.remove('open');
-  
-  document.querySelectorAll('.lang-btn').forEach(btn => {
+
+  langCurrent.childNodes[0].textContent = langLabels[lang] + ' ';
+
+  document.querySelectorAll('.lang-option').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
-  
+
   document.querySelectorAll('[data-key]').forEach(el => {
     const key = el.dataset.key;
     if (translations[lang] && translations[lang][key]) {
-      if (key === 'hero-role' || key === 'sobre-title' || key === 'sobre-text1' || 
-          key === 'sobre-text2' || key === 'sistemas-title' || key === 'sites-title' || 
-          key === 'contato-title' || key === 'modulo1-desc' || key === 'modulo2-desc' || 
-          key === 'modulo3-desc' || key === 'modulo4-desc' || key === 'modulo5-desc' ||
-          key === 'modulo6-desc' || key === 'modulo7-desc' || key === 'modulo8-desc' ||
-          key === 'modulo9-desc' || key === 'modulo10-desc') {
+      if (key === 'hero-role' || key === 'sobre-title' || key === 'sobre-text1' ||
+          key === 'sobre-text2' || key === 'sistemas-title' ||
+          key === 'sites-title' || key === 'contato-title' ||
+          key === 'modulo1-desc' || key === 'modulo2-desc' || key === 'modulo3-desc' ||
+          key === 'modulo4-desc' || key === 'modulo5-desc' || key === 'modulo6-desc' ||
+          key === 'modulo7-desc' || key === 'modulo8-desc' || key === 'modulo9-desc' ||
+          key === 'modulo10-desc') {
         el.innerHTML = translations[lang][key];
       } else {
         el.textContent = translations[lang][key];
       }
     }
   });
-}
 
-document.addEventListener('click', (e) => {
-  const selector = document.querySelector('.language-selector');
-  if (!selector.contains(e.target)) {
-    selector.classList.remove('open');
-    isLangOpen = false;
-  }
-});
+  langSelector.classList.remove('open');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-  toggleLanguage('pt');
+  changeLanguage('pt');
 });
-
-function changeLanguage(lang) {
-  toggleLanguage(lang);
-}
