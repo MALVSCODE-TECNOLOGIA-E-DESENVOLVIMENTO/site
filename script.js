@@ -15,10 +15,14 @@ const links = document.getElementById('navLinks');
 ham.addEventListener('click', () => {
   ham.classList.toggle('open');
   links.classList.toggle('open');
+  // Toggle language selector open state for mobile
+  const langSelector = document.querySelector('.language-selector');
+  langSelector.classList.toggle('open');
 });
 links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
   ham.classList.remove('open');
   links.classList.remove('open');
+  document.querySelector('.language-selector').classList.remove('open');
 }));
 
 // Scroll reveal
@@ -30,14 +34,12 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 // ── BACKGROUND ANIMADO COM PALAVRAS ──
 const words = [
   'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Next.js',
-  'Node.js', 'Python', 'Java', 'PHP', 'Docker', 'Kubernetes',
-  'AWS', 'GCP', 'Azure', 'Linux', 'Git', 'GitHub',
-  'APIs', 'REST', 'GraphQL', 'SQL', 'PostgreSQL', 'MongoDB',
-  'Firebase', 'Vercel', 'Netlify', 'Render', 'CI/CD', 'DevOps',
-  'Full Stack', 'Front-end', 'Back-end', 'Cloud', 'Seguranca',
+  'Node.js', 'Python', 'Docker', 'Kubernetes', 'AWS', 'GCP',
+  'Linux', 'Git', 'GitHub', 'APIs', 'REST', 'GraphQL', 'SQL',
+  'PostgreSQL', 'MongoDB', 'Firebase', 'Vercel', 'Render',
+  'Full Stack', 'Front-end', 'Back-end', 'Cloud', 'DevOps',
   'Performance', 'Escalabilidade', 'Responsivo', 'UX/UI', 'Agile',
-  'Scrum', 'Kanban', 'JWT', 'OAuth', 'WebSockets', 'SSR', 'SPA',
-  'MALVSCODE', 'Sistemas Web', 'APIs', 'Cloud Architecture'
+  'Scrum', 'JWT', 'WebSockets', 'SSR', 'SPA', 'MALVSCODE'
 ];
 
 const bgWords = document.getElementById('bgWords');
@@ -217,50 +219,60 @@ window.addEventListener('resize', () => {
 });
 
 createModulosDots();
-setTimeout(updateModulosCarousel, 100);
+setTimeout(updateModulosCarousel, 150);
 autoModuloInterval = setInterval(nextModulo, 6000);
 
 // ── MODAL ──
 const modalData = {
   modulo1: {
     title: 'Sistema Interno Empresarial',
-    desc: 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais. Ideal para empresas que buscam organizar seus processos internos de forma eficiente e integrada. Desenvolvido com HTML, CSS, JavaScript, Node.js, PostgreSQL e outras tecnologias modernas.'
+    desc: 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais. Ideal para empresas que buscam organizar seus processos internos de forma eficiente e integrada.',
+    techs: ['HTML', 'CSS', 'JavaScript', 'SQL', 'APIs', 'Git']
   },
   modulo2: {
     title: 'Controle de Frete',
-    desc: 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa. Perfeito para empresas de logística e transportes. Tecnologias utilizadas: React, Node.js, PostgreSQL, Render e mais.'
+    desc: 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa. Perfeito para empresas de logística e transportes.',
+    techs: ['JavaScript', 'Node.js', 'Render', '.env', 'Git', 'APIs']
   },
   modulo3: {
     title: 'Contas a Pagar',
-    desc: 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária. Mantenha as finanças da sua empresa em ordem. Desenvolvido com HTML, CSS, JavaScript, Node.js, SQL e outras ferramentas.'
+    desc: 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária. Mantenha as finanças da sua empresa em ordem.',
+    techs: ['HTML', 'CSS', 'JavaScript', 'SQL', 'server.js', 'package.json']
   },
   modulo4: {
     title: 'Contas a Receber',
-    desc: 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa. Tenha visibilidade total das suas finanças. Stack: React, Node.js, PostgreSQL, server.js, .env e mais.'
+    desc: 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa. Tenha visibilidade total das suas finanças.',
+    techs: ['Node.js', 'SQL', 'server.js', 'package.json', '.env', 'APIs']
   },
   modulo5: {
     title: 'Tabela de Preços',
-    desc: 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real. Ideal para comércios e empresas com muitos produtos. Tecnologias: HTML, CSS, JavaScript, Node.js, SQL e outras.'
+    desc: 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real. Ideal para comércios e empresas com muitos produtos.',
+    techs: ['HTML', 'CSS', 'JavaScript', 'APIs', 'Git', 'SQL']
   },
   modulo6: {
     title: 'Estoque',
-    desc: 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais. Mantenha seu estoque sempre atualizado. Desenvolvido com React, Node.js, PostgreSQL, package.json e mais.'
+    desc: 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais. Mantenha seu estoque sempre atualizado.',
+    techs: ['Node.js', 'Render', '.env', 'Git', 'SQL', 'APIs']
   },
   modulo7: {
     title: 'Login e Autenticação',
-    desc: 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso. Garanta a segurança da sua aplicação. Stack: React, Node.js, JWT, Render, SQL e outras tecnologias.'
+    desc: 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso. Garanta a segurança da sua aplicação.',
+    techs: ['JavaScript', 'Node.js', 'server.js', 'package.json', 'JWT', '.env']
   },
   modulo8: {
     title: 'Jornada Acadêmica',
-    desc: 'Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico. Ideal para instituições de ensino. Tecnologias: HTML, CSS, JavaScript, Node.js, PostgreSQL e mais.'
+    desc: 'Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico. Ideal para instituições de ensino.',
+    techs: ['HTML', 'CSS', 'JavaScript', 'SQL', 'APIs', 'Git']
   },
   modulo9: {
     title: 'Fornecedores',
-    desc: 'Gerencie fornecedores, contratos, avaliações e histórico de compras. Perfeito para empresas que precisam controlar sua cadeia de suprimentos. Desenvolvido com React, Node.js, SQL, server.js e outras ferramentas.'
+    desc: 'Gerencie fornecedores, contratos, avaliações e histórico de compras. Perfeito para empresas que precisam controlar sua cadeia de suprimentos.',
+    techs: ['Node.js', 'Render', '.env', 'Git', 'SQL', 'APIs']
   },
   modulo10: {
     title: 'Transportadoras',
-    desc: 'Gerencie transportadoras, contratos, rotas e acompanhamento de entregas. Ideal para empresas de logística. Stack: React, Node.js, PostgreSQL, .env, package.json e mais.'
+    desc: 'Gerencie transportadoras, contratos, rotas e acompanhamento de entregas. Ideal para empresas de logística.',
+    techs: ['JavaScript', 'Node.js', 'server.js', 'package.json', 'APIs', 'SQL']
   }
 };
 
@@ -270,6 +282,17 @@ function openModal(moduloId) {
   
   document.getElementById('modalTitle').textContent = data.title;
   document.getElementById('modalBody').textContent = data.desc;
+  
+  // Add tech tags
+  const techContainer = document.getElementById('modalTechTags');
+  techContainer.innerHTML = '';
+  data.techs.forEach(tech => {
+    const tag = document.createElement('span');
+    tag.className = 'modal-tech-tag';
+    tag.textContent = tech;
+    techContainer.appendChild(tag);
+  });
+  
   document.getElementById('modalOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -295,8 +318,8 @@ const translations = {
     'status': '"disponível para projetos"',
     'sobre-label': 'Sobre a MALVSCODE',
     'sobre-title': 'Tecnologia que<br><span>entrega resultado.</span>',
-    'sobre-text1': 'A <strong>MALVSCODE</strong> desenvolve sites e software robustos, escaláveis e seguros. Atuando desde o front-end até a arquitetura de infraestrutura em nuvem, unindo <strong>engenharia de software</strong> com <strong>visão estratégica de negócio</strong>.',
-    'sobre-text2': 'Com foco em performance e segurança, entregamos soluções que impulsionam negócios e garantem a melhor experiência para usuários e clientes.',
+    'sobre-text1': 'A <strong>MALVSCODE</strong> desenvolve sites e soluções de software robustas, escaláveis e seguras. Atuamos desde o desenvolvimento de interfaces até a arquitetura de sistemas e infraestrutura em nuvem, unindo <strong>engenharia de software</strong>, tecnologia e <strong>visão estratégica de negócio</strong>.',
+    'sobre-text2': 'Com foco em performance, segurança e experiência do usuário, desenvolvemos soluções digitais pensadas para atender necessidades reais e contribuir para a evolução de negócios e projetos.',
     'sede': 'Com sede em Serra, ES',
     'projetos-text': 'Soluções personalizadas para cada cliente',
     'diferencial': 'Planejamento · Entrega · Suporte',
@@ -357,8 +380,8 @@ const translations = {
     'status': '"available for projects"',
     'sobre-label': 'About MALVSCODE',
     'sobre-title': 'Technology that<br><span>delivers results.</span>',
-    'sobre-text1': '<strong>MALVSCODE</strong> develops robust, scalable and secure websites and software. Operating from front-end to cloud infrastructure architecture, combining <strong>software engineering</strong> with <strong>strategic business vision</strong>.',
-    'sobre-text2': 'With a focus on performance and security, we deliver solutions that drive business growth and ensure the best experience for users and clients.',
+    'sobre-text1': '<strong>MALVSCODE</strong> develops robust, scalable and secure websites and software solutions. We work from interface development to system architecture and cloud infrastructure, combining <strong>software engineering</strong>, technology and <strong>strategic business vision</strong>.',
+    'sobre-text2': 'With a focus on performance, security and user experience, we develop digital solutions designed to meet real needs and contribute to the evolution of businesses and projects.',
     'sede': 'Based in Serra, ES',
     'projetos-text': 'Custom solutions for each client',
     'diferencial': 'Planning · Delivery · Support',
@@ -419,8 +442,8 @@ const translations = {
     'status': '"disponible para proyectos"',
     'sobre-label': 'Sobre MALVSCODE',
     'sobre-title': 'Tecnología que<br><span>entrega resultados.</span>',
-    'sobre-text1': '<strong>MALVSCODE</strong> desarrolla sitios web y software robustos, escalables y seguros. Actuando desde el front-end hasta la arquitectura de infraestructura en la nube, uniendo <strong>ingeniería de software</strong> con <strong>visión estratégica de negocio</strong>.',
-    'sobre-text2': 'Con enfoque en rendimiento y seguridad, entregamos soluciones que impulsan negocios y garantizan la mejor experiencia para usuarios y clientes.',
+    'sobre-text1': '<strong>MALVSCODE</strong> desarrolla sitios web y soluciones de software robustas, escalables y seguras. Actuamos desde el desarrollo de interfaces hasta la arquitectura de sistemas e infraestructura en la nube, uniendo <strong>ingeniería de software</strong>, tecnología y <strong>visión estratégica de negocio</strong>.',
+    'sobre-text2': 'Con enfoque en rendimiento, seguridad y experiencia de usuario, desarrollamos soluciones digitales pensadas para atender necesidades reales y contribuir a la evolución de negocios y proyectos.',
     'sede': 'Con sede en Serra, ES',
     'projetos-text': 'Soluciones personalizadas para cada cliente',
     'diferencial': 'Planificación · Entrega · Soporte',
