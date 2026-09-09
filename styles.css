@@ -677,6 +677,7 @@ section{padding:100px 0;position:relative;z-index:1}
   gap:16px;flex-wrap:wrap;
 }
 .footer-logo{font-family:var(--display);font-size:1.1rem;font-weight:800;letter-spacing:0.06em;color:var(--white)}
+.footer-logo span{color:var(--blue-b)}
 .footer-copy{font-family:var(--mono);font-size:0.65rem;color:var(--muted);letter-spacing:0.1em;word-break:break-all;text-align:center}
 
 /* ═══════════════════════════════════════════
