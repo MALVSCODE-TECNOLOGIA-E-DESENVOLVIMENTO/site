@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
@@ -47,20 +47,19 @@
 
 <!-- ── HERO ── -->
 <section class="hero" id="inicio">
-  <div class="hero-grid"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
   <div class="container">
     <div class="hero-inner">
       <div class="hero-left">
-        <p class="hero-tag" data-key="hero-tag">Desenvolvimento e Tecnologia</p>
+        <p class="hero-tag" data-key="hero-tag">Software que impulsiona negócios</p>
         <h1 class="hero-name">
-          <span data-key="hero-title1">O futuro começa em um</span><br>
-          <span class="hero-name-accent" data-key="hero-title2">bit.</span>
+          <span data-key="hero-title1">O futuro começa</span><br>
+          <span class="hero-name-accent" data-key="hero-title2">em um <span style="color:var(--blue-b);">bit.</span></span>
         </h1>
         <p class="hero-role" data-key="hero-role">
-          <strong>Arquitetura Cloud</strong> · Sites<br>
+          <strong>Arquitetura Cloud</strong> · Segurança da Informação<br>
           Sistemas Web · APIs · Soluções Escaláveis<br>
           <span style="color:var(--blue-b)">—</span> MALVSCODE
         </p>
@@ -134,69 +133,21 @@
         </div>
         <div class="edu-list reveal" data-d="1" style="margin-top:36px">
           <div class="edu-item">
-            <div class="edu-degree" data-key="fundacao">Fundada em 2025</div>
+            <div class="edu-degree" data-key="fundacao">Fundada em 2027</div>
             <div class="edu-area" data-key="sede">Com sede em Serra, ES</div>
           </div>
           <div class="edu-item">
-            <div class="edu-degree" data-key="projetos-entregues">+2 Projetos Entregues</div>
-            <div class="edu-area" data-key="projetos-text"><a href="#avaliacoes" style="color:var(--blue-b);text-decoration:none;">Veja o feedback dos clientes →</a></div>
+            <div class="edu-degree" data-key="projetos-entregues">Projetos em Desenvolvimento</div>
+            <div class="edu-area" data-key="projetos-text">Soluções personalizadas para cada cliente</div>
           </div>
           <div class="edu-item">
-            <div class="edu-degree" data-key="diferencial">Atendimento Personalizado</div>
-            <div class="edu-area" data-key="diferencial-text">Do planejamento à entrega, com suporte contínuo</div>
+            <div class="edu-degree" data-key="diferencial">Planejamento · Entrega · Suporte</div>
+            <div class="edu-area" data-key="diferencial-text">Da concepção à implementação, com qualidade e compromisso</div>
           </div>
         </div>
       </div>
       <div>
-        <div class="reveal" data-d="2">
-          <div class="terminal-wrapper">
-            <div class="terminal-card">
-              <div class="terminal-bar">
-                <div class="dot d-red"></div>
-                <div class="dot d-yellow"></div>
-                <div class="dot d-green"></div>
-                <span class="terminal-title">malvscode.tech</span>
-              </div>
-              <div class="terminal-body">
-                <div class="terminal-line"><span class="terminal-prompt">$</span> cat technologies.txt</div>
-                <div class="terminal-line terminal-output">┌─────────────────────────────────────────┐</div>
-                <div class="terminal-line terminal-output">│  🚀 Full Stack Development               │</div>
-                <div class="terminal-line terminal-output">│  ☁️  Cloud Architecture (AWS/GCP)         │</div>
-                <div class="terminal-line terminal-output">│  🔒 Security & Compliance                │</div>
-                <div class="terminal-line terminal-output">│  📱 Responsive Web Design                │</div>
-                <div class="terminal-line terminal-output">│  ⚡ Performance Optimization             │</div>
-                <div class="terminal-line terminal-output">└─────────────────────────────────────────┘</div>
-                <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="cursor-blink">▌</span></div>
-              </div>
-              <div class="terminal-chips">
-                <span class="chip">HTML5</span>
-                <span class="chip">CSS</span>
-                <span class="chip">JavaScript</span>
-                <span class="chip">TypeScript</span>
-                <span class="chip">React</span>
-                <span class="chip">Next.js</span>
-                <span class="chip">Tailwind CSS</span>
-                <span class="chip">Node.js</span>
-                <span class="chip">Express</span>
-                <span class="chip">APIs REST</span>
-                <span class="chip">JWT</span>
-                <span class="chip">SQL</span>
-                <span class="chip">PostgreSQL</span>
-                <span class="chip">Prisma</span>
-                <span class="chip">Docker</span>
-                <span class="chip">AWS</span>
-                <span class="chip">GCP</span>
-                <span class="chip">Vercel</span>
-                <span class="chip">Render</span>
-                <span class="chip">Linux</span>
-                <span class="chip">Git</span>
-                <span class="chip">GitHub</span>
-                <span class="chip">HTTP</span>
-                <span class="chip">JSON</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Lado direito vazio - removido o terminal malvscode.tech -->
       </div>
     </div>
   </div>
@@ -216,16 +167,16 @@
           <div class="avaliacao-stars">★★★★★</div>
           <p class="avaliacao-text" data-key="avaliacao1">"Excelente trabalho! A MALVSCODE entregou um sistema completo e sob medida para nossa empresa. Profissionalismo e qualidade impecáveis."</p>
           <div class="avaliacao-cliente">
-            <strong>IR Comércio</strong>
-            <span>• Sistemas Elétricos</span>
+            <strong>Em breve</strong>
+            <span>• Primeiro cliente</span>
           </div>
         </div>
         <div class="avaliacao-card">
           <div class="avaliacao-stars">★★★★★</div>
           <p class="avaliacao-text" data-key="avaliacao2">"O site institucional ficou incrível! Design moderno, responsivo e com ótima performance. Superou todas as expectativas."</p>
           <div class="avaliacao-cliente">
-            <strong>Elevate Vision</strong>
-            <span>• Consultoria</span>
+            <strong>Em breve</strong>
+            <span>• Primeiro cliente</span>
           </div>
         </div>
         <div class="avaliacao-card">
@@ -233,7 +184,7 @@
           <p class="avaliacao-text" data-key="avaliacao3">"Profissionalismo e pontualidade impressionantes. A MALVSCODE entendeu nossas necessidades e entregou além do esperado."</p>
           <div class="avaliacao-cliente">
             <strong>Em breve</strong>
-            <span>• Novo projeto</span>
+            <span>• Primeiro cliente</span>
           </div>
         </div>
         <div class="avaliacao-card">
@@ -241,7 +192,7 @@
           <p class="avaliacao-text" data-key="avaliacao4">"A equipe da MALVSCODE é extremamente capacitada. Recomendo para qualquer empresa que busque qualidade e inovação."</p>
           <div class="avaliacao-cliente">
             <strong>Em breve</strong>
-            <span>• Novo projeto</span>
+            <span>• Primeiro cliente</span>
           </div>
         </div>
       </div>
@@ -252,7 +203,7 @@
   </div>
 </section>
 
-<!-- ── SISTEMAS ── -->
+<!-- ── SISTEMAS (CARROSSEL DE MÓDULOS) ── -->
 <section class="projetos" id="sistemas">
   <div class="divider"></div>
   <div class="container">
@@ -260,67 +211,157 @@
       <div class="label" data-key="sistemas-label">Sistemas desenvolvidos</div>
       <h2 class="sec-title" data-key="sistemas-title">Projetos & <span>Sistemas Web</span></h2>
     </div>
-    <div class="proj-grid">
+    <div class="modulos-carousel-container">
+      <div class="modulos-carousel-track" id="modulosTrack">
+        
+        <!-- Módulo 1: Sistema Interno -->
+        <div class="modulo-card">
+          <div class="modulo-header">
+            <span class="modulo-icon">🏢</span>
+            <h3 class="modulo-nome" data-key="modulo1-nome">Sistema Interno Empresarial</h3>
+          </div>
+          <p class="modulo-desc" data-key="modulo1-desc">Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais.</p>
+          <div class="modulo-tags">
+            <span class="modulo-tag">React</span>
+            <span class="modulo-tag">Node.js</span>
+            <span class="modulo-tag">PostgreSQL</span>
+          </div>
+          <div class="modulo-footer">
+            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo1')">Info</button>
+          </div>
+        </div>
 
-      <div class="proj-card reveal" data-d="1">
-        <div class="proj-screen">
-          <div class="proj-screen-inner">
-            <div class="proj-screen-bar">
-              <div class="dot d-red"></div><div class="dot d-yellow"></div><div class="dot d-green"></div>
-            </div>
-            <div class="proj-screen-label">Sistema</div>
+        <!-- Módulo 2: Controle de Frete -->
+        <div class="modulo-card">
+          <div class="modulo-header">
+            <span class="modulo-icon">🚚</span>
+            <h3 class="modulo-nome" data-key="modulo2-nome">Controle de Frete</h3>
           </div>
-          <div class="proj-type-badge">Sistema Web</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-name" data-key="sistema1-nome">Sistema Interno Empresarial</div>
-          <div class="proj-desc" data-key="sistema1-desc">Sistema completo para gestão empresarial desenvolvido para a IR Comércio e Materiais Elétricos LTDA. Controle de estoque, vendas e relatórios.</div>
-          <div class="proj-tags">
-            <span class="proj-tag">React</span>
-            <span class="proj-tag">Node.js</span>
-            <span class="proj-tag">PostgreSQL</span>
-            <span class="proj-tag">AWS</span>
+          <p class="modulo-desc" data-key="modulo2-desc">Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa.</p>
+          <div class="modulo-tags">
+            <span class="modulo-tag">React</span>
+            <span class="modulo-tag">Node.js</span>
+            <span class="modulo-tag">PostgreSQL</span>
+          </div>
+          <div class="modulo-footer">
+            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo2')">Info</button>
           </div>
         </div>
-        <div class="proj-footer">
-          <a href="#" target="_blank" rel="noopener" class="btn btn-blue btn-sm">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            <span data-key="ver-demo">Ver Demo</span>
-          </a>
+
+        <!-- Módulo 3: Contas a Pagar -->
+        <div class="modulo-card">
+          <div class="modulo-header">
+            <span class="modulo-icon">📤</span>
+            <h3 class="modulo-nome" data-key="modulo3-nome">Contas a Pagar</h3>
+          </div>
+          <p class="modulo-desc" data-key="modulo3-desc">Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária.</p>
+          <div class="modulo-tags">
+            <span class="modulo-tag">React</span>
+            <span class="modulo-tag">Node.js</span>
+            <span class="modulo-tag">PostgreSQL</span>
+          </div>
+          <div class="modulo-footer">
+            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo3')">Info</button>
+          </div>
         </div>
+
+        <!-- Módulo 4: Contas a Receber -->
+        <div class="modulo-card">
+          <div class="modulo-header">
+            <span class="modulo-icon">📥</span>
+            <h3 class="modulo-nome" data-key="modulo4-nome">Contas a Receber</h3>
+          </div>
+          <p class="modulo-desc" data-key="modulo4-desc">Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa.</p>
+          <div class="modulo-tags">
+            <span class="modulo-tag">React</span>
+            <span class="modulo-tag">Node.js</span>
+            <span class="modulo-tag">PostgreSQL</span>
+          </div>
+          <div class="modulo-footer">
+            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo4')">Info</button>
+          </div>
+        </div>
+
+        <!-- Módulo 5: Tabela de Preços -->
+        <div class="modulo-card">
+          <div class="modulo-header">
+            <span class="modulo-icon">💰</span>
+            <h3 class="modulo-nome" data-key="modulo5-nome">Tabela de Preços</h3>
+          </div>
+          <p class="modulo-desc" data-key="modulo5-desc">Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real.</p>
+          <div class="modulo-tags">
+            <span class="modulo-tag">React</span>
+            <span class="modulo-tag">Node.js</span>
+            <span class="modulo-tag">PostgreSQL</span>
+          </div>
+          <div class="modulo-footer">
+            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo5')">Info</button>
+          </div>
+        </div>
+
+        <!-- Módulo 6: Estoque -->
+        <div class="modulo-card">
+          <div class="modulo-header">
+            <span class="modulo-icon">📦</span>
+            <h3 class="modulo-nome" data-key="modulo6-nome">Estoque</h3>
+          </div>
+          <p class="modulo-desc" data-key="modulo6-desc">Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais.</p>
+          <div class="modulo-tags">
+            <span class="modulo-tag">React</span>
+            <span class="modulo-tag">Node.js</span>
+            <span class="modulo-tag">PostgreSQL</span>
+          </div>
+          <div class="modulo-footer">
+            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo6')">Info</button>
+          </div>
+        </div>
+
+        <!-- Módulo 7: Login / Autenticação -->
+        <div class="modulo-card">
+          <div class="modulo-header">
+            <span class="modulo-icon">🔐</span>
+            <h3 class="modulo-nome" data-key="modulo7-nome">Login e Autenticação</h3>
+          </div>
+          <p class="modulo-desc" data-key="modulo7-desc">Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso.</p>
+          <div class="modulo-tags">
+            <span class="modulo-tag">React</span>
+            <span class="modulo-tag">Node.js</span>
+            <span class="modulo-tag">JWT</span>
+          </div>
+          <div class="modulo-footer">
+            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo7')">Info</button>
+          </div>
+        </div>
+
       </div>
-
-      <div class="proj-card reveal" data-d="2">
-        <div class="proj-screen">
-          <div class="proj-screen-inner">
-            <div class="proj-screen-bar">
-              <div class="dot d-red"></div><div class="dot d-yellow"></div><div class="dot d-green"></div>
-            </div>
-            <div class="proj-screen-label">API</div>
-          </div>
-          <div class="proj-type-badge">API REST</div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-name" data-key="sistema2-nome">API de Integração</div>
-          <div class="proj-desc" data-key="sistema2-desc">API RESTful para integração entre sistemas, com autenticação JWT, rate limiting e documentação Swagger.</div>
-          <div class="proj-tags">
-            <span class="proj-tag">TypeScript</span>
-            <span class="proj-tag">Node.js</span>
-            <span class="proj-tag">Docker</span>
-            <span class="proj-tag">GCP</span>
-          </div>
-        </div>
-        <div class="proj-footer">
-          <a href="#" target="_blank" rel="noopener" class="btn btn-blue btn-sm">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            <span data-key="ver-demo">Ver Demo</span>
-          </a>
-        </div>
-      </div>
-
+      <button class="modulos-carousel-btn prev" id="modulosPrev">‹</button>
+      <button class="modulos-carousel-btn next" id="modulosNext">›</button>
+      <div class="modulos-carousel-dots" id="modulosDots"></div>
     </div>
   </div>
 </section>
+
+<!-- ── MODAL DE INFORMAÇÕES ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3 class="modal-title" id="modalTitle">Módulo</h3>
+    <p class="modal-body" id="modalBody">Descrição do módulo</p>
+    <div class="modal-footer">
+      <p class="modal-demo-text">Esta é uma demonstração do módulo.</p>
+      <p class="modal-demo-text">O cliente pode solicitar ajustes e novas funcionalidades durante o planejamento.</p>
+      <p class="modal-demo-text">Personalize conforme as necessidades do seu negócio.</p>
+    </div>
+    <button class="btn btn-blue" onclick="closeModal()" data-key="fechar">Fechar</button>
+  </div>
+</div>
 
 <!-- ── SITES ── -->
 <section class="sites-section" id="sites">
@@ -334,14 +375,13 @@
 
       <div class="site-card reveal" data-d="1">
         <div class="site-preview">
-          <img src="imagens/elevatevision.png" alt="Elevate Vision" class="site-thumbnail"/>
+          <img src="imagens/elevatevision.png" alt="Elevate Vision Agency" class="site-thumbnail"/>
           <div class="site-preview-overlay">
-            <span class="site-preview-icon">🌐</span>
+            <span class="site-preview-icon">+</span>
           </div>
         </div>
         <div class="site-info">
-          <div class="site-name" data-key="site1-nome">Elevate Vision</div>
-          <div class="site-desc" data-key="site1-desc">Site institucional com design moderno, responsivo e otimizado para SEO. Reflete a identidade da consultoria.</div>
+          <div class="site-name" data-key="site1-nome">Elevate Vision Agency</div>
           <a href="https://www.elevatevision.com.br" target="_blank" rel="noopener" class="site-link">
             <span data-key="visitar-site">Visitar site</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -351,14 +391,13 @@
 
       <div class="site-card reveal" data-d="2">
         <div class="site-preview">
-          <img src="imagens/ircomercio.png" alt="IR Comércio" class="site-thumbnail"/>
+          <img src="imagens/ircomercio.png" alt="IR COMÉRCIO E MATERIAIS ELÉTRICOS LTDA" class="site-thumbnail"/>
           <div class="site-preview-overlay">
-            <span class="site-preview-icon">🏢</span>
+            <span class="site-preview-icon">+</span>
           </div>
         </div>
         <div class="site-info">
-          <div class="site-name" data-key="site2-nome">IR Comércio</div>
-          <div class="site-desc" data-key="site2-desc">Site institucional para a IR Comércio e Materiais Elétricos LTDA, com catálogo de produtos e informações da empresa.</div>
+          <div class="site-name" data-key="site2-nome">I.R. COMÉRCIO E MATERIAIS ELÉTRICOS LTDA</div>
           <a href="#" target="_blank" rel="noopener" class="site-link">
             <span data-key="visitar-site">Visitar site</span>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
