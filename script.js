@@ -27,12 +27,134 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+// ── BACKGROUND ANIMADO COM PALAVRAS ──
+const words = [
+  'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Next.js',
+  'Node.js', 'Python', 'Java', 'PHP', 'Docker', 'Kubernetes',
+  'AWS', 'GCP', 'Azure', 'Linux', 'Git', 'GitHub',
+  'APIs', 'REST', 'GraphQL', 'SQL', 'PostgreSQL', 'MongoDB',
+  'Firebase', 'Vercel', 'Netlify', 'Render', 'CI/CD', 'DevOps',
+  'Full Stack', 'Front-end', 'Back-end', 'Cloud', 'Segurança',
+  'Performance', 'Escalabilidade', 'Responsivo', 'UX/UI', 'Agile',
+  'Scrum', 'Kanban', 'JWT', 'OAuth', 'WebSockets', 'SSR', 'SPA',
+  'MALVSCODE', 'Sistemas Web', 'APIs', 'Cloud Architecture'
+];
+
+const bgWords = document.getElementById('bgWords');
+
+function createFloatingWords() {
+  const count = 80;
+  for (let i = 0; i < count; i++) {
+    const word = document.createElement('span');
+    word.className = 'word';
+    word.textContent = words[Math.floor(Math.random() * words.length)];
+    word.style.left = Math.random() * 100 + '%';
+    word.style.top = Math.random() * 100 + '%';
+    word.style.animationDuration = (20 + Math.random() * 30) + 's';
+    word.style.animationDelay = (Math.random() * 20) + 's';
+    word.style.fontSize = (0.5 + Math.random() * 0.8) + 'rem';
+    word.style.opacity = 0.1 + Math.random() * 0.3;
+    bgWords.appendChild(word);
+  }
+}
+createFloatingWords();
+
+// ── CARROSSEL DE AVALIAÇÕES ──
+const track = document.getElementById('carouselTrack');
+const prevBtn = document.getElementById('carouselPrev');
+const nextBtn = document.getElementById('carouselNext');
+const dotsContainer = document.getElementById('carouselDots');
+
+let currentSlide = 0;
+let totalSlides = document.querySelectorAll('.avaliacao-card').length;
+let autoSlideInterval;
+
+function updateCarousel() {
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  
+  // Update dots
+  document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentSlide);
+  });
+}
+
+function createDots() {
+  dotsContainer.innerHTML = '';
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => {
+      currentSlide = i;
+      updateCarousel();
+      resetAutoSlide();
+    });
+    dotsContainer.appendChild(dot);
+  }
+}
+
+function nextSlide() {
+  currentSlide = (currentSlide + 1) % totalSlides;
+  updateCarousel();
+}
+
+function prevSlide() {
+  currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+  updateCarousel();
+}
+
+function resetAutoSlide() {
+  clearInterval(autoSlideInterval);
+  autoSlideInterval = setInterval(nextSlide, 5000);
+}
+
+prevBtn.addEventListener('click', () => {
+  prevSlide();
+  resetAutoSlide();
+});
+
+nextBtn.addEventListener('click', () => {
+  nextSlide();
+  resetAutoSlide();
+});
+
+// Touch support for mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+track.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+track.addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  const diff = touchStartX - touchEndX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) {
+      nextSlide();
+    } else {
+      prevSlide();
+    }
+    resetAutoSlide();
+  }
+}
+
+createDots();
+autoSlideInterval = setInterval(nextSlide, 5000);
+
 // ── LANGUAGE SYSTEM ──
 const translations = {
   pt: {
-    'hero-tag': 'Soluções digitais de alto impacto',
-    'hero-title1': 'Desenvolvimento',
-    'hero-title2': 'que transforma',
+    'nav-sobre': 'A Empresa',
+    'nav-sistemas': 'Sistemas',
+    'nav-sites': 'Sites',
+    'nav-contato': 'Contato',
+    'hero-tag': 'Software que impulsiona negócios',
+    'hero-title1': 'O futuro começa',
+    'hero-title2': 'em um bit.',
     'hero-role': '<strong>Arquitetura Cloud</strong> · Segurança da Informação<br>Sistemas Web · APIs · Soluções Escaláveis<br><span style="color:var(--blue-b)">—</span> MALVSCODE',
     'btn-projetos': 'Ver Projetos',
     'btn-contato': 'Fale Conosco',
@@ -47,16 +169,12 @@ const translations = {
     'projetos-text': 'Veja o feedback dos clientes →',
     'diferencial': 'Atendimento Personalizado',
     'diferencial-text': 'Do planejamento à entrega, com suporte contínuo',
-    'stack-title': 'Nossa Stack',
-    'stack-front': 'Front-end',
-    'stack-back': 'Back-end',
-    'stack-db': 'Banco de Dados',
-    'stack-cloud': 'Cloud & DevOps',
-    'stack-tools': 'Ferramentas',
     'avaliacoes-label': 'Avaliações',
     'avaliacoes-title': 'O que nossos <span>clientes dizem</span>',
     'avaliacao1': '"Excelente trabalho! A MALVSCODE entregou um sistema completo e sob medida para nossa empresa. Profissionalismo e qualidade impecáveis."',
     'avaliacao2': '"O site institucional ficou incrível! Design moderno, responsivo e com ótima performance. Superou todas as expectativas."',
+    'avaliacao3': '"Profissionalismo e pontualidade impressionantes. A MALVSCODE entendeu nossas necessidades e entregou além do esperado."',
+    'avaliacao4': '"A equipe da MALVSCODE é extremamente capacitada. Recomendo para qualquer empresa que busque qualidade e inovação."',
     'sistemas-label': 'Sistemas desenvolvidos',
     'sistemas-title': 'Projetos & <span>Sistemas Web</span>',
     'sistema1-nome': 'Sistema Interno Empresarial',
@@ -80,9 +198,13 @@ const translations = {
     'email-btn': 'Enviar E-mail'
   },
   en: {
-    'hero-tag': 'High-impact digital solutions',
-    'hero-title1': 'Development',
-    'hero-title2': 'that transforms',
+    'nav-sobre': 'About Us',
+    'nav-sistemas': 'Systems',
+    'nav-sites': 'Websites',
+    'nav-contato': 'Contact',
+    'hero-tag': 'Software that drives business',
+    'hero-title1': 'The future starts',
+    'hero-title2': 'in one bit.',
     'hero-role': '<strong>Cloud Architecture</strong> · Information Security<br>Web Systems · APIs · Scalable Solutions<br><span style="color:var(--blue-b)">—</span> MALVSCODE',
     'btn-projetos': 'View Projects',
     'btn-contato': 'Contact Us',
@@ -97,16 +219,12 @@ const translations = {
     'projetos-text': 'See client feedback →',
     'diferencial': 'Personalized Service',
     'diferencial-text': 'From planning to delivery, with ongoing support',
-    'stack-title': 'Our Stack',
-    'stack-front': 'Front-end',
-    'stack-back': 'Back-end',
-    'stack-db': 'Database',
-    'stack-cloud': 'Cloud & DevOps',
-    'stack-tools': 'Tools',
     'avaliacoes-label': 'Reviews',
     'avaliacoes-title': 'What our <span>clients say</span>',
     'avaliacao1': '"Excellent work! MALVSCODE delivered a complete custom system for our company. Impeccable professionalism and quality."',
     'avaliacao2': '"The institutional website turned out amazing! Modern design, responsive, and great performance. Exceeded all expectations."',
+    'avaliacao3': '"Impressive professionalism and punctuality. MALVSCODE understood our needs and delivered beyond expectations."',
+    'avaliacao4': '"The MALVSCODE team is highly skilled. I recommend them to any company seeking quality and innovation."',
     'sistemas-label': 'Developed Systems',
     'sistemas-title': 'Projects & <span>Web Systems</span>',
     'sistema1-nome': 'Business Management System',
@@ -130,9 +248,13 @@ const translations = {
     'email-btn': 'Send E-mail'
   },
   es: {
-    'hero-tag': 'Soluciones digitales de alto impacto',
-    'hero-title1': 'Desarrollo',
-    'hero-title2': 'que transforma',
+    'nav-sobre': 'La Empresa',
+    'nav-sistemas': 'Sistemas',
+    'nav-sites': 'Sitios',
+    'nav-contato': 'Contacto',
+    'hero-tag': 'Software que impulsa negocios',
+    'hero-title1': 'El futuro comienza',
+    'hero-title2': 'en un bit.',
     'hero-role': '<strong>Arquitectura Cloud</strong> · Seguridad de la Información<br>Sistemas Web · APIs · Soluciones Escalables<br><span style="color:var(--blue-b)">—</span> MALVSCODE',
     'btn-projetos': 'Ver Proyectos',
     'btn-contato': 'Contáctenos',
@@ -147,16 +269,12 @@ const translations = {
     'projetos-text': 'Ver comentarios de clientes →',
     'diferencial': 'Atención Personalizada',
     'diferencial-text': 'Desde la planificación hasta la entrega, con soporte continuo',
-    'stack-title': 'Nuestro Stack',
-    'stack-front': 'Front-end',
-    'stack-back': 'Back-end',
-    'stack-db': 'Base de Datos',
-    'stack-cloud': 'Cloud & DevOps',
-    'stack-tools': 'Herramientas',
     'avaliacoes-label': 'Evaluaciones',
     'avaliacoes-title': 'Lo que nuestros <span>clientes dicen</span>',
     'avaliacao1': '"¡Excelente trabajo! MALVSCODE entregó un sistema completo y a medida para nuestra empresa. Profesionalismo y calidad impecables."',
     'avaliacao2': '"¡El sitio institucional quedó increíble! Diseño moderno, responsive y con gran rendimiento. Superó todas las expectativas."',
+    'avaliacao3': '"Profesionalismo y puntualidad impresionantes. MALVSCODE entendió nuestras necesidades y entregó más de lo esperado."',
+    'avaliacao4': '"El equipo de MALVSCODE es extremadamente capacitado. Lo recomiendo para cualquier empresa que busque calidad e innovación."',
     'sistemas-label': 'Sistemas desarrollados',
     'sistemas-title': 'Proyectos & <span>Sistemas Web</span>',
     'sistema1-nome': 'Sistema Interno Empresarial',
@@ -196,8 +314,9 @@ function changeLanguage(lang) {
     const key = el.dataset.key;
     if (translations[lang] && translations[lang][key]) {
       if (key === 'hero-role' || key === 'sobre-title' || key === 'sobre-text1' || 
-          key === 'avaliacoes-title' || key === 'sistemas-title' || key === 'sites-title' || 
-          key === 'contato-title') {
+          key === 'sobre-text2' || key === 'avaliacoes-title' || key === 'sistemas-title' || 
+          key === 'sites-title' || key === 'contato-title' || key === 'avaliacao1' ||
+          key === 'avaliacao2' || key === 'avaliacao3' || key === 'avaliacao4') {
         el.innerHTML = translations[lang][key];
       } else {
         el.textContent = translations[lang][key];
