@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MALVSCODE — Desenvolvimento de Software</title>
+  <title>MALVSCODE</title>
   <meta name="description" content="MALVSCODE desenvolve sites e software robustos, escaláveis e seguros."/>
   
   <!-- Favicon -->
@@ -25,7 +25,7 @@
 <!-- ── NAV ── -->
 <nav class="nav" id="nav">
   <div class="nav-logo">
-    <a href="#inicio" class="nav-logo-txt">MALVS<span>CODE</span></a>
+    <a href="#inicio" class="nav-logo-txt">MALVSCODE</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -37,16 +37,16 @@
     <li><a href="#contato" class="nav-link" data-key="nav-contato">Contato</a></li>
     <li>
       <div class="language-selector">
-        <button class="lang-btn active" data-lang="pt" onclick="changeLanguage('pt')">Português</button>
-        <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">English</button>
-        <button class="lang-btn" data-lang="es" onclick="changeLanguage('es')">Español</button>
+        <button class="lang-btn active" data-lang="pt" onclick="toggleLanguage('pt')">PT-BR</button>
+        <button class="lang-btn" data-lang="en" onclick="toggleLanguage('en')">EN</button>
+        <button class="lang-btn" data-lang="es" onclick="toggleLanguage('es')">ES</button>
       </div>
     </li>
   </ul>
 </nav>
 
 <!-- ── BOTÃO WHATSAPP FLUTUANTE ── -->
-<a href="https://wa.me/5527999709444?text=Olá!%20Vi%20o%20site%20da%20MALVSCODE%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" rel="noopener" class="whatsapp-float" aria-label="WhatsApp">
+<a href="https://wa.me/5527997099444?text=Olá!%20Vi%20o%20site%20da%20MALVSCODE%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" rel="noopener" class="whatsapp-float" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24" fill="white">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </svg>
@@ -60,7 +60,7 @@
   <div class="container">
     <div class="hero-inner">
       <div class="hero-left">
-        <p class="hero-tag" data-key="hero-tag">Software que impulsiona negócios</p>
+        <p class="hero-tag" data-key="hero-tag">Desenvolvimento de Software</p>
         <h1 class="hero-name">
           <span data-key="hero-title1">O futuro começa</span><br>
           <span class="hero-name-accent" data-key="hero-title2">em um <span style="color:var(--blue-b);">bit.</span></span>
@@ -138,70 +138,23 @@
           <p class="sobre-text" data-key="sobre-text1">A <strong>MALVSCODE</strong> desenvolve sites e soluções de software robustas, escaláveis e seguras. Atuamos desde o desenvolvimento de interfaces até a arquitetura de sistemas e infraestrutura em nuvem, unindo <strong>engenharia de software</strong>, tecnologia e <strong>visão estratégica de negócio</strong>.</p>
           <p class="sobre-text" data-key="sobre-text2">Com foco em performance, segurança e experiência do usuário, desenvolvemos soluções digitais pensadas para atender necessidades reais e contribuir para a evolução de negócios e projetos.</p>
         </div>
-        <div class="edu-list reveal" data-d="1" style="margin-top:36px">
-          <div class="edu-item">
-            <div class="edu-degree" data-key="sede">Com sede em Serra, ES</div>
-            <div class="edu-area" data-key="projetos-text">Soluções personalizadas para cada cliente</div>
-          </div>
-          <div class="edu-item">
-            <div class="edu-degree" data-key="diferencial">Planejamento · Entrega · Suporte</div>
-            <div class="edu-area" data-key="diferencial-text">Da concepção à implementação, com qualidade e compromisso</div>
-          </div>
-        </div>
       </div>
       <div>
-        <!-- Lado direito vazio - mantido para equilíbrio do grid -->
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── AVALIAÇÕES (CARROSSEL) ── -->
-<section class="avaliacoes" id="avaliacoes">
-  <div class="divider"></div>
-  <div class="container">
-    <div class="sec-header reveal">
-      <div class="label" data-key="avaliacoes-label">Avaliações</div>
-      <h2 class="sec-title" data-key="avaliacoes-title">O que nossos <span>clientes dizem</span></h2>
-    </div>
-    <div class="carousel-container">
-      <div class="carousel-track" id="carouselTrack">
-        <div class="avaliacao-card">
-          <div class="avaliacao-stars">★★★★★</div>
-          <p class="avaliacao-text" data-key="avaliacao1">"Excelente trabalho! A MALVSCODE entregou um sistema completo e sob medida para nossa empresa. Profissionalismo e qualidade impecáveis."</p>
-          <div class="avaliacao-cliente">
-            <strong>Em breve</strong>
-            <span>• Primeiro cliente</span>
+        <div class="edu-list reveal" data-d="1">
+          <div class="edu-item">
+            <div class="edu-degree">+2 anos de experiência</div>
+            <div class="edu-area">Desenvolvendo soluções digitais</div>
           </div>
-        </div>
-        <div class="avaliacao-card">
-          <div class="avaliacao-stars">★★★★★</div>
-          <p class="avaliacao-text" data-key="avaliacao2">"O site institucional ficou incrível! Design moderno, responsivo e com ótima performance. Superou todas as expectativas."</p>
-          <div class="avaliacao-cliente">
-            <strong>Em breve</strong>
-            <span>• Primeiro cliente</span>
+          <div class="edu-item">
+            <div class="edu-degree">Planejamento · Entrega · Suporte</div>
+            <div class="edu-area">Da concepção à implementação</div>
           </div>
-        </div>
-        <div class="avaliacao-card">
-          <div class="avaliacao-stars">★★★★★</div>
-          <p class="avaliacao-text" data-key="avaliacao3">"Profissionalismo e pontualidade impressionantes. A MALVSCODE entendeu nossas necessidades e entregou além do esperado."</p>
-          <div class="avaliacao-cliente">
-            <strong>Em breve</strong>
-            <span>• Primeiro cliente</span>
-          </div>
-        </div>
-        <div class="avaliacao-card">
-          <div class="avaliacao-stars">★★★★★</div>
-          <p class="avaliacao-text" data-key="avaliacao4">"A equipe da MALVSCODE é extremamente capacitada. Recomendo para qualquer empresa que busque qualidade e inovação."</p>
-          <div class="avaliacao-cliente">
-            <strong>Em breve</strong>
-            <span>• Primeiro cliente</span>
+          <div class="edu-item">
+            <div class="edu-degree">Desenvolvimento Moderno</div>
+            <div class="edu-area">Tecnologias atuais e boas práticas</div>
           </div>
         </div>
       </div>
-      <button class="carousel-btn prev" id="carouselPrev">‹</button>
-      <button class="carousel-btn next" id="carouselNext">›</button>
-      <div class="carousel-dots" id="carouselDots"></div>
     </div>
   </div>
 </section>
@@ -457,26 +410,17 @@
       <p class="modal-body" id="modalBody">Descrição do módulo</p>
     </div>
     <div class="modal-divider"></div>
-    <div class="modal-tech-header">
-      <span class="modal-tech-label">Tecnologias utilizadas</span>
-    </div>
-    <div class="modal-tech-tags" id="modalTechTags">
-      <span class="modal-tech-tag">HTML</span>
-      <span class="modal-tech-tag">CSS</span>
-      <span class="modal-tech-tag">JavaScript</span>
-    </div>
-    <div class="modal-divider"></div>
     <div class="modal-footer-info">
       <div class="modal-info-item">
-        <span class="modal-info-icon">◆</span>
+        <span class="modal-info-icon">—</span>
         <span class="modal-info-text">Esta é uma demonstração do módulo.</span>
       </div>
       <div class="modal-info-item">
-        <span class="modal-info-icon">◆</span>
+        <span class="modal-info-icon">—</span>
         <span class="modal-info-text">O cliente pode solicitar ajustes e novas funcionalidades durante o planejamento.</span>
       </div>
       <div class="modal-info-item">
-        <span class="modal-info-icon">◆</span>
+        <span class="modal-info-icon">—</span>
         <span class="modal-info-text">Personalize conforme as necessidades do seu negócio.</span>
       </div>
     </div>
@@ -523,13 +467,13 @@
       <h2 class="sec-title" data-key="contato-title">Vamos <span>trabalhar juntos?</span></h2>
       <p class="contato-sub" data-key="contato-sub">Abertos para projetos, consultorias e parcerias.<br>Entre em contato e vamos conversar sobre sua ideia.</p>
       <div class="contact-cards">
-        <a href="tel:+5527999709444" class="contact-card">
+        <a href="tel:+5527997099444" class="contact-card">
           <div class="contact-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
           </div>
           <div>
             <div class="contact-label" data-key="telefone">WhatsApp / Telefone</div>
-            <div class="contact-value">(27) 99970-9444</div>
+            <div class="contact-value">(27) 99709-9444</div>
           </div>
         </a>
         <a href="mailto:contato@malvscode.com.br" class="contact-card">
@@ -543,7 +487,7 @@
         </a>
       </div>
       <div class="contact-cta">
-        <a href="https://wa.me/5527999709444?text=Olá!%20Vi%20o%20site%20da%20MALVSCODE%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" rel="noopener" class="btn btn-blue">
+        <a href="https://wa.me/5527997099444?text=Olá!%20Vi%20o%20site%20da%20MALVSCODE%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" rel="noopener" class="btn btn-blue">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           <span data-key="whatsapp">Chamar no WhatsApp</span>
         </a>
@@ -560,9 +504,7 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-inner">
-      <div class="footer-logo">
-        MALVS<span>CODE</span>
-      </div>
+      <div class="footer-logo">MALVSCODE</div>
       <p class="footer-copy">© 2026 MALVSCODE · Desenvolvimento de Software · contato@malvscode.com.br</p>
     </div>
   </div>
