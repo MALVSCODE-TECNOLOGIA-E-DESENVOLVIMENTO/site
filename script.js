@@ -224,31 +224,43 @@ autoModuloInterval = setInterval(nextModulo, 6000);
 const modalData = {
   modulo1: {
     title: 'Sistema Interno Empresarial',
-    desc: 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais. Ideal para empresas que buscam organizar seus processos internos de forma eficiente e integrada.'
+    desc: 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais. Ideal para empresas que buscam organizar seus processos internos de forma eficiente e integrada. Desenvolvido com HTML, CSS, JavaScript, Node.js, PostgreSQL e outras tecnologias modernas.'
   },
   modulo2: {
     title: 'Controle de Frete',
-    desc: 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa. Perfeito para empresas de logística e transportes.'
+    desc: 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa. Perfeito para empresas de logística e transportes. Tecnologias utilizadas: React, Node.js, PostgreSQL, Render e mais.'
   },
   modulo3: {
     title: 'Contas a Pagar',
-    desc: 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária. Mantenha as finanças da sua empresa em ordem.'
+    desc: 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária. Mantenha as finanças da sua empresa em ordem. Desenvolvido com HTML, CSS, JavaScript, Node.js, SQL e outras ferramentas.'
   },
   modulo4: {
     title: 'Contas a Receber',
-    desc: 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa. Tenha visibilidade total das suas finanças.'
+    desc: 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa. Tenha visibilidade total das suas finanças. Stack: React, Node.js, PostgreSQL, server.js, .env e mais.'
   },
   modulo5: {
     title: 'Tabela de Preços',
-    desc: 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real. Ideal para comércios e empresas com muitos produtos.'
+    desc: 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real. Ideal para comércios e empresas com muitos produtos. Tecnologias: HTML, CSS, JavaScript, Node.js, SQL e outras.'
   },
   modulo6: {
     title: 'Estoque',
-    desc: 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais. Mantenha seu estoque sempre atualizado.'
+    desc: 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais. Mantenha seu estoque sempre atualizado. Desenvolvido com React, Node.js, PostgreSQL, package.json e mais.'
   },
   modulo7: {
     title: 'Login e Autenticação',
-    desc: 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso. Garanta a segurança da sua aplicação.'
+    desc: 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso. Garanta a segurança da sua aplicação. Stack: React, Node.js, JWT, Render, SQL e outras tecnologias.'
+  },
+  modulo8: {
+    title: 'Jornada Acadêmica',
+    desc: 'Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico. Ideal para instituições de ensino. Tecnologias: HTML, CSS, JavaScript, Node.js, PostgreSQL e mais.'
+  },
+  modulo9: {
+    title: 'Fornecedores',
+    desc: 'Gerencie fornecedores, contratos, avaliações e histórico de compras. Perfeito para empresas que precisam controlar sua cadeia de suprimentos. Desenvolvido com React, Node.js, SQL, server.js e outras ferramentas.'
+  },
+  modulo10: {
+    title: 'Transportadoras',
+    desc: 'Gerencie transportadoras, contratos, rotas e acompanhamento de entregas. Ideal para empresas de logística. Stack: React, Node.js, PostgreSQL, .env, package.json e mais.'
   }
 };
 
@@ -283,11 +295,9 @@ const translations = {
     'status': '"disponível para projetos"',
     'sobre-label': 'Sobre a MALVSCODE',
     'sobre-title': 'Tecnologia que<br><span>entrega resultado.</span>',
-    'sobre-text1': 'A <strong>MALVSCODE</strong> é uma empresa de desenvolvimento de sites e software robustos, escaláveis e seguros. Atuamos desde o front-end até a arquitetura de infraestrutura em nuvem, unindo <strong>engenharia de software</strong> com <strong>visão estratégica de negócio</strong>.',
+    'sobre-text1': 'A <strong>MALVSCODE</strong> desenvolve sites e software robustos, escaláveis e seguros. Atuando desde o front-end até a arquitetura de infraestrutura em nuvem, unindo <strong>engenharia de software</strong> com <strong>visão estratégica de negócio</strong>.',
     'sobre-text2': 'Com foco em performance e segurança, entregamos soluções que impulsionam negócios e garantem a melhor experiência para usuários e clientes.',
-    'fundacao': 'Fundada em 2027',
     'sede': 'Com sede em Serra, ES',
-    'projetos-entregues': 'Projetos em Desenvolvimento',
     'projetos-text': 'Soluções personalizadas para cada cliente',
     'diferencial': 'Planejamento · Entrega · Suporte',
     'diferencial-text': 'Da concepção à implementação, com qualidade e compromisso',
@@ -313,11 +323,16 @@ const translations = {
     'modulo6-desc': 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais.',
     'modulo7-nome': 'Login e Autenticação',
     'modulo7-desc': 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso.',
+    'modulo8-nome': 'Jornada Acadêmica',
+    'modulo8-desc': 'Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico.',
+    'modulo9-nome': 'Fornecedores',
+    'modulo9-desc': 'Gerencie fornecedores, contratos, avaliações e histórico de compras.',
+    'modulo10-nome': 'Transportadoras',
+    'modulo10-desc': 'Gerencie transportadoras, contratos, rotas e acompanhamento de entregas.',
     'ver-demo': 'Ver Demo',
     'sites-label': 'Sites desenvolvidos',
     'sites-title': 'Sites & <span>Interfaces</span>',
     'site1-nome': 'Elevate Vision Agency',
-    'site2-nome': 'I.R. COMÉRCIO E MATERIAIS ELÉTRICOS LTDA',
     'visitar-site': 'Visitar site',
     'contato-label': 'Contato',
     'contato-title': 'Vamos <span>trabalhar juntos?</span>',
@@ -342,11 +357,9 @@ const translations = {
     'status': '"available for projects"',
     'sobre-label': 'About MALVSCODE',
     'sobre-title': 'Technology that<br><span>delivers results.</span>',
-    'sobre-text1': '<strong>MALVSCODE</strong> is a software development company focused on building robust, scalable, and secure websites and systems. We work from front-end to cloud infrastructure architecture, combining <strong>software engineering</strong> with <strong>strategic business vision</strong>.',
+    'sobre-text1': '<strong>MALVSCODE</strong> develops robust, scalable and secure websites and software. Operating from front-end to cloud infrastructure architecture, combining <strong>software engineering</strong> with <strong>strategic business vision</strong>.',
     'sobre-text2': 'With a focus on performance and security, we deliver solutions that drive business growth and ensure the best experience for users and clients.',
-    'fundacao': 'Founded in 2027',
     'sede': 'Based in Serra, ES',
-    'projetos-entregues': 'Projects in Development',
     'projetos-text': 'Custom solutions for each client',
     'diferencial': 'Planning · Delivery · Support',
     'diferencial-text': 'From conception to implementation, with quality and commitment',
@@ -372,11 +385,16 @@ const translations = {
     'modulo6-desc': 'Inventory control, movements, low stock alerts and management reports.',
     'modulo7-nome': 'Login & Authentication',
     'modulo7-desc': 'Secure login system, JWT authentication, password recovery and access levels.',
+    'modulo8-nome': 'Academic Journey',
+    'modulo8-desc': 'Platform for managing courses, students, classes and academic tracking.',
+    'modulo9-nome': 'Suppliers',
+    'modulo9-desc': 'Manage suppliers, contracts, evaluations and purchase history.',
+    'modulo10-nome': 'Carriers',
+    'modulo10-desc': 'Manage carriers, contracts, routes and delivery tracking.',
     'ver-demo': 'View Demo',
     'sites-label': 'Developed Websites',
     'sites-title': 'Websites & <span>Interfaces</span>',
     'site1-nome': 'Elevate Vision Agency',
-    'site2-nome': 'I.R. COMÉRCIO E MATERIAIS ELÉTRICOS LTDA',
     'visitar-site': 'Visit site',
     'contato-label': 'Contact',
     'contato-title': "Let's <span>work together?</span>",
@@ -401,11 +419,9 @@ const translations = {
     'status': '"disponible para proyectos"',
     'sobre-label': 'Sobre MALVSCODE',
     'sobre-title': 'Tecnología que<br><span>entrega resultados.</span>',
-    'sobre-text1': '<strong>MALVSCODE</strong> es una empresa de desarrollo de sitios web y software robustos, escalables y seguros. Actuamos desde el front-end hasta la arquitectura de infraestructura en la nube, uniendo <strong>ingeniería de software</strong> con <strong>visión estratégica de negocio</strong>.',
+    'sobre-text1': '<strong>MALVSCODE</strong> desarrolla sitios web y software robustos, escalables y seguros. Actuando desde el front-end hasta la arquitectura de infraestructura en la nube, uniendo <strong>ingeniería de software</strong> con <strong>visión estratégica de negocio</strong>.',
     'sobre-text2': 'Con enfoque en rendimiento y seguridad, entregamos soluciones que impulsan negocios y garantizan la mejor experiencia para usuarios y clientes.',
-    'fundacao': 'Fundada en 2027',
     'sede': 'Con sede en Serra, ES',
-    'projetos-entregues': 'Proyectos en Desarrollo',
     'projetos-text': 'Soluciones personalizadas para cada cliente',
     'diferencial': 'Planificación · Entrega · Soporte',
     'diferencial-text': 'Desde la concepción hasta la implementación, con calidad y compromiso',
@@ -431,11 +447,16 @@ const translations = {
     'modulo6-desc': 'Control de inventario, movimientos, alertas de stock bajo e informes gerenciales.',
     'modulo7-nome': 'Login y Autenticación',
     'modulo7-desc': 'Sistema seguro de login, autenticación JWT, recuperación de contraseña y niveles de acceso.',
+    'modulo8-nome': 'Jornada Académica',
+    'modulo8-desc': 'Plataforma para gestión de cursos, alumnos, clases y seguimiento académico.',
+    'modulo9-nome': 'Proveedores',
+    'modulo9-desc': 'Gestione proveedores, contratos, evaluaciones e historial de compras.',
+    'modulo10-nome': 'Transportadoras',
+    'modulo10-desc': 'Gestione transportadoras, contratos, rutas y seguimiento de entregas.',
     'ver-demo': 'Ver Demo',
     'sites-label': 'Sitios desarrollados',
     'sites-title': 'Sitios web & <span>Interfaces</span>',
     'site1-nome': 'Elevate Vision Agency',
-    'site2-nome': 'I.R. COMÉRCIO E MATERIAIS ELÉTRICOS LTDA',
     'visitar-site': 'Visitar sitio',
     'contato-label': 'Contacto',
     'contato-title': '¿Vamos a <span>trabajar juntos?</span>',
@@ -466,7 +487,8 @@ function changeLanguage(lang) {
           key === 'avaliacao2' || key === 'avaliacao3' || key === 'avaliacao4' ||
           key === 'modulo1-desc' || key === 'modulo2-desc' || key === 'modulo3-desc' ||
           key === 'modulo4-desc' || key === 'modulo5-desc' || key === 'modulo6-desc' ||
-          key === 'modulo7-desc') {
+          key === 'modulo7-desc' || key === 'modulo8-desc' || key === 'modulo9-desc' ||
+          key === 'modulo10-desc') {
         el.innerHTML = translations[lang][key];
       } else {
         el.textContent = translations[lang][key];
