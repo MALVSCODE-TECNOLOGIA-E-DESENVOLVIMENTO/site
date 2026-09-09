@@ -34,7 +34,7 @@ const words = [
   'AWS', 'GCP', 'Azure', 'Linux', 'Git', 'GitHub',
   'APIs', 'REST', 'GraphQL', 'SQL', 'PostgreSQL', 'MongoDB',
   'Firebase', 'Vercel', 'Netlify', 'Render', 'CI/CD', 'DevOps',
-  'Full Stack', 'Front-end', 'Back-end', 'Cloud', 'Segurança',
+  'Full Stack', 'Front-end', 'Back-end', 'Cloud', 'Seguranca',
   'Performance', 'Escalabilidade', 'Responsivo', 'UX/UI', 'Agile',
   'Scrum', 'Kanban', 'JWT', 'OAuth', 'WebSockets', 'SSR', 'SPA',
   'MALVSCODE', 'Sistemas Web', 'APIs', 'Cloud Architecture'
@@ -71,8 +71,6 @@ let autoSlideInterval;
 
 function updateCarousel() {
   track.style.transform = `translateX(-${currentSlide * 100}%)`;
-  
-  // Update dots
   document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
     dot.classList.toggle('active', index === currentSlide);
   });
@@ -117,7 +115,6 @@ nextBtn.addEventListener('click', () => {
   resetAutoSlide();
 });
 
-// Touch support for mobile
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -127,10 +124,6 @@ track.addEventListener('touchstart', (e) => {
 
 track.addEventListener('touchend', (e) => {
   touchEndX = e.changedTouches[0].screenX;
-  handleSwipe();
-});
-
-function handleSwipe() {
   const diff = touchStartX - touchEndX;
   if (Math.abs(diff) > 50) {
     if (diff > 0) {
@@ -140,10 +133,139 @@ function handleSwipe() {
     }
     resetAutoSlide();
   }
-}
+});
 
 createDots();
 autoSlideInterval = setInterval(nextSlide, 5000);
+
+// ── CARROSSEL DE MÓDULOS ──
+const modulosTrack = document.getElementById('modulosTrack');
+const modulosPrev = document.getElementById('modulosPrev');
+const modulosNext = document.getElementById('modulosNext');
+const modulosDots = document.getElementById('modulosDots');
+
+let currentModulo = 0;
+let totalModulos = document.querySelectorAll('.modulo-card').length;
+let modulosPerView = 3;
+let autoModuloInterval;
+
+function getModulosPerView() {
+  if (window.innerWidth <= 600) return 1;
+  if (window.innerWidth <= 1024) return 2;
+  return 3;
+}
+
+function updateModulosCarousel() {
+  modulosPerView = getModulosPerView();
+  const total = Math.ceil(totalModulos / modulosPerView);
+  const maxSlide = Math.max(0, total - 1);
+  if (currentModulo > maxSlide) currentModulo = maxSlide;
+  
+  const cardWidth = document.querySelector('.modulo-card').offsetWidth + 20;
+  const offset = currentModulo * (cardWidth * modulosPerView);
+  modulosTrack.style.transform = `translateX(-${offset}px)`;
+  
+  document.querySelectorAll('.modulos-carousel-dot').forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentModulo);
+  });
+}
+
+function createModulosDots() {
+  modulosDots.innerHTML = '';
+  const total = Math.ceil(totalModulos / getModulosPerView());
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'modulos-carousel-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => {
+      currentModulo = i;
+      updateModulosCarousel();
+      resetModulosAutoSlide();
+    });
+    modulosDots.appendChild(dot);
+  }
+}
+
+function nextModulo() {
+  const total = Math.ceil(totalModulos / getModulosPerView());
+  currentModulo = (currentModulo + 1) % total;
+  updateModulosCarousel();
+}
+
+function prevModulo() {
+  const total = Math.ceil(totalModulos / getModulosPerView());
+  currentModulo = (currentModulo - 1 + total) % total;
+  updateModulosCarousel();
+}
+
+function resetModulosAutoSlide() {
+  clearInterval(autoModuloInterval);
+  autoModuloInterval = setInterval(nextModulo, 6000);
+}
+
+modulosPrev.addEventListener('click', () => {
+  prevModulo();
+  resetModulosAutoSlide();
+});
+
+modulosNext.addEventListener('click', () => {
+  nextModulo();
+  resetModulosAutoSlide();
+});
+
+window.addEventListener('resize', () => {
+  updateModulosCarousel();
+});
+
+createModulosDots();
+setTimeout(updateModulosCarousel, 100);
+autoModuloInterval = setInterval(nextModulo, 6000);
+
+// ── MODAL ──
+const modalData = {
+  modulo1: {
+    title: 'Sistema Interno Empresarial',
+    desc: 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais. Ideal para empresas que buscam organizar seus processos internos de forma eficiente e integrada.'
+  },
+  modulo2: {
+    title: 'Controle de Frete',
+    desc: 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa. Perfeito para empresas de logística e transportes.'
+  },
+  modulo3: {
+    title: 'Contas a Pagar',
+    desc: 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária. Mantenha as finanças da sua empresa em ordem.'
+  },
+  modulo4: {
+    title: 'Contas a Receber',
+    desc: 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa. Tenha visibilidade total das suas finanças.'
+  },
+  modulo5: {
+    title: 'Tabela de Preços',
+    desc: 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real. Ideal para comércios e empresas com muitos produtos.'
+  },
+  modulo6: {
+    title: 'Estoque',
+    desc: 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais. Mantenha seu estoque sempre atualizado.'
+  },
+  modulo7: {
+    title: 'Login e Autenticação',
+    desc: 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso. Garanta a segurança da sua aplicação.'
+  }
+};
+
+function openModal(moduloId) {
+  const data = modalData[moduloId];
+  if (!data) return;
+  
+  document.getElementById('modalTitle').textContent = data.title;
+  document.getElementById('modalBody').textContent = data.desc;
+  document.getElementById('modalOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
 
 // ── LANGUAGE SYSTEM ──
 const translations = {
@@ -163,12 +285,12 @@ const translations = {
     'sobre-title': 'Tecnologia que<br><span>entrega resultado.</span>',
     'sobre-text1': 'A <strong>MALVSCODE</strong> é uma empresa de desenvolvimento de sites e software robustos, escaláveis e seguros. Atuamos desde o front-end até a arquitetura de infraestrutura em nuvem, unindo <strong>engenharia de software</strong> com <strong>visão estratégica de negócio</strong>.',
     'sobre-text2': 'Com foco em performance e segurança, entregamos soluções que impulsionam negócios e garantem a melhor experiência para usuários e clientes.',
-    'fundacao': 'Fundada em 2025',
+    'fundacao': 'Fundada em 2027',
     'sede': 'Com sede em Serra, ES',
-    'projetos-entregues': '+2 Projetos Entregues',
-    'projetos-text': 'Veja o feedback dos clientes →',
-    'diferencial': 'Atendimento Personalizado',
-    'diferencial-text': 'Do planejamento à entrega, com suporte contínuo',
+    'projetos-entregues': 'Projetos em Desenvolvimento',
+    'projetos-text': 'Soluções personalizadas para cada cliente',
+    'diferencial': 'Planejamento · Entrega · Suporte',
+    'diferencial-text': 'Da concepção à implementação, com qualidade e compromisso',
     'avaliacoes-label': 'Avaliações',
     'avaliacoes-title': 'O que nossos <span>clientes dizem</span>',
     'avaliacao1': '"Excelente trabalho! A MALVSCODE entregou um sistema completo e sob medida para nossa empresa. Profissionalismo e qualidade impecáveis."',
@@ -177,17 +299,25 @@ const translations = {
     'avaliacao4': '"A equipe da MALVSCODE é extremamente capacitada. Recomendo para qualquer empresa que busque qualidade e inovação."',
     'sistemas-label': 'Sistemas desenvolvidos',
     'sistemas-title': 'Projetos & <span>Sistemas Web</span>',
-    'sistema1-nome': 'Sistema Interno Empresarial',
-    'sistema1-desc': 'Sistema completo para gestão empresarial desenvolvido para a IR Comércio e Materiais Elétricos LTDA. Controle de estoque, vendas e relatórios.',
-    'sistema2-nome': 'API de Integração',
-    'sistema2-desc': 'API RESTful para integração entre sistemas, com autenticação JWT, rate limiting e documentação Swagger.',
+    'modulo1-nome': 'Sistema Interno Empresarial',
+    'modulo1-desc': 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais.',
+    'modulo2-nome': 'Controle de Frete',
+    'modulo2-desc': 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa.',
+    'modulo3-nome': 'Contas a Pagar',
+    'modulo3-desc': 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária.',
+    'modulo4-nome': 'Contas a Receber',
+    'modulo4-desc': 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa.',
+    'modulo5-nome': 'Tabela de Preços',
+    'modulo5-desc': 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real.',
+    'modulo6-nome': 'Estoque',
+    'modulo6-desc': 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais.',
+    'modulo7-nome': 'Login e Autenticação',
+    'modulo7-desc': 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso.',
     'ver-demo': 'Ver Demo',
     'sites-label': 'Sites desenvolvidos',
     'sites-title': 'Sites & <span>Interfaces</span>',
-    'site1-nome': 'Elevate Vision',
-    'site1-desc': 'Site institucional com design moderno, responsivo e otimizado para SEO. Reflete a identidade da consultoria.',
-    'site2-nome': 'IR Comércio',
-    'site2-desc': 'Site institucional para a IR Comércio e Materiais Elétricos LTDA, com catálogo de produtos e informações da empresa.',
+    'site1-nome': 'Elevate Vision Agency',
+    'site2-nome': 'I.R. COMÉRCIO E MATERIAIS ELÉTRICOS LTDA',
     'visitar-site': 'Visitar site',
     'contato-label': 'Contato',
     'contato-title': 'Vamos <span>trabalhar juntos?</span>',
@@ -195,7 +325,8 @@ const translations = {
     'telefone': 'WhatsApp / Telefone',
     'email': 'E-mail',
     'whatsapp': 'Chamar no WhatsApp',
-    'email-btn': 'Enviar E-mail'
+    'email-btn': 'Enviar E-mail',
+    'fechar': 'Fechar'
   },
   en: {
     'nav-sobre': 'About Us',
@@ -213,12 +344,12 @@ const translations = {
     'sobre-title': 'Technology that<br><span>delivers results.</span>',
     'sobre-text1': '<strong>MALVSCODE</strong> is a software development company focused on building robust, scalable, and secure websites and systems. We work from front-end to cloud infrastructure architecture, combining <strong>software engineering</strong> with <strong>strategic business vision</strong>.',
     'sobre-text2': 'With a focus on performance and security, we deliver solutions that drive business growth and ensure the best experience for users and clients.',
-    'fundacao': 'Founded in 2025',
+    'fundacao': 'Founded in 2027',
     'sede': 'Based in Serra, ES',
-    'projetos-entregues': '+2 Projects Delivered',
-    'projetos-text': 'See client feedback →',
-    'diferencial': 'Personalized Service',
-    'diferencial-text': 'From planning to delivery, with ongoing support',
+    'projetos-entregues': 'Projects in Development',
+    'projetos-text': 'Custom solutions for each client',
+    'diferencial': 'Planning · Delivery · Support',
+    'diferencial-text': 'From conception to implementation, with quality and commitment',
     'avaliacoes-label': 'Reviews',
     'avaliacoes-title': 'What our <span>clients say</span>',
     'avaliacao1': '"Excellent work! MALVSCODE delivered a complete custom system for our company. Impeccable professionalism and quality."',
@@ -227,17 +358,25 @@ const translations = {
     'avaliacao4': '"The MALVSCODE team is highly skilled. I recommend them to any company seeking quality and innovation."',
     'sistemas-label': 'Developed Systems',
     'sistemas-title': 'Projects & <span>Web Systems</span>',
-    'sistema1-nome': 'Business Management System',
-    'sistema1-desc': 'Complete business management system developed for IR Comércio e Materiais Elétricos LTDA. Inventory, sales, and reporting control.',
-    'sistema2-nome': 'Integration API',
-    'sistema2-desc': 'RESTful API for system integration with JWT authentication, rate limiting, and Swagger documentation.',
+    'modulo1-nome': 'Business Management System',
+    'modulo1-desc': 'Complete business management system with inventory, sales, reports and much more.',
+    'modulo2-nome': 'Freight Control',
+    'modulo2-desc': 'Manage freight, routes, costs and deliveries with efficiency and complete traceability.',
+    'modulo3-nome': 'Accounts Payable',
+    'modulo3-desc': 'Total control of accounts payable, due dates, cash flow and bank reconciliation.',
+    'modulo4-nome': 'Accounts Receivable',
+    'modulo4-desc': 'Manage receipts, customers, deadlines and monitor your company\'s cash flow.',
+    'modulo5-nome': 'Price List',
+    'modulo5-desc': 'Manage price lists, promotions, discounts and real-time updates.',
+    'modulo6-nome': 'Inventory',
+    'modulo6-desc': 'Inventory control, movements, low stock alerts and management reports.',
+    'modulo7-nome': 'Login & Authentication',
+    'modulo7-desc': 'Secure login system, JWT authentication, password recovery and access levels.',
     'ver-demo': 'View Demo',
     'sites-label': 'Developed Websites',
     'sites-title': 'Websites & <span>Interfaces</span>',
-    'site1-nome': 'Elevate Vision',
-    'site1-desc': 'Modern institutional website with responsive design and SEO optimization. Reflects the consulting identity.',
-    'site2-nome': 'IR Comércio',
-    'site2-desc': 'Institutional website for IR Comércio e Materiais Elétricos LTDA, with product catalog and company information.',
+    'site1-nome': 'Elevate Vision Agency',
+    'site2-nome': 'I.R. COMÉRCIO E MATERIAIS ELÉTRICOS LTDA',
     'visitar-site': 'Visit site',
     'contato-label': 'Contact',
     'contato-title': "Let's <span>work together?</span>",
@@ -245,7 +384,8 @@ const translations = {
     'telefone': 'WhatsApp / Phone',
     'email': 'E-mail',
     'whatsapp': 'Call on WhatsApp',
-    'email-btn': 'Send E-mail'
+    'email-btn': 'Send E-mail',
+    'fechar': 'Close'
   },
   es: {
     'nav-sobre': 'La Empresa',
@@ -263,12 +403,12 @@ const translations = {
     'sobre-title': 'Tecnología que<br><span>entrega resultados.</span>',
     'sobre-text1': '<strong>MALVSCODE</strong> es una empresa de desarrollo de sitios web y software robustos, escalables y seguros. Actuamos desde el front-end hasta la arquitectura de infraestructura en la nube, uniendo <strong>ingeniería de software</strong> con <strong>visión estratégica de negocio</strong>.',
     'sobre-text2': 'Con enfoque en rendimiento y seguridad, entregamos soluciones que impulsan negocios y garantizan la mejor experiencia para usuarios y clientes.',
-    'fundacao': 'Fundada en 2025',
+    'fundacao': 'Fundada en 2027',
     'sede': 'Con sede en Serra, ES',
-    'projetos-entregues': '+2 Proyectos Entregados',
-    'projetos-text': 'Ver comentarios de clientes →',
-    'diferencial': 'Atención Personalizada',
-    'diferencial-text': 'Desde la planificación hasta la entrega, con soporte continuo',
+    'projetos-entregues': 'Proyectos en Desarrollo',
+    'projetos-text': 'Soluciones personalizadas para cada cliente',
+    'diferencial': 'Planificación · Entrega · Soporte',
+    'diferencial-text': 'Desde la concepción hasta la implementación, con calidad y compromiso',
     'avaliacoes-label': 'Evaluaciones',
     'avaliacoes-title': 'Lo que nuestros <span>clientes dicen</span>',
     'avaliacao1': '"¡Excelente trabajo! MALVSCODE entregó un sistema completo y a medida para nuestra empresa. Profesionalismo y calidad impecables."',
@@ -277,17 +417,25 @@ const translations = {
     'avaliacao4': '"El equipo de MALVSCODE es extremadamente capacitado. Lo recomiendo para cualquier empresa que busque calidad e innovación."',
     'sistemas-label': 'Sistemas desarrollados',
     'sistemas-title': 'Proyectos & <span>Sistemas Web</span>',
-    'sistema1-nome': 'Sistema Interno Empresarial',
-    'sistema1-desc': 'Sistema completo de gestión empresarial desarrollado para IR Comércio e Materiais Elétricos LTDA. Control de inventario, ventas e informes.',
-    'sistema2-nome': 'API de Integración',
-    'sistema2-desc': 'API RESTful para integración entre sistemas, con autenticación JWT, rate limiting y documentación Swagger.',
+    'modulo1-nome': 'Sistema Interno Empresarial',
+    'modulo1-desc': 'Sistema completo de gestión empresarial con control de inventario, ventas, informes y más.',
+    'modulo2-nome': 'Control de Flete',
+    'modulo2-desc': 'Gestione fletes, rutas, costos y entregas con eficiencia y trazabilidad completa.',
+    'modulo3-nome': 'Cuentas a Pagar',
+    'modulo3-desc': 'Control total de cuentas a pagar, vencimientos, flujo de caja y conciliación bancaria.',
+    'modulo4-nome': 'Cuentas a Cobrar',
+    'modulo4-desc': 'Gestione cobros, clientes, plazos y monitoree el flujo de caja de su empresa.',
+    'modulo5-nome': 'Tabla de Precios',
+    'modulo5-desc': 'Gestione tablas de precios, promociones, descuentos y actualizaciones en tiempo real.',
+    'modulo6-nome': 'Inventario',
+    'modulo6-desc': 'Control de inventario, movimientos, alertas de stock bajo e informes gerenciales.',
+    'modulo7-nome': 'Login y Autenticación',
+    'modulo7-desc': 'Sistema seguro de login, autenticación JWT, recuperación de contraseña y niveles de acceso.',
     'ver-demo': 'Ver Demo',
     'sites-label': 'Sitios desarrollados',
     'sites-title': 'Sitios web & <span>Interfaces</span>',
-    'site1-nome': 'Elevate Vision',
-    'site1-desc': 'Sitio institucional con diseño moderno, responsive y optimizado para SEO. Refleja la identidad de la consultoría.',
-    'site2-nome': 'IR Comércio',
-    'site2-desc': 'Sitio institucional para IR Comércio e Materiais Elétricos LTDA, con catálogo de productos e información de la empresa.',
+    'site1-nome': 'Elevate Vision Agency',
+    'site2-nome': 'I.R. COMÉRCIO E MATERIAIS ELÉTRICOS LTDA',
     'visitar-site': 'Visitar sitio',
     'contato-label': 'Contacto',
     'contato-title': '¿Vamos a <span>trabajar juntos?</span>',
@@ -295,7 +443,8 @@ const translations = {
     'telefone': 'WhatsApp / Teléfono',
     'email': 'Correo electrónico',
     'whatsapp': 'Llamar por WhatsApp',
-    'email-btn': 'Enviar correo'
+    'email-btn': 'Enviar correo',
+    'fechar': 'Cerrar'
   }
 };
 
@@ -304,19 +453,20 @@ let currentLang = 'pt';
 function changeLanguage(lang) {
   currentLang = lang;
   
-  // Update active button
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
   
-  // Update all translatable elements
   document.querySelectorAll('[data-key]').forEach(el => {
     const key = el.dataset.key;
     if (translations[lang] && translations[lang][key]) {
       if (key === 'hero-role' || key === 'sobre-title' || key === 'sobre-text1' || 
           key === 'sobre-text2' || key === 'avaliacoes-title' || key === 'sistemas-title' || 
           key === 'sites-title' || key === 'contato-title' || key === 'avaliacao1' ||
-          key === 'avaliacao2' || key === 'avaliacao3' || key === 'avaliacao4') {
+          key === 'avaliacao2' || key === 'avaliacao3' || key === 'avaliacao4' ||
+          key === 'modulo1-desc' || key === 'modulo2-desc' || key === 'modulo3-desc' ||
+          key === 'modulo4-desc' || key === 'modulo5-desc' || key === 'modulo6-desc' ||
+          key === 'modulo7-desc') {
         el.innerHTML = translations[lang][key];
       } else {
         el.textContent = translations[lang][key];
@@ -325,7 +475,6 @@ function changeLanguage(lang) {
   });
 }
 
-// Set default language (Portuguese)
 document.addEventListener('DOMContentLoaded', () => {
   changeLanguage('pt');
 });
