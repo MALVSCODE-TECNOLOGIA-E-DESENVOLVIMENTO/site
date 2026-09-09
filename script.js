@@ -60,7 +60,7 @@ function createFloatingWords() {
 }
 createFloatingWords();
 
-// ── CARROSSEL DE MÓDULOS (INFINITO) ──
+// ── CARROSSEL DE MÓDULOS (INFINITO COM AUTOPLAY) ──
 const modulosTrack = document.getElementById('modulosTrack');
 const modulosPrev = document.getElementById('modulosPrev');
 const modulosNext = document.getElementById('modulosNext');
@@ -71,6 +71,8 @@ let totalModulos = document.querySelectorAll('.modulo-card').length;
 let modulosPerView = 3;
 let autoModuloInterval;
 let isTransitioning = false;
+let userInteracted = false;
+let interactionTimeout = null;
 
 // Clonar cards para efeito infinito
 function setupInfiniteCarousel() {
@@ -78,14 +80,12 @@ function setupInfiniteCarousel() {
   const cards = track.querySelectorAll('.modulo-card');
   const totalCards = cards.length;
   
-  // Clonar primeiro e último card
   const firstClone = cards[0].cloneNode(true);
   const lastClone = cards[totalCards - 1].cloneNode(true);
   
   track.appendChild(firstClone);
   track.insertBefore(lastClone, cards[0]);
   
-  // Ajustar posição inicial
   const cardWidth = cards[0].offsetWidth + 20;
   track.style.transform = `translateX(-${cardWidth}px)`;
   
@@ -108,27 +108,16 @@ function updateModulosCarousel(animate = true) {
   
   modulosPerView = getModulosPerView();
   const cardWidth = getCardWidth();
-  const totalSlides = totalModulos + 2; // +2 pelos clones
   
-  // Ajusta o índice para considerar os clones
   let displayIndex = currentModulo + 1;
   
   modulosTrack.style.transition = animate ? 'transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'none';
   modulosTrack.style.transform = `translateX(-${displayIndex * cardWidth}px)`;
   
-  // Atualizar dots (ignorando os clones)
   const dotCount = Math.ceil(totalModulos / modulosPerView);
   document.querySelectorAll('.modulos-carousel-dot').forEach((dot, index) => {
     dot.classList.toggle('active', index === currentModulo % dotCount);
   });
-}
-
-function goToSlide(index, animate = true) {
-  if (isTransitioning) return;
-  
-  const dotCount = Math.ceil(totalModulos / modulosPerView);
-  currentModulo = ((index % dotCount) + dotCount) % dotCount;
-  updateModulosCarousel(animate);
 }
 
 function createModulosDots() {
@@ -138,8 +127,15 @@ function createModulosDots() {
     const dot = document.createElement('button');
     dot.className = 'modulos-carousel-dot' + (i === 0 ? ' active' : '');
     dot.addEventListener('click', () => {
-      goToSlide(i);
+      userInteracted = true;
+      clearTimeout(interactionTimeout);
+      currentModulo = i;
+      updateModulosCarousel();
       resetModulosAutoSlide();
+      interactionTimeout = setTimeout(() => {
+        userInteracted = false;
+        resetModulosAutoSlide();
+      }, 8000);
     });
     modulosDots.appendChild(dot);
   }
@@ -150,18 +146,15 @@ function nextModulo() {
   
   const dotCount = Math.ceil(totalModulos / modulosPerView);
   const cardWidth = getCardWidth();
-  const displayIndex = currentModulo + 2; // +2 por causa dos clones
+  const displayIndex = currentModulo + 2;
   
   isTransitioning = true;
   
-  // Ir para o próximo slide
   currentModulo = (currentModulo + 1) % dotCount;
   updateModulosCarousel(true);
   
-  // Verificar se chegou no clone
   setTimeout(() => {
     if (displayIndex >= totalModulos + 1) {
-      // Voltou ao início (loop infinito)
       isTransitioning = true;
       currentModulo = 0;
       modulosTrack.style.transition = 'none';
@@ -190,7 +183,6 @@ function prevModulo() {
   
   setTimeout(() => {
     if (displayIndex <= 0) {
-      // Foi para o último (loop infinito)
       isTransitioning = true;
       currentModulo = dotCount - 1;
       modulosTrack.style.transition = 'none';
@@ -207,18 +199,30 @@ function prevModulo() {
 
 function resetModulosAutoSlide() {
   clearInterval(autoModuloInterval);
-  autoModuloInterval = setInterval(nextModulo, 5000);
+  const delay = userInteracted ? 8000 : 5000;
+  autoModuloInterval = setInterval(nextModulo, delay);
 }
 
-// Event listeners para os botões
 modulosPrev.addEventListener('click', () => {
+  userInteracted = true;
+  clearTimeout(interactionTimeout);
   prevModulo();
   resetModulosAutoSlide();
+  interactionTimeout = setTimeout(() => {
+    userInteracted = false;
+    resetModulosAutoSlide();
+  }, 8000);
 });
 
 modulosNext.addEventListener('click', () => {
+  userInteracted = true;
+  clearTimeout(interactionTimeout);
   nextModulo();
   resetModulosAutoSlide();
+  interactionTimeout = setTimeout(() => {
+    userInteracted = false;
+    resetModulosAutoSlide();
+  }, 8000);
 });
 
 // ── TOUCH / SWIPE SUPPORT ──
@@ -229,6 +233,8 @@ let isSwiping = false;
 modulosTrack.addEventListener('touchstart', (e) => {
   touchStartX = e.changedTouches[0].screenX;
   isSwiping = true;
+  userInteracted = true;
+  clearTimeout(interactionTimeout);
   clearInterval(autoModuloInterval);
 }, { passive: true });
 
@@ -247,13 +253,15 @@ modulosTrack.addEventListener('touchend', (e) => {
     } else {
       prevModulo();
     }
-    resetModulosAutoSlide();
-  } else {
-    resetModulosAutoSlide();
   }
+  resetModulosAutoSlide();
+  interactionTimeout = setTimeout(() => {
+    userInteracted = false;
+    resetModulosAutoSlide();
+  }, 8000);
 }, { passive: true });
 
-// Mouse drag support para desktop
+// Mouse drag support
 let isDragging = false;
 let startX = 0;
 let currentX = 0;
@@ -262,6 +270,8 @@ modulosTrack.addEventListener('mousedown', (e) => {
   isDragging = true;
   startX = e.clientX;
   modulosTrack.style.cursor = 'grabbing';
+  userInteracted = true;
+  clearTimeout(interactionTimeout);
   clearInterval(autoModuloInterval);
 });
 
@@ -281,10 +291,12 @@ document.addEventListener('mouseup', (e) => {
     } else {
       prevModulo();
     }
-    resetModulosAutoSlide();
-  } else {
-    resetModulosAutoSlide();
   }
+  resetModulosAutoSlide();
+  interactionTimeout = setTimeout(() => {
+    userInteracted = false;
+    resetModulosAutoSlide();
+  }, 8000);
 });
 
 // ── INICIALIZAÇÃO ──
@@ -295,10 +307,10 @@ function initCarousel() {
   setTimeout(() => {
     updateModulosCarousel(false);
   }, 100);
+  userInteracted = false;
   resetModulosAutoSlide();
 }
 
-// Re-inicializar em resize
 let resizeTimeout;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimeout);
@@ -312,7 +324,6 @@ window.addEventListener('resize', () => {
   }, 250);
 });
 
-// Iniciar carrossel quando a página carregar
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(initCarousel, 200);
 });
@@ -377,7 +388,6 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-// Fechar modal com ESC
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeModal();
 });
@@ -559,7 +569,6 @@ let isLangOpen = false;
 
 function toggleLanguage(lang) {
   if (lang === currentLang) {
-    // Toggle dropdown
     const selector = document.querySelector('.language-selector');
     isLangOpen = !isLangOpen;
     selector.classList.toggle('open', isLangOpen);
@@ -591,7 +600,6 @@ function toggleLanguage(lang) {
   });
 }
 
-// Fechar dropdown ao clicar fora
 document.addEventListener('click', (e) => {
   const selector = document.querySelector('.language-selector');
   if (!selector.contains(e.target)) {
@@ -601,10 +609,9 @@ document.addEventListener('click', (e) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  changeLanguage('pt');
+  toggleLanguage('pt');
 });
 
-// Função para mudar idioma (mantida para compatibilidade)
 function changeLanguage(lang) {
   toggleLanguage(lang);
 }
