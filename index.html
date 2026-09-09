@@ -5,14 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MALVSCODE — Desenvolvimento de Software</title>
   <meta name="description" content="MALVSCODE é uma empresa de desenvolvimento de sites e software robustos, escaláveis e seguros."/>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="imagens/malvscode-logo.png"/>
+  <link rel="apple-touch-icon" href="imagens/malvscode-logo.png"/>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
 <div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ── BACKGROUND ANIMADO COM PALAVRAS ── -->
+<div class="bg-words" id="bgWords"></div>
 
 <!-- ── NAV ── -->
 <nav class="nav" id="nav">
@@ -23,10 +31,10 @@
     <span></span><span></span><span></span>
   </button>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#sobre" class="nav-link">A Empresa</a></li>
-    <li><a href="#sistemas" class="nav-link">Sistemas</a></li>
-    <li><a href="#sites" class="nav-link">Sites</a></li>
-    <li><a href="#contato" class="nav-link">Contato</a></li>
+    <li><a href="#sobre" class="nav-link" data-key="nav-sobre">A Empresa</a></li>
+    <li><a href="#sistemas" class="nav-link" data-key="nav-sistemas">Sistemas</a></li>
+    <li><a href="#sites" class="nav-link" data-key="nav-sites">Sites</a></li>
+    <li><a href="#contato" class="nav-link" data-key="nav-contato">Contato</a></li>
     <li>
       <div class="language-selector">
         <button class="lang-btn active" data-lang="pt" onclick="changeLanguage('pt')">PT</button>
@@ -46,10 +54,10 @@
   <div class="container">
     <div class="hero-inner">
       <div class="hero-left">
-        <p class="hero-tag" data-key="hero-tag">Soluções digitais de alto impacto</p>
+        <p class="hero-tag" data-key="hero-tag">Software que impulsiona negócios</p>
         <h1 class="hero-name">
-          <span data-key="hero-title1">Desenvolvimento</span><br>
-          <span class="hero-name-accent" data-key="hero-title2">que transforma</span>
+          <span data-key="hero-title1">O futuro começa</span><br>
+          <span class="hero-name-accent" data-key="hero-title2">em um bit.</span>
         </h1>
         <p class="hero-role" data-key="hero-role">
           <strong>Arquitetura Cloud</strong> · Segurança da Informação<br>
@@ -67,7 +75,7 @@
             <div class="dot d-red"></div>
             <div class="dot d-yellow"></div>
             <div class="dot d-green"></div>
-            <span class="card-title">malvscode.manifest</span>
+            <span class="card-title">malvscode.config</span>
           </div>
           <div class="card-body">
             <div class="line-comment">// empresa de desenvolvimento de software</div>
@@ -87,6 +95,7 @@
             <span class="chip">TypeScript</span>
             <span class="chip">React</span>
             <span class="chip">Next.js</span>
+            <span class="chip">Tailwind CSS</span>
             <span class="chip">Node.js</span>
             <span class="chip">Express</span>
             <span class="chip">APIs REST</span>
@@ -98,7 +107,12 @@
             <span class="chip">AWS</span>
             <span class="chip">GCP</span>
             <span class="chip">Vercel</span>
+            <span class="chip">Render</span>
             <span class="chip">Linux</span>
+            <span class="chip">Git</span>
+            <span class="chip">GitHub</span>
+            <span class="chip">HTTP</span>
+            <span class="chip">JSON</span>
           </div>
         </div>
       </div>
@@ -135,43 +149,50 @@
       </div>
       <div>
         <div class="reveal" data-d="2">
-          <div class="certs">
-            <div class="certs-label" data-key="stack-title">Nossa Stack</div>
-            <div class="cert-list">
-              <div class="cert-item">
-                <div class="cert-icon">⚡</div>
-                <div class="cert-info">
-                  <div class="cert-name" data-key="stack-front">Front-end</div>
-                  <div class="cert-org">HTML5, CSS, JavaScript, TypeScript, React, Next.js, Tailwind CSS</div>
-                </div>
+          <div class="terminal-wrapper">
+            <div class="terminal-card">
+              <div class="terminal-bar">
+                <div class="dot d-red"></div>
+                <div class="dot d-yellow"></div>
+                <div class="dot d-green"></div>
+                <span class="terminal-title">malvscode.tech</span>
               </div>
-              <div class="cert-item">
-                <div class="cert-icon">🚀</div>
-                <div class="cert-info">
-                  <div class="cert-name" data-key="stack-back">Back-end</div>
-                  <div class="cert-org">Node.js, Express, APIs REST, JWT, Autenticação</div>
-                </div>
+              <div class="terminal-body">
+                <div class="terminal-line"><span class="terminal-prompt">$</span> cat technologies.txt</div>
+                <div class="terminal-line terminal-output">┌─────────────────────────────────────────┐</div>
+                <div class="terminal-line terminal-output">│  🚀 Full Stack Development               │</div>
+                <div class="terminal-line terminal-output">│  ☁️  Cloud Architecture (AWS/GCP)         │</div>
+                <div class="terminal-line terminal-output">│  🔒 Security & Compliance                │</div>
+                <div class="terminal-line terminal-output">│  📱 Responsive Web Design                │</div>
+                <div class="terminal-line terminal-output">│  ⚡ Performance Optimization             │</div>
+                <div class="terminal-line terminal-output">└─────────────────────────────────────────┘</div>
+                <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="cursor-blink">▌</span></div>
               </div>
-              <div class="cert-item">
-                <div class="cert-icon">🗄️</div>
-                <div class="cert-info">
-                  <div class="cert-name" data-key="stack-db">Banco de Dados</div>
-                  <div class="cert-org">SQL, PostgreSQL, Prisma, Modelagem de Dados</div>
-                </div>
-              </div>
-              <div class="cert-item">
-                <div class="cert-icon">☁️</div>
-                <div class="cert-info">
-                  <div class="cert-name" data-key="stack-cloud">Cloud & DevOps</div>
-                  <div class="cert-org">AWS, GCP, Vercel, Render, Docker, Linux</div>
-                </div>
-              </div>
-              <div class="cert-item">
-                <div class="cert-icon">🔧</div>
-                <div class="cert-info">
-                  <div class="cert-name" data-key="stack-tools">Ferramentas</div>
-                  <div class="cert-org">Git/GitHub, HTTP, JSON</div>
-                </div>
+              <div class="terminal-chips">
+                <span class="chip">HTML5</span>
+                <span class="chip">CSS</span>
+                <span class="chip">JavaScript</span>
+                <span class="chip">TypeScript</span>
+                <span class="chip">React</span>
+                <span class="chip">Next.js</span>
+                <span class="chip">Tailwind CSS</span>
+                <span class="chip">Node.js</span>
+                <span class="chip">Express</span>
+                <span class="chip">APIs REST</span>
+                <span class="chip">JWT</span>
+                <span class="chip">SQL</span>
+                <span class="chip">PostgreSQL</span>
+                <span class="chip">Prisma</span>
+                <span class="chip">Docker</span>
+                <span class="chip">AWS</span>
+                <span class="chip">GCP</span>
+                <span class="chip">Vercel</span>
+                <span class="chip">Render</span>
+                <span class="chip">Linux</span>
+                <span class="chip">Git</span>
+                <span class="chip">GitHub</span>
+                <span class="chip">HTTP</span>
+                <span class="chip">JSON</span>
               </div>
             </div>
           </div>
@@ -181,7 +202,7 @@
   </div>
 </section>
 
-<!-- ── AVALIAÇÕES ── -->
+<!-- ── AVALIAÇÕES (CARROSSEL) ── -->
 <section class="avaliacoes" id="avaliacoes">
   <div class="divider"></div>
   <div class="container">
@@ -189,23 +210,44 @@
       <div class="label" data-key="avaliacoes-label">Avaliações</div>
       <h2 class="sec-title" data-key="avaliacoes-title">O que nossos <span>clientes dizem</span></h2>
     </div>
-    <div class="avaliacoes-grid">
-      <div class="avaliacao-card reveal" data-d="1">
-        <div class="avaliacao-stars">★★★★★</div>
-        <p class="avaliacao-text" data-key="avaliacao1">"Excelente trabalho! A MALVSCODE entregou um sistema completo e sob medida para nossa empresa. Profissionalismo e qualidade impecáveis."</p>
-        <div class="avaliacao-cliente">
-          <strong>IR Comércio</strong>
-          <span>• Sistemas Elétricos</span>
+    <div class="carousel-container">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="avaliacao-card">
+          <div class="avaliacao-stars">★★★★★</div>
+          <p class="avaliacao-text" data-key="avaliacao1">"Excelente trabalho! A MALVSCODE entregou um sistema completo e sob medida para nossa empresa. Profissionalismo e qualidade impecáveis."</p>
+          <div class="avaliacao-cliente">
+            <strong>IR Comércio</strong>
+            <span>• Sistemas Elétricos</span>
+          </div>
+        </div>
+        <div class="avaliacao-card">
+          <div class="avaliacao-stars">★★★★★</div>
+          <p class="avaliacao-text" data-key="avaliacao2">"O site institucional ficou incrível! Design moderno, responsivo e com ótima performance. Superou todas as expectativas."</p>
+          <div class="avaliacao-cliente">
+            <strong>Elevate Vision</strong>
+            <span>• Consultoria</span>
+          </div>
+        </div>
+        <div class="avaliacao-card">
+          <div class="avaliacao-stars">★★★★★</div>
+          <p class="avaliacao-text" data-key="avaliacao3">"Profissionalismo e pontualidade impressionantes. A MALVSCODE entendeu nossas necessidades e entregou além do esperado."</p>
+          <div class="avaliacao-cliente">
+            <strong>Em breve</strong>
+            <span>• Novo projeto</span>
+          </div>
+        </div>
+        <div class="avaliacao-card">
+          <div class="avaliacao-stars">★★★★★</div>
+          <p class="avaliacao-text" data-key="avaliacao4">"A equipe da MALVSCODE é extremamente capacitada. Recomendo para qualquer empresa que busque qualidade e inovação."</p>
+          <div class="avaliacao-cliente">
+            <strong>Em breve</strong>
+            <span>• Novo projeto</span>
+          </div>
         </div>
       </div>
-      <div class="avaliacao-card reveal" data-d="2">
-        <div class="avaliacao-stars">★★★★★</div>
-        <p class="avaliacao-text" data-key="avaliacao2">"O site institucional ficou incrível! Design moderno, responsivo e com ótima performance. Superou todas as expectativas."</p>
-        <div class="avaliacao-cliente">
-          <strong>Elevate Vision</strong>
-          <span>• Consultoria</span>
-        </div>
-      </div>
+      <button class="carousel-btn prev" id="carouselPrev">‹</button>
+      <button class="carousel-btn next" id="carouselNext">›</button>
+      <div class="carousel-dots" id="carouselDots"></div>
     </div>
   </div>
 </section>
@@ -220,7 +262,6 @@
     </div>
     <div class="proj-grid">
 
-      <!-- PROJETO 1 -->
       <div class="proj-card reveal" data-d="1">
         <div class="proj-screen">
           <div class="proj-screen-inner">
@@ -249,7 +290,6 @@
         </div>
       </div>
 
-      <!-- PROJETO 2 -->
       <div class="proj-card reveal" data-d="2">
         <div class="proj-screen">
           <div class="proj-screen-inner">
@@ -258,7 +298,7 @@
             </div>
             <div class="proj-screen-label">API</div>
           </div>
-          <div class="proj-type-badge">Sistema Web</div>
+          <div class="proj-type-badge">API REST</div>
         </div>
         <div class="proj-body">
           <div class="proj-name" data-key="sistema2-nome">API de Integração</div>
@@ -292,17 +332,11 @@
     </div>
     <div class="sites-grid">
 
-      <!-- SITE 1 -->
       <div class="site-card reveal" data-d="1">
         <div class="site-preview">
-          <div class="site-browser">
-            <div class="site-browser-bar">
-              <div class="dot d-red"></div><div class="dot d-yellow"></div><div class="dot d-green"></div>
-              <span class="site-browser-url">www.elevatevision.com.br</span>
-            </div>
-            <div class="site-browser-content">
-              <div class="site-preview-icon">🌐</div>
-            </div>
+          <img src="imagens/elevatevision.png" alt="Elevate Vision" class="site-thumbnail"/>
+          <div class="site-preview-overlay">
+            <span class="site-preview-icon">🌐</span>
           </div>
         </div>
         <div class="site-info">
@@ -315,17 +349,11 @@
         </div>
       </div>
 
-      <!-- SITE 2 -->
       <div class="site-card reveal" data-d="2">
         <div class="site-preview">
-          <div class="site-browser">
-            <div class="site-browser-bar">
-              <div class="dot d-red"></div><div class="dot d-yellow"></div><div class="dot d-green"></div>
-              <span class="site-browser-url">www.ircomercio.com.br</span>
-            </div>
-            <div class="site-browser-content">
-              <div class="site-preview-icon">🏢</div>
-            </div>
+          <img src="imagens/ircomercio.png" alt="IR Comércio" class="site-thumbnail"/>
+          <div class="site-preview-overlay">
+            <span class="site-preview-icon">🏢</span>
           </div>
         </div>
         <div class="site-info">
@@ -389,7 +417,7 @@
   <div class="container">
     <div class="footer-inner">
       <div class="footer-logo">
-        MALVS<span style="color:var(--blue-b)">CODE</span>
+        MALVS<span>CODE</span>
       </div>
       <p class="footer-copy">© 2026 MALVSCODE · Desenvolvimento de Software · contato@malvscode.com.br</p>
     </div>
