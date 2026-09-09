@@ -94,7 +94,7 @@ body::after{
 .label::before{content:'//';color:var(--blue-b);opacity:0.5}
 
 .sec-title{
-  font-family:var(--display);font-size:clamp(2rem,4.5vw,3.2rem);
+  font-family:var(--display);font-size:clamp(1.8rem,4.5vw,3.2rem);
   font-weight:800;line-height:1.05;color:var(--white);
 }
 .sec-title span{color:var(--blue-b)}
@@ -117,6 +117,32 @@ body::after{
 .btn-outline{background:transparent;color:var(--white);border:1px solid var(--blue-bd)}
 .btn-outline:hover{border-color:var(--blue);color:var(--cyan);transform:translateY(-2px)}
 .btn-sm{padding:9px 22px;font-size:0.74rem}
+
+/* ── WHATSAPP FLOAT ── */
+.whatsapp-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 10000;
+  width: 60px;
+  height: 60px;
+  background: #25d366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  transition: all 0.3s var(--ease);
+  cursor: pointer;
+}
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
+}
+.whatsapp-float svg {
+  width: 32px;
+  height: 32px;
+}
 
 /* ═══════════════════════════════════════════
    NAV
@@ -162,6 +188,7 @@ body::after{
   display: flex;
   gap: 6px;
   align-items: center;
+  position: relative;
 }
 .lang-btn {
   background: transparent;
@@ -183,6 +210,12 @@ body::after{
   background: var(--blue);
   border-color: var(--blue);
   color: #fff;
+}
+.lang-btn:not(.active) {
+  display: none;
+}
+.lang-btn.active {
+  display: block;
 }
 
 /* ═══════════════════════════════════════════
@@ -215,7 +248,7 @@ body::after{
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 
 .hero-name{
-  font-family:var(--display);font-size:clamp(3rem,8vw,6.5rem);
+  font-family:var(--display);font-size:clamp(2.8rem,8vw,6.5rem);
   font-weight:800;line-height:0.9;letter-spacing:-0.02em;
   color:var(--white);margin-bottom:24px;
   opacity:0;animation:fadeUp 0.9s var(--ease) 0.25s forwards;
@@ -378,8 +411,8 @@ section{padding:110px 0;position:relative;z-index:1}
   background: var(--blue);
   border-color: var(--blue);
 }
-.carousel-btn.prev { left: -20px; }
-.carousel-btn.next { right: -20px; }
+.carousel-btn.prev { left: 10px; }
+.carousel-btn.next { right: 10px; }
 .carousel-dots {
   display: flex;
   justify-content: center;
@@ -405,14 +438,14 @@ section{padding:110px 0;position:relative;z-index:1}
 }
 
 /* ═══════════════════════════════════════════
-   MÓDULOS (CARROSSEL)
+   MÓDULOS (CARROSSEL) - FULL WIDTH
 ═══════════════════════════════════════════ */
 .modulos-carousel-container {
   position: relative;
   overflow: hidden;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 100vw;
+  margin: 0 -32px;
+  padding: 0 32px;
 }
 .modulos-carousel-track {
   display: flex;
@@ -425,7 +458,7 @@ section{padding:110px 0;position:relative;z-index:1}
   background: var(--bg2);
   border: 1px solid rgba(10,86,245,0.15);
   border-radius: 8px;
-  padding: 28px 24px;
+  overflow: hidden;
   transition: all 0.35s var(--ease);
   display: flex;
   flex-direction: column;
@@ -435,14 +468,26 @@ section{padding:110px 0;position:relative;z-index:1}
   transform: translateY(-4px);
   box-shadow: 0 16px 48px rgba(10,86,245,0.13);
 }
+.modulo-image {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  background: var(--bg3);
+}
+.modulo-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s var(--ease);
+}
+.modulo-card:hover .modulo-image img {
+  transform: scale(1.05);
+}
 .modulo-header {
+  padding: 16px 20px 0;
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
-}
-.modulo-icon {
-  font-size: 1.8rem;
 }
 .modulo-nome {
   font-family: var(--display);
@@ -451,13 +496,15 @@ section{padding:110px 0;position:relative;z-index:1}
   color: var(--white);
 }
 .modulo-desc {
+  padding: 0 20px;
   font-size: 0.85rem;
   color: var(--muted);
   line-height: 1.7;
   flex: 1;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 .modulo-tags {
+  padding: 0 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -474,6 +521,7 @@ section{padding:110px 0;position:relative;z-index:1}
   border: 1px solid rgba(255,255,255,0.07);
 }
 .modulo-footer {
+  padding: 0 20px 20px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
@@ -508,8 +556,8 @@ section{padding:110px 0;position:relative;z-index:1}
   background: var(--blue);
   border-color: var(--blue);
 }
-.modulos-carousel-btn.prev { left: -10px; }
-.modulos-carousel-btn.next { right: -10px; }
+.modulos-carousel-btn.prev { left: 10px; }
+.modulos-carousel-btn.next { right: 10px; }
 .modulos-carousel-dots {
   display: flex;
   justify-content: center;
@@ -534,7 +582,7 @@ section{padding:110px 0;position:relative;z-index:1}
   background: var(--blue-b);
 }
 
-/* ── MODAL ── */
+/* ── MODAL PROFISSIONAL ── */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -574,35 +622,61 @@ section{padding:110px 0;position:relative;z-index:1}
 .modal-close:hover {
   color: var(--white);
 }
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.modal-icon {
+  font-size: 1.8rem;
+}
 .modal-title {
   font-family: var(--display);
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--white);
-  margin-bottom: 16px;
+}
+.modal-body-wrapper {
+  margin-bottom: 20px;
 }
 .modal-body {
   font-size: 1rem;
   color: var(--soft);
   line-height: 1.8;
-  margin-bottom: 20px;
 }
-.modal-demo-text {
-  font-size: 0.9rem;
-  color: var(--muted);
-  line-height: 1.7;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(10,86,245,0.08);
+.modal-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(10,86,245,0.3), transparent);
+  margin: 16px 0;
 }
-.modal-demo-text:last-child {
-  border-bottom: none;
-}
-.modal-footer {
-  margin: 20px 0;
-  padding: 16px;
+.modal-footer-info {
+  margin: 16px 0 24px;
+  padding: 16px 20px;
   background: var(--bg);
   border-radius: 6px;
   border-left: 3px solid var(--blue);
+}
+.modal-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+}
+.modal-info-icon {
+  color: var(--blue-b);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.modal-info-text {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.modal-close-btn {
+  width: 100%;
+  justify-content: center;
 }
 
 /* ═══════════════════════════════════════════
@@ -697,10 +771,10 @@ section{padding:110px 0;position:relative;z-index:1}
    RESPONSIVE
 ═══════════════════════════════════════════ */
 @media(max-width:1024px){
-  .carousel-btn.prev { left: 0; }
-  .carousel-btn.next { right: 0; }
-  .modulos-carousel-btn.prev { left: 0; }
-  .modulos-carousel-btn.next { right: 0; }
+  .carousel-btn.prev { left: 5px; }
+  .carousel-btn.next { right: 5px; }
+  .modulos-carousel-btn.prev { left: 5px; }
+  .modulos-carousel-btn.next { right: 5px; }
   .modulo-card { flex: 0 0 calc(50% - 10px); }
 }
 
@@ -732,15 +806,17 @@ section{padding:110px 0;position:relative;z-index:1}
   .carousel-dots { display: flex; }
   .avaliacao-card { margin: 0; }
   
-  .modulo-card { flex: 0 0 100%; }
-  .modulos-carousel-btn { display: none; }
+  .modulo-card { flex: 0 0 calc(50% - 10px); }
   .modulos-carousel-dots { display: flex; }
+  .modulos-carousel-container {
+    margin: 0 -20px;
+    padding: 0 20px;
+  }
 }
 
 @media(max-width:600px){
   .container{padding:0 20px}
   section{padding:80px 0}
-  .proj-grid{grid-template-columns:1fr}
   .sites-grid{grid-template-columns:1fr}
   .footer-inner{flex-direction:column;text-align:center}
   .footer-copy{font-size:0.55rem}
@@ -758,6 +834,17 @@ section{padding:110px 0;position:relative;z-index:1}
   .btn-sm{padding:7px 16px;font-size:0.65rem}
   .avaliacao-card{padding:24px 20px}
   .avaliacao-text{font-size:0.85rem}
-  .modulo-card{padding:20px 16px}
-  .modulo-nome{font-size:0.95rem}
+  
+  .modulo-card { flex: 0 0 100%; }
+  .modulos-carousel-btn { display: none; }
+  .modulos-carousel-dots { display: flex; }
+  .modulos-carousel-container {
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
+  .modulo-image { height: 120px; }
+  .whatsapp-float { width: 50px; height: 50px; bottom: 20px; right: 20px; }
+  .whatsapp-float svg { width: 26px; height: 26px; }
+  .modal-content { padding: 24px 20px; }
+  .modal-title { font-size: 1.2rem; }
 }
