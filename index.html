@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MALVSCODE — Desenvolvimento de Software</title>
   <meta name="description" content="MALVSCODE desenvolve sites e software robustos, escaláveis e seguros."/>
-  
+
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="imagens/malvscode-logo.png"/>
-  <link rel="apple-touch-icon" href="imagens/malvscode-logo.png"/>
-  
+  <link rel="icon" type="image/png" href="imagens/malvscode-logo.png?v=2" sizes="32x32"/>
+  <link rel="shortcut icon" type="image/png" href="imagens/malvscode-logo.png?v=2"/>
+  <link rel="apple-touch-icon" href="imagens/malvscode-logo.png?v=2"/>
+
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -36,10 +37,13 @@
     <li><a href="#sites" class="nav-link" data-key="nav-sites">Sites</a></li>
     <li><a href="#contato" class="nav-link" data-key="nav-contato">Contato</a></li>
     <li>
-      <div class="language-selector">
-        <button class="lang-btn active" data-lang="pt" onclick="toggleLanguage('pt')">PT-BR</button>
-        <button class="lang-btn" data-lang="en" onclick="toggleLanguage('en')">EN</button>
-        <button class="lang-btn" data-lang="es" onclick="toggleLanguage('es')">ES</button>
+      <div class="language-selector" id="langSelector">
+        <button type="button" class="lang-current" id="langCurrent">PT-BR <span class="lang-arrow">▾</span></button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button type="button" class="lang-option active" data-lang="pt" onclick="changeLanguage('pt')">PT-BR</button>
+          <button type="button" class="lang-option" data-lang="en" onclick="changeLanguage('en')">EN</button>
+          <button type="button" class="lang-option" data-lang="es" onclick="changeLanguage('es')">ES</button>
+        </div>
       </div>
     </li>
   </ul>
@@ -60,7 +64,7 @@
   <div class="container">
     <div class="hero-inner">
       <div class="hero-left">
-        <p class="hero-tag" data-key="hero-tag">Software que impulsiona negócios</p>
+        <p class="hero-tag" data-key="hero-tag">Desenvolvimento de Software</p>
         <h1 class="hero-name">
           <span data-key="hero-title1">O futuro começa</span><br>
           <span class="hero-name-accent" data-key="hero-title2">em um <span style="color:var(--blue-b);">bit.</span></span>
@@ -140,18 +144,15 @@
         </div>
       </div>
       <div>
-        <div class="edu-list reveal" data-d="1">
-          <div class="edu-item">
-            <div class="edu-degree">+2 anos de experiência</div>
-            <div class="edu-area">Desenvolvendo soluções digitais</div>
+        <div class="sobre-features reveal" data-d="1">
+          <div class="feature-item">
+            <div class="feature-title" data-key="feat1">+2 anos de experiência</div>
           </div>
-          <div class="edu-item">
-            <div class="edu-degree">Planejamento · Entrega · Suporte</div>
-            <div class="edu-area">Da concepção à implementação</div>
+          <div class="feature-item">
+            <div class="feature-title" data-key="feat2">Planejamento, Entrega e Suporte</div>
           </div>
-          <div class="edu-item">
-            <div class="edu-degree">Desenvolvimento Moderno</div>
-            <div class="edu-area">Tecnologias atuais e boas práticas</div>
+          <div class="feature-item">
+            <div class="feature-title" data-key="feat3">Desenvolvimento Moderno</div>
           </div>
         </div>
       </div>
@@ -169,7 +170,7 @@
     </div>
     <div class="modulos-carousel-container">
       <div class="modulos-carousel-track" id="modulosTrack">
-        
+
         <!-- Módulo 1: Sistema Interno -->
         <div class="modulo-card">
           <div class="modulo-image">
@@ -408,21 +409,7 @@
     <div class="modal-divider"></div>
     <div class="modal-body-wrapper">
       <p class="modal-body" id="modalBody">Descrição do módulo</p>
-    </div>
-    <div class="modal-divider"></div>
-    <div class="modal-footer-info">
-      <div class="modal-info-item">
-        <span class="modal-info-icon">—</span>
-        <span class="modal-info-text">Esta é uma demonstração do módulo.</span>
-      </div>
-      <div class="modal-info-item">
-        <span class="modal-info-icon">—</span>
-        <span class="modal-info-text">O cliente pode solicitar ajustes e novas funcionalidades durante o planejamento.</span>
-      </div>
-      <div class="modal-info-item">
-        <span class="modal-info-icon">—</span>
-        <span class="modal-info-text">Personalize conforme as necessidades do seu negócio.</span>
-      </div>
+      <div class="modal-topics" id="modalTopics"></div>
     </div>
     <button class="btn btn-blue modal-close-btn" onclick="closeModal()" data-key="fechar">Fechar</button>
   </div>
