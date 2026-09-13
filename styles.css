@@ -272,6 +272,7 @@ body::after{
   font-weight:800;line-height:0.9;letter-spacing:-0.02em;
   color:var(--white);margin-bottom:24px;
   opacity:0;animation:fadeUp 0.9s var(--ease) 0.25s forwards;
+  text-align:center;
 }
 .hero-name-accent{
   display:block;
