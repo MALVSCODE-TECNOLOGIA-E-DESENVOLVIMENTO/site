@@ -315,62 +315,26 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// ── PT-BR É LIDO DIRETO DO HTML (NUNCA MAIS FICA DESATUALIZADO) ──
+// Em vez de guardar uma cópia fixa dos textos em português aqui no JS,
+// pegamos o conteúdo atual de cada elemento com data-key direto do
+// index.html assim que a página carrega. Ou seja: qualquer texto que
+// você editar no HTML passa a ser automaticamente a versão "pt",
+// sem precisar tocar neste arquivo. Só EN e ES continuam manuais,
+// porque não tem como traduzir sozinho.
+function buildPtFromDOM() {
+  const pt = {};
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.dataset.key;
+    if (!(key in pt)) {
+      pt[key] = el.innerHTML.trim();
+    }
+  });
+  return pt;
+}
+
 const translations = {
-  pt: {
-    'nav-sobre': 'A Empresa',
-    'nav-sistemas': 'Sistemas',
-    'nav-sites': 'Sites',
-    'nav-contato': 'Contato',
-    'hero-tag': 'Desenvolvimento de Software',
-    'hero-title1': 'O futuro começa',
-    'hero-title2': 'em um bit.',
-    'hero-role': '<strong>Desenvolvimento Web</strong> • Sites<br>Sistemas Web · APIs · Soluções Escaláveis<br><span style="color:var(--blue-b)">—</span> MALVSCODE',
-    'btn-projetos': 'Ver Projetos',
-    'btn-contato': 'Fale Conosco',
-    'status': '"disponível para projetos"',
-    'sobre-label': 'Sobre a MALVSCODE',
-    'sobre-title': 'Tecnologia que<br><span>entrega resultado.</span>',
-    'sobre-text1': 'A <strong>MALVSCODE</strong> desenvolve sites e soluções de software robustas, escaláveis e seguras. Atuamos desde o desenvolvimento de interfaces até a arquitetura de sistemas e infraestrutura em nuvem, unindo <strong>engenharia de software</strong>, tecnologia e <strong>visão estratégica de negócio</strong>.',
-    'sobre-text2': 'Com foco em performance, segurança e experiência do usuário, desenvolvemos soluções digitais pensadas para atender necessidades reais e contribuir para a evolução de negócios e projetos.',
-    'feat1': '+2 anos de experiência',
-    'feat2': 'Planejamento, Entrega e Suporte',
-    'feat3': 'Desenvolvimento Moderno',
-    'sistemas-label': 'Sistemas desenvolvidos',
-    'sistemas-title': 'Projetos & <span>Sistemas Web</span>',
-    'modulo1-nome': 'Sistema Interno Empresarial',
-    'modulo1-desc': 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais.',
-    'modulo2-nome': 'Controle de Frete',
-    'modulo2-desc': 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa.',
-    'modulo3-nome': 'Contas a Pagar',
-    'modulo3-desc': 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária.',
-    'modulo4-nome': 'Contas a Receber',
-    'modulo4-desc': 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa.',
-    'modulo5-nome': 'Tabela de Preços',
-    'modulo5-desc': 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real.',
-    'modulo6-nome': 'Estoque',
-    'modulo6-desc': 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais.',
-    'modulo7-nome': 'Login e Autenticação',
-    'modulo7-desc': 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso.',
-    'modulo8-nome': 'Jornada Acadêmica',
-    'modulo8-desc': 'Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico.',
-    'modulo9-nome': 'Fornecedores',
-    'modulo9-desc': 'Gerencie fornecedores, contratos, avaliações e histórico de compras.',
-    'modulo10-nome': 'Transportadoras',
-    'modulo10-desc': 'Gerencie transportadoras, contratos, rotas e acompanhamento de entregas.',
-    'ver-demo': 'Ver Demo',
-    'sites-label': 'Sites desenvolvidos',
-    'sites-title': 'Sites & <span>Interfaces</span>',
-    'site1-nome': 'Elevate Vision Agency',
-    'visitar-site': 'Visitar site',
-    'contato-label': 'Contato',
-    'contato-title': 'Vamos <span>trabalhar juntos?</span>',
-    'contato-sub': 'Abertos para projetos, consultorias e parcerias.<br>Entre em contato e vamos conversar sobre sua ideia.',
-    'telefone': 'WhatsApp / Telefone',
-    'email': 'E-mail',
-    'whatsapp': 'Chamar no WhatsApp',
-    'email-btn': 'Enviar E-mail',
-    'fechar': 'Fechar'
-  },
+  pt: buildPtFromDOM(),
   en: {
     'nav-sobre': 'About Us',
     'nav-sistemas': 'Systems',
@@ -496,24 +460,15 @@ function changeLanguage(lang) {
 
   document.querySelectorAll('[data-key]').forEach(el => {
     const key = el.dataset.key;
-    if (translations[lang] && translations[lang][key]) {
-      if (key === 'hero-role' || key === 'sobre-title' || key === 'sobre-text1' ||
-          key === 'sobre-text2' || key === 'sistemas-title' ||
-          key === 'sites-title' || key === 'contato-title' ||
-          key === 'modulo1-desc' || key === 'modulo2-desc' || key === 'modulo3-desc' ||
-          key === 'modulo4-desc' || key === 'modulo5-desc' || key === 'modulo6-desc' ||
-          key === 'modulo7-desc' || key === 'modulo8-desc' || key === 'modulo9-desc' ||
-          key === 'modulo10-desc') {
-        el.innerHTML = translations[lang][key];
-      } else {
-        el.textContent = translations[lang][key];
-      }
+    if (translations[lang] && translations[lang][key] !== undefined) {
+      el.innerHTML = translations[lang][key];
     }
   });
 
   langSelector.classList.remove('open');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  changeLanguage('pt');
-});
+// Não precisa mais chamar changeLanguage('pt') aqui: o HTML já nasce
+// em português, e o objeto translations.pt acima já foi montado a
+// partir dele. Assim a página nunca mais "pisca" e volta pro texto
+// antigo ao carregar.
