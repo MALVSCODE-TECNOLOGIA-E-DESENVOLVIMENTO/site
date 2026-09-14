@@ -52,9 +52,9 @@
       <div class="language-selector" id="langSelector">
         <button type="button" class="lang-current" id="langCurrent">PT-BR <span class="lang-arrow">▾</span></button>
         <div class="lang-dropdown" id="langDropdown">
-          <button type="button" class="lang-option active" data-lang="pt" onclick="changeLanguage('pt')">PT-BR</button>
-          <button type="button" class="lang-option" data-lang="en" onclick="changeLanguage('en')">EN</button>
-          <button type="button" class="lang-option" data-lang="es" onclick="changeLanguage('es')">ES</button>
+          <button type="button" class="lang-option active" data-lang="pt">PT-BR</button>
+          <button type="button" class="lang-option" data-lang="en">EN</button>
+          <button type="button" class="lang-option" data-lang="es">ES</button>
         </div>
       </div>
     </li>
@@ -124,7 +124,7 @@
             <p class="modulo-desc" data-key="modulo1-desc">Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo1')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo1">Info</button>
             </div>
           </div>
 
@@ -134,7 +134,7 @@
             <p class="modulo-desc" data-key="modulo2-desc">Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo2')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo2">Info</button>
             </div>
           </div>
 
@@ -144,7 +144,7 @@
             <p class="modulo-desc" data-key="modulo3-desc">Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo3')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo3">Info</button>
             </div>
           </div>
 
@@ -154,7 +154,7 @@
             <p class="modulo-desc" data-key="modulo4-desc">Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo4')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo4">Info</button>
             </div>
           </div>
 
@@ -164,7 +164,7 @@
             <p class="modulo-desc" data-key="modulo5-desc">Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo5')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo5">Info</button>
             </div>
           </div>
 
@@ -174,7 +174,7 @@
             <p class="modulo-desc" data-key="modulo6-desc">Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo6')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo6">Info</button>
             </div>
           </div>
 
@@ -184,7 +184,7 @@
             <p class="modulo-desc" data-key="modulo7-desc">Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo7')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo7">Info</button>
             </div>
           </div>
 
@@ -194,7 +194,7 @@
             <p class="modulo-desc" data-key="modulo8-desc">Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo8')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo8">Info</button>
             </div>
           </div>
 
@@ -204,7 +204,7 @@
             <p class="modulo-desc" data-key="modulo9-desc">Gerencie fornecedores, contratos, avaliações e histórico de compras.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo9')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo9">Info</button>
             </div>
           </div>
 
@@ -214,7 +214,7 @@
             <p class="modulo-desc" data-key="modulo10-desc">Gerencie transportadoras, contratos, rotas e acompanhamento de entregas.</p>
             <div class="modulo-footer">
               <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo10')">Info</button>
+              <button class="btn btn-outline btn-sm modulo-info-btn" data-modulo="modulo10">Info</button>
             </div>
           </div>
 
@@ -228,16 +228,16 @@
 </section>
 
 <!-- ── MODAL ── -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
-  <div class="modal-content" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal()">✕</button>
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    <button class="modal-close">✕</button>
     <div class="modal-header"><h3 class="modal-title" id="modalTitle">Módulo</h3></div>
     <div class="modal-divider"></div>
     <div class="modal-body-wrapper">
       <p class="modal-body" id="modalBody">Descrição do módulo</p>
       <div class="modal-topics" id="modalTopics"></div>
     </div>
-    <button class="btn btn-blue modal-close-btn" onclick="closeModal()" data-key="fechar">Fechar</button>
+    <button class="btn btn-blue modal-close-btn" data-key="fechar">Fechar</button>
   </div>
 </div>
 
