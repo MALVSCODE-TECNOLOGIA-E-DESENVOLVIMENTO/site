@@ -9,8 +9,7 @@ document.addEventListener('mousemove', e => {
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
 
-// Hamburger
-const ham = document.getElementById('hamburger');
+// Hamburgerconst ham = document.getElementById('hamburger');
 const links = document.getElementById('navLinks');
 const langSelector = document.getElementById('langSelector');
 
