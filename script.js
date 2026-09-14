@@ -9,7 +9,8 @@ document.addEventListener('mousemove', e => {
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
 
-// Hamburgerconst ham = document.getElementById('hamburger');
+// Hamburger
+const ham = document.getElementById('hamburger');
 const links = document.getElementById('navLinks');
 const langSelector = document.getElementById('langSelector');
 
@@ -156,6 +157,14 @@ function wrapIfNeeded() {
 }
 modulosTrack.addEventListener('transitionend', wrapIfNeeded);
 
+// Delegação de evento: cobre também os cards clonados do loop infinito
+modulosTrack.addEventListener('click', (e) => {
+  const infoBtn = e.target.closest('.modulo-info-btn');
+  if (infoBtn && infoBtn.dataset.modulo) {
+    openModal(infoBtn.dataset.modulo);
+  }
+});
+
 function nextModulo() {
   modulosPerView = getModulosPerView();
   cardIndex += modulosPerView;
@@ -272,6 +281,13 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
+const modalOverlayEl = document.getElementById('modalOverlay');
+modalOverlayEl.addEventListener('click', closeModal);
+modalOverlayEl.querySelector('.modal-content').addEventListener('click', (e) => e.stopPropagation());
+document.querySelectorAll('.modal-close, .modal-close-btn').forEach(btn => {
+  btn.addEventListener('click', closeModal);
+});
+
 // ── LANGUAGE SYSTEM ──
 const langCurrent = document.getElementById('langCurrent');
 const langLabels = { pt: 'PT-BR', en: 'EN', es: 'ES' };
@@ -284,6 +300,9 @@ document.addEventListener('click', (e) => {
   if (!langSelector.contains(e.target)) {
     langSelector.classList.remove('open');
   }
+});
+document.querySelectorAll('.lang-option').forEach(btn => {
+  btn.addEventListener('click', () => changeLanguage(btn.dataset.lang));
 });
 
 function buildPtFromDOM() {
