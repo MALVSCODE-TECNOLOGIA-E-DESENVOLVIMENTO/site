@@ -61,21 +61,19 @@
   <div class="orb orb-3"></div>
   <div class="container">
     <div class="hero-inner">
-      <div class="hero-left">
-        <p class="hero-tag" data-key="hero-tag">Bem-vindo(a) ao meu portifólio!</p>
-        <h1 class="hero-name">
-          <span data-key="hero-title1">Desenvolvedor</span>
-          <span class="hero-name-accent" data-key="hero-title2">Full <span style="color:var(--blue-b);">Stack.</span></span>
-        </h1>
-        <p class="hero-role" data-key="hero-role">
-          <strong>Sistemas Web</strong> · Sites · Soluções Escaláveis<br>
-          Banco de Dados · APIs · Deploy · DNS · Vercel · Render · JSON<br>
-          <span style="color:var(--blue-b)">—</span> MALVSCODE
-        </p>
-        <div class="hero-actions">
-          <a href="#sistemas" class="btn btn-blue" data-key="btn-projetos">Ver Projetos</a>
-          <a href="#contato" class="btn btn-outline" data-key="btn-contato">Fale Conosco</a>
-        </div>
+      <p class="hero-tag" data-key="hero-tag">Bem-vindo(a) ao meu portifólio!</p>
+      <h1 class="hero-name">
+        <span data-key="hero-title1">Desenvolvedor</span>
+        <span class="hero-name-accent" data-key="hero-title2">Full <span style="color:var(--blue-b);">Stack.</span></span>
+      </h1>
+      <p class="hero-role" data-key="hero-role">
+        <strong>Sistemas Web</strong> · Sites · Soluções Escaláveis<br>
+        Banco de Dados · APIs · Deploy · DNS · Vercel · Render · JSON<br>
+        <span style="color:var(--blue-b)">—</span> MALVSCODE
+      </p>
+      <div class="hero-actions">
+        <a href="#sistemas" class="btn btn-blue" data-key="btn-projetos">Ver Projetos</a>
+        <a href="#contato" class="btn btn-outline" data-key="btn-contato">Fale Conosco</a>
       </div>
     </div>
   </div>
@@ -90,228 +88,230 @@
       <h2 class="sec-title" data-key="sistemas-title">Projetos & <span>Sistemas Web</span></h2>
     </div>
     <div class="modulos-carousel-container">
-      <div class="modulos-carousel-track" id="modulosTrack">
+      <div class="modulos-carousel-viewport">
+        <div class="modulos-carousel-track" id="modulosTrack">
 
-        <!-- Módulo 1: Sistema Interno -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/sistema-interno.png" alt="Sistema Interno Empresarial"/>
+          <!-- Módulo 1: Sistema Interno -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/sistema-interno.png" alt="Sistema Interno Empresarial"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo1-nome">Sistema Interno Empresarial</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo1-desc">Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">HTML</span>
+              <span class="modulo-tag">CSS</span>
+              <span class="modulo-tag">JavaScript</span>
+              <span class="modulo-tag">SQL</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo1')">Info</button>
+            </div>
           </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo1-nome">Sistema Interno Empresarial</h3>
+
+          <!-- Módulo 2: Controle de Frete -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/controle-frete.png" alt="Controle de Frete"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo2-nome">Controle de Frete</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo2-desc">Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">JavaScript</span>
+              <span class="modulo-tag">Node.js</span>
+              <span class="modulo-tag">Render</span>
+              <span class="modulo-tag">.env</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo2')">Info</button>
+            </div>
           </div>
-          <p class="modulo-desc" data-key="modulo1-desc">Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">HTML</span>
-            <span class="modulo-tag">CSS</span>
-            <span class="modulo-tag">JavaScript</span>
-            <span class="modulo-tag">SQL</span>
-            <span class="modulo-tag">+ outras</span>
+
+          <!-- Módulo 3: Contas a Pagar -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/contas-pagar.png" alt="Contas a Pagar"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo3-nome">Contas a Pagar</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo3-desc">Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">HTML</span>
+              <span class="modulo-tag">CSS</span>
+              <span class="modulo-tag">JavaScript</span>
+              <span class="modulo-tag">SQL</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo3')">Info</button>
+            </div>
           </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo1')">Info</button>
+
+          <!-- Módulo 4: Contas a Receber -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/contas-receber.png" alt="Contas a Receber"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo4-nome">Contas a Receber</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo4-desc">Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">Node.js</span>
+              <span class="modulo-tag">SQL</span>
+              <span class="modulo-tag">server.js</span>
+              <span class="modulo-tag">package.json</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo4')">Info</button>
+            </div>
           </div>
+
+          <!-- Módulo 5: Tabela de Preços -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/tabela-precos.png" alt="Tabela de Preços"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo5-nome">Tabela de Preços</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo5-desc">Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">HTML</span>
+              <span class="modulo-tag">CSS</span>
+              <span class="modulo-tag">JavaScript</span>
+              <span class="modulo-tag">APIs</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo5')">Info</button>
+            </div>
+          </div>
+
+          <!-- Módulo 6: Estoque -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/estoque.png" alt="Estoque"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo6-nome">Estoque</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo6-desc">Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">Node.js</span>
+              <span class="modulo-tag">Render</span>
+              <span class="modulo-tag">.env</span>
+              <span class="modulo-tag">Git</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo6')">Info</button>
+            </div>
+          </div>
+
+          <!-- Módulo 7: Login -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/login.png" alt="Login e Autenticação"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo7-nome">Login e Autenticação</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo7-desc">Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">JavaScript</span>
+              <span class="modulo-tag">Node.js</span>
+              <span class="modulo-tag">server.js</span>
+              <span class="modulo-tag">package.json</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo7')">Info</button>
+            </div>
+          </div>
+
+          <!-- Módulo 8: Jornada Acadêmica -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/jornada-academica.png" alt="Jornada Acadêmica"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo8-nome">Jornada Acadêmica</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo8-desc">Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">HTML</span>
+              <span class="modulo-tag">CSS</span>
+              <span class="modulo-tag">JavaScript</span>
+              <span class="modulo-tag">SQL</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo8')">Info</button>
+            </div>
+          </div>
+
+          <!-- Módulo 9: Fornecedores -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/fornecedores.png" alt="Fornecedores"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo9-nome">Fornecedores</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo9-desc">Gerencie fornecedores, contratos, avaliações e histórico de compras.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">Node.js</span>
+              <span class="modulo-tag">Render</span>
+              <span class="modulo-tag">.env</span>
+              <span class="modulo-tag">Git</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo9')">Info</button>
+            </div>
+          </div>
+
+          <!-- Módulo 10: Transportadoras -->
+          <div class="modulo-card">
+            <div class="modulo-image">
+              <img src="imagens/transportadoras.png" alt="Transportadoras"/>
+            </div>
+            <div class="modulo-header">
+              <h3 class="modulo-nome" data-key="modulo10-nome">Transportadoras</h3>
+            </div>
+            <p class="modulo-desc" data-key="modulo10-desc">Gerencie transportadoras, contratos, rotas e acompanhamento de entregas.</p>
+            <div class="modulo-tags">
+              <span class="modulo-tag">JavaScript</span>
+              <span class="modulo-tag">Node.js</span>
+              <span class="modulo-tag">server.js</span>
+              <span class="modulo-tag">package.json</span>
+              <span class="modulo-tag">+ outras</span>
+            </div>
+            <div class="modulo-footer">
+              <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
+              <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo10')">Info</button>
+            </div>
+          </div>
+
         </div>
-
-        <!-- Módulo 2: Controle de Frete -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/controle-frete.png" alt="Controle de Frete"/>
-          </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo2-nome">Controle de Frete</h3>
-          </div>
-          <p class="modulo-desc" data-key="modulo2-desc">Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">JavaScript</span>
-            <span class="modulo-tag">Node.js</span>
-            <span class="modulo-tag">Render</span>
-            <span class="modulo-tag">.env</span>
-            <span class="modulo-tag">+ outras</span>
-          </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo2')">Info</button>
-          </div>
-        </div>
-
-        <!-- Módulo 3: Contas a Pagar -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/contas-pagar.png" alt="Contas a Pagar"/>
-          </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo3-nome">Contas a Pagar</h3>
-          </div>
-          <p class="modulo-desc" data-key="modulo3-desc">Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">HTML</span>
-            <span class="modulo-tag">CSS</span>
-            <span class="modulo-tag">JavaScript</span>
-            <span class="modulo-tag">SQL</span>
-            <span class="modulo-tag">+ outras</span>
-          </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo3')">Info</button>
-          </div>
-        </div>
-
-        <!-- Módulo 4: Contas a Receber -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/contas-receber.png" alt="Contas a Receber"/>
-          </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo4-nome">Contas a Receber</h3>
-          </div>
-          <p class="modulo-desc" data-key="modulo4-desc">Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">Node.js</span>
-            <span class="modulo-tag">SQL</span>
-            <span class="modulo-tag">server.js</span>
-            <span class="modulo-tag">package.json</span>
-            <span class="modulo-tag">+ outras</span>
-          </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo4')">Info</button>
-          </div>
-        </div>
-
-        <!-- Módulo 5: Tabela de Preços -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/tabela-precos.png" alt="Tabela de Preços"/>
-          </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo5-nome">Tabela de Preços</h3>
-          </div>
-          <p class="modulo-desc" data-key="modulo5-desc">Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">HTML</span>
-            <span class="modulo-tag">CSS</span>
-            <span class="modulo-tag">JavaScript</span>
-            <span class="modulo-tag">APIs</span>
-            <span class="modulo-tag">+ outras</span>
-          </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo5')">Info</button>
-          </div>
-        </div>
-
-        <!-- Módulo 6: Estoque -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/estoque.png" alt="Estoque"/>
-          </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo6-nome">Estoque</h3>
-          </div>
-          <p class="modulo-desc" data-key="modulo6-desc">Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">Node.js</span>
-            <span class="modulo-tag">Render</span>
-            <span class="modulo-tag">.env</span>
-            <span class="modulo-tag">Git</span>
-            <span class="modulo-tag">+ outras</span>
-          </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo6')">Info</button>
-          </div>
-        </div>
-
-        <!-- Módulo 7: Login -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/login.png" alt="Login e Autenticação"/>
-          </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo7-nome">Login e Autenticação</h3>
-          </div>
-          <p class="modulo-desc" data-key="modulo7-desc">Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">JavaScript</span>
-            <span class="modulo-tag">Node.js</span>
-            <span class="modulo-tag">server.js</span>
-            <span class="modulo-tag">package.json</span>
-            <span class="modulo-tag">+ outras</span>
-          </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo7')">Info</button>
-          </div>
-        </div>
-
-        <!-- Módulo 8: Jornada Acadêmica -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/jornada-academica.png" alt="Jornada Acadêmica"/>
-          </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo8-nome">Jornada Acadêmica</h3>
-          </div>
-          <p class="modulo-desc" data-key="modulo8-desc">Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">HTML</span>
-            <span class="modulo-tag">CSS</span>
-            <span class="modulo-tag">JavaScript</span>
-            <span class="modulo-tag">SQL</span>
-            <span class="modulo-tag">+ outras</span>
-          </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo8')">Info</button>
-          </div>
-        </div>
-
-        <!-- Módulo 9: Fornecedores -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/fornecedores.png" alt="Fornecedores"/>
-          </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo9-nome">Fornecedores</h3>
-          </div>
-          <p class="modulo-desc" data-key="modulo9-desc">Gerencie fornecedores, contratos, avaliações e histórico de compras.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">Node.js</span>
-            <span class="modulo-tag">Render</span>
-            <span class="modulo-tag">.env</span>
-            <span class="modulo-tag">Git</span>
-            <span class="modulo-tag">+ outras</span>
-          </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo9')">Info</button>
-          </div>
-        </div>
-
-        <!-- Módulo 10: Transportadoras -->
-        <div class="modulo-card">
-          <div class="modulo-image">
-            <img src="imagens/transportadoras.png" alt="Transportadoras"/>
-          </div>
-          <div class="modulo-header">
-            <h3 class="modulo-nome" data-key="modulo10-nome">Transportadoras</h3>
-          </div>
-          <p class="modulo-desc" data-key="modulo10-desc">Gerencie transportadoras, contratos, rotas e acompanhamento de entregas.</p>
-          <div class="modulo-tags">
-            <span class="modulo-tag">JavaScript</span>
-            <span class="modulo-tag">Node.js</span>
-            <span class="modulo-tag">server.js</span>
-            <span class="modulo-tag">package.json</span>
-            <span class="modulo-tag">+ outras</span>
-          </div>
-          <div class="modulo-footer">
-            <a href="#" target="_blank" class="btn btn-blue btn-sm" data-key="ver-demo">Ver Demo</a>
-            <button class="btn btn-outline btn-sm modulo-info-btn" onclick="openModal('modulo10')">Info</button>
-          </div>
-        </div>
-
       </div>
       <button class="modulos-carousel-btn prev" id="modulosPrev">‹</button>
       <button class="modulos-carousel-btn next" id="modulosNext">›</button>
