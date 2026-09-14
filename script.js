@@ -343,6 +343,8 @@ const translations = {
     'contato-sub': 'Open for projects, consulting, and partnerships.<br>Get in touch and let\'s talk about your idea.',
     'telefone': 'WhatsApp / Phone',
     'email': 'E-mail',
+    'instagram-label': 'Instagram',
+    'github-label': 'GitHub',
     'whatsapp': 'Call on WhatsApp',
     'email-btn': 'Send E-mail',
     'fechar': 'Close'
@@ -390,6 +392,8 @@ const translations = {
     'contato-sub': 'Abiertos a proyectos, consultorías y alianzas.<br>Póngase en contacto y hablemos de su idea.',
     'telefone': 'WhatsApp / Teléfono',
     'email': 'Correo electrónico',
+    'instagram-label': 'Instagram',
+    'github-label': 'GitHub',
     'whatsapp': 'Llamar por WhatsApp',
     'email-btn': 'Enviar correo',
     'fechar': 'Cerrar'
