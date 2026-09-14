@@ -64,66 +64,6 @@ function createFloatingWords() {
 createFloatingWords();
 
 // ══════════════════════════════════════════════════════════
-// ── TERMINAL — efeito de digitação das competências ──
-// ══════════════════════════════════════════════════════════
-const terminalCommands = [
-  { cmd: 'whoami',          out: 'malvscode — Desenvolvedor Full Stack' },
-  { cmd: 'cat skills.txt',  out: 'HTML5 · CSS3 · JavaScript · TypeScript' },
-  { cmd: 'ls stack/',       out: 'React · Next.js · Node.js · Express' },
-  { cmd: 'cat backend.txt', out: 'APIs REST · SQL · PostgreSQL · MongoDB' },
-  { cmd: 'cat deploy.txt',  out: 'Vercel · Render · Git · DNS · Cloud' },
-  { cmd: 'echo $STATUS',    out: 'Disponível para novos projetos ✓' }
-];
-
-const terminalTyped  = document.getElementById('terminalTyped');
-const terminalSkills = document.getElementById('terminalSkills');
-
-let tCmdIndex = 0;
-
-function typeCommand(text, onDone) {
-  let i = 0;
-  terminalTyped.textContent = '';
-  const timer = setInterval(() => {
-    terminalTyped.textContent = text.slice(0, ++i);
-    if (i >= text.length) {
-      clearInterval(timer);
-      setTimeout(onDone, 380);
-    }
-  }, 55);
-}
-
-function pushOutput(text) {
-  const line = document.createElement('div');
-  line.className = 'terminal-output';
-  line.textContent = '> ' + text;
-  terminalSkills.appendChild(line);
-  while (terminalSkills.children.length > 3) {
-    terminalSkills.removeChild(terminalSkills.firstChild);
-  }
-}
-
-function runTerminalCycle() {
-  const item = terminalCommands[tCmdIndex % terminalCommands.length];
-  typeCommand(item.cmd, () => {
-    pushOutput(item.out);
-    tCmdIndex++;
-    setTimeout(runTerminalCycle, 900);
-  });
-}
-
-if (terminalTyped && terminalSkills) {
-  const termObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        runTerminalCycle();
-        termObs.disconnect();
-      }
-    });
-  }, { threshold: 0.3 });
-  termObs.observe(document.querySelector('.terminal'));
-}
-
-// ══════════════════════════════════════════════════════════
 // ── CARROSSEL DE MÓDULOS — INFINITO + SWIPE + AUTOPLAY ──
 // ══════════════════════════════════════════════════════════
 const modulosTrack     = document.getElementById('modulosTrack');
@@ -366,8 +306,9 @@ const translations = {
     'nav-sites': 'Websites',
     'nav-contato': 'Contact',
     'hero-tag': 'Welcome to my portfolio!',
-    'hero-title1': 'Developer',
-    'hero-title2': 'Full <span style="color:var(--blue-b);">Stack.</span>',
+    'hero-title1': 'MALVS',
+    'hero-title2': 'CODE',
+    'hero-role': '<strong>Full Stack Developer</strong><br>Web Systems · Websites · Scalable Solutions<br>Databases · APIs · Deploy · DNS · Vercel · Render · JSON',
     'btn-projetos': 'View Projects',
     'btn-contato': 'Contact Us',
     'sistemas-label': 'Developed Systems',
@@ -412,8 +353,9 @@ const translations = {
     'nav-sites': 'Sitios',
     'nav-contato': 'Contacto',
     'hero-tag': '¡Bienvenido(a) a mi portafolio!',
-    'hero-title1': 'Desarrollador',
-    'hero-title2': 'Full <span style="color:var(--blue-b);">Stack.</span>',
+    'hero-title1': 'MALVS',
+    'hero-title2': 'CODE',
+    'hero-role': '<strong>Desarrollador Full Stack</strong><br>Sistemas Web · Sitios · Soluciones Escalables<br>Bases de Datos · APIs · Deploy · DNS · Vercel · Render · JSON',
     'btn-projetos': 'Ver Proyectos',
     'btn-contato': 'Contáctenos',
     'sistemas-label': 'Sistemas desarrollados',
