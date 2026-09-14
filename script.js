@@ -64,10 +64,9 @@ function createFloatingWords() {
 createFloatingWords();
 
 // ══════════════════════════════════════════════════════════
-// ── CARROSSEL DE MÓDULOS — INFINITO (com clones) + SWIPE ──
+// ── CARROSSEL DE MÓDULOS — INFINITO + SWIPE + AUTOPLAY ──
 // ══════════════════════════════════════════════════════════
 const modulosTrack     = document.getElementById('modulosTrack');
-const modulosViewport  = modulosTrack.parentElement;
 const modulosPrevBtn   = document.getElementById('modulosPrev');
 const modulosNextBtn   = document.getElementById('modulosNext');
 const modulosDots      = document.getElementById('modulosDots');
@@ -75,7 +74,7 @@ const modulosDots      = document.getElementById('modulosDots');
 const originalModuloCards = Array.from(modulosTrack.children);
 const totalModulos = originalModuloCards.length;
 
-// Clona o conjunto original e insere uma cópia ANTES e outra DEPOIS.
+// Clona o conjunto original antes e depois para loop infinito
 const beforeFrag = document.createDocumentFragment();
 originalModuloCards.forEach(card => beforeFrag.appendChild(card.cloneNode(true)));
 modulosTrack.insertBefore(beforeFrag, modulosTrack.firstChild);
@@ -84,20 +83,21 @@ const afterFrag = document.createDocumentFragment();
 originalModuloCards.forEach(card => afterFrag.appendChild(card.cloneNode(true)));
 modulosTrack.appendChild(afterFrag);
 
-let cardIndex = totalModulos; // começa no início do bloco "original"
+let cardIndex = totalModulos;
 let modulosPerView = getModulosPerView();
 let autoModuloInterval;
-let modulosGap = 20;
+let modulosGap = 22;
 
 function getModulosPerView() {
-  if (window.innerWidth <= 1024) return 2;   // tablet + celular → 2 blocos
-  return 3;                                   // desktop → 3 blocos
+  if (window.innerWidth <= 600) return 1;    // celular → 1 card
+  if (window.innerWidth <= 1024) return 2;   // tablet → 2 cards
+  return 3;                                   // desktop → 3 cards
 }
 
 function readCssGap() {
   const styles = getComputedStyle(modulosTrack);
-  const g = parseFloat(styles.columnGap || styles.gap || '20');
-  return isNaN(g) ? 20 : g;
+  const g = parseFloat(styles.columnGap || styles.gap || '0');
+  return isNaN(g) ? 0 : g;
 }
 
 function getCardWidth() {
@@ -123,12 +123,10 @@ function updateDots() {
 function setTrackPosition(instant) {
   modulosGap = readCssGap();
   const step = getStep();
-  if (instant) {
-    modulosTrack.style.transition = 'none';
-  }
+  if (instant) modulosTrack.style.transition = 'none';
   modulosTrack.style.transform = `translateX(${-step * cardIndex}px)`;
   if (instant) {
-    void modulosTrack.offsetHeight; // força reflow
+    void modulosTrack.offsetHeight;
     modulosTrack.style.transition = '';
   }
   updateDots();
@@ -187,7 +185,7 @@ modulosNextBtn.addEventListener('click', () => {
   resetModulosAutoSlide();
 });
 
-// Swipe (touch)
+// Swipe
 let modTouchStartX = 0;
 let modIsSwiping = false;
 
@@ -216,8 +214,7 @@ window.addEventListener('resize', () => {
     const newPerView = getModulosPerView();
     if (newPerView !== modulosPerView) {
       modulosPerView = newPerView;
-      // Reancorar no início do bloco original para evitar “pulos”
-      cardIndex = totalModulos;
+      cardIndex = totalModulos; // reancora
       createModulosDots();
       setTrackPosition(true);
     } else {
@@ -234,46 +231,16 @@ setTimeout(() => {
 
 // ── MODAL ──
 const modalData = {
-  modulo1: {
-    title: 'Sistema Interno Empresarial',
-    desc: 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais. Ideal para empresas que buscam organizar seus processos internos de forma eficiente e integrada.'
-  },
-  modulo2: {
-    title: 'Controle de Frete',
-    desc: 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa. Perfeito para empresas de logística e transportes.'
-  },
-  modulo3: {
-    title: 'Contas a Pagar',
-    desc: 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária. Mantenha as finanças da sua empresa em ordem.'
-  },
-  modulo4: {
-    title: 'Contas a Receber',
-    desc: 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa. Tenha visibilidade total das suas finanças.'
-  },
-  modulo5: {
-    title: 'Tabela de Preços',
-    desc: 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real. Ideal para comércios e empresas com muitos produtos.'
-  },
-  modulo6: {
-    title: 'Estoque',
-    desc: 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais. Mantenha seu estoque sempre atualizado.'
-  },
-  modulo7: {
-    title: 'Login e Autenticação',
-    desc: 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso. Garanta a segurança da sua aplicação.'
-  },
-  modulo8: {
-    title: 'Jornada Acadêmica',
-    desc: 'Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico. Ideal para instituições de ensino.'
-  },
-  modulo9: {
-    title: 'Fornecedores',
-    desc: 'Gerencie fornecedores, contratos, avaliações e histórico de compras. Perfeito para empresas que precisam controlar sua cadeia de suprimentos.'
-  },
-  modulo10: {
-    title: 'Transportadoras',
-    desc: 'Gerencie transportadoras, contratos, rotas e acompanhamento de entregas. Ideal para empresas de logística.'
-  }
+  modulo1: { title: 'Sistema Interno Empresarial', desc: 'Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais. Ideal para empresas que buscam organizar seus processos internos de forma eficiente e integrada.' },
+  modulo2: { title: 'Controle de Frete', desc: 'Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa. Perfeito para empresas de logística e transportes.' },
+  modulo3: { title: 'Contas a Pagar', desc: 'Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária. Mantenha as finanças da sua empresa em ordem.' },
+  modulo4: { title: 'Contas a Receber', desc: 'Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa. Tenha visibilidade total das suas finanças.' },
+  modulo5: { title: 'Tabela de Preços', desc: 'Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real. Ideal para comércios e empresas com muitos produtos.' },
+  modulo6: { title: 'Estoque', desc: 'Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais. Mantenha seu estoque sempre atualizado.' },
+  modulo7: { title: 'Login e Autenticação', desc: 'Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso. Garanta a segurança da sua aplicação.' },
+  modulo8: { title: 'Jornada Acadêmica', desc: 'Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico. Ideal para instituições de ensino.' },
+  modulo9: { title: 'Fornecedores', desc: 'Gerencie fornecedores, contratos, avaliações e histórico de compras. Perfeito para empresas que precisam controlar sua cadeia de suprimentos.' },
+  modulo10: { title: 'Transportadoras', desc: 'Gerencie transportadoras, contratos, rotas e acompanhamento de entregas. Ideal para empresas de logística.' }
 };
 
 const modalTopics = [
@@ -345,14 +312,6 @@ const translations = {
     'hero-role': '<strong>Cloud Architecture</strong> · Information Security<br>Web Systems · APIs · Scalable Solutions<br><span style="color:var(--blue-b)">—</span> MALVSCODE',
     'btn-projetos': 'View Projects',
     'btn-contato': 'Contact Us',
-    'status': '"available for projects"',
-    'sobre-label': 'About MALVSCODE',
-    'sobre-title': 'Technology that<br><span>delivers results.</span>',
-    'sobre-text1': '<strong>MALVSCODE</strong> develops robust, scalable and secure websites and software solutions. We work from interface development to system architecture and cloud infrastructure, combining <strong>software engineering</strong>, technology and <strong>strategic business vision</strong>.',
-    'sobre-text2': 'With a focus on performance, security and user experience, we develop digital solutions designed to meet real needs and contribute to the evolution of businesses and projects.',
-    'feat1': '+2 years of experience',
-    'feat2': 'Planning, Delivery and Support',
-    'feat3': 'Modern Development',
     'sistemas-label': 'Developed Systems',
     'sistemas-title': 'Projects & <span>Web Systems</span>',
     'modulo1-nome': 'Business Management System',
@@ -400,14 +359,6 @@ const translations = {
     'hero-role': '<strong>Arquitectura Cloud</strong> · Seguridad de la Información<br>Sistemas Web · APIs · Soluciones Escalables<br><span style="color:var(--blue-b)">—</span> MALVSCODE',
     'btn-projetos': 'Ver Proyectos',
     'btn-contato': 'Contáctenos',
-    'status': '"disponible para proyectos"',
-    'sobre-label': 'Sobre MALVSCODE',
-    'sobre-title': 'Tecnología que<br><span>entrega resultados.</span>',
-    'sobre-text1': '<strong>MALVSCODE</strong> desarrolla sitios web y soluciones de software robustas, escalables y seguras. Actuamos desde el desarrollo de interfaces hasta la arquitectura de sistemas e infraestructura en la nube, uniendo <strong>ingeniería de software</strong>, tecnología y <strong>visión estratégica de negocio</strong>.',
-    'sobre-text2': 'Con enfoque en rendimiento, seguridad y experiencia de usuario, desarrollamos soluciones digitales pensadas para atender necesidades reales y contribuir a la evolución de negocios y proyectos.',
-    'feat1': '+2 años de experiencia',
-    'feat2': 'Planificación, Entrega y Soporte',
-    'feat3': 'Desarrollo Moderno',
     'sistemas-label': 'Sistemas desarrollados',
     'sistemas-title': 'Proyectos & <span>Sistemas Web</span>',
     'modulo1-nome': 'Sistema Interno Empresarial',
