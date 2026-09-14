@@ -22,12 +22,18 @@
 
 <!-- ── NAV ── -->
 <nav class="nav" id="nav">
+
+  <!-- Logo do nav agora é a imagem da marca -->
   <div class="nav-logo">
-    <a href="#inicio" class="nav-logo-txt">MALVS<span>CODE</span></a>
+    <a href="#inicio" class="nav-logo-link" aria-label="MALVSCODE — início">
+      <img src="imagens/malvscode-logo.png" alt="MALVSCODE" class="nav-logo-img"/>
+    </a>
   </div>
+
   <button class="hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
+
   <ul class="nav-links" id="navLinks">
     <li><a href="#sistemas" class="nav-link" data-key="nav-sistemas">Sistemas</a></li>
     <li><a href="#sites" class="nav-link" data-key="nav-sites">Sites</a></li>
@@ -79,9 +85,9 @@
 
       <p class="hero-tag" data-key="hero-tag">Bem-vindo(a) ao meu portfólio!</p>
 
-      <!-- Logo como título principal -->
-      <h1 class="hero-brand" aria-label="MALVSCODE">
-        <img src="imagens/malvscode-logo.png" alt="MALVSCODE" class="hero-brand-img"/>
+      <h1 class="hero-name">
+        <span data-key="hero-title1">Desenvolvedor</span>
+        <span class="hero-name-accent" data-key="hero-title2">Full <span style="color:var(--blue-b);">Stack.</span></span>
       </h1>
 
       <!-- Terminal com competências técnicas -->
