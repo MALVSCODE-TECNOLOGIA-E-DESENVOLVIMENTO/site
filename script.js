@@ -33,7 +33,7 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-// ── BACKGROUND ANIMADO COM PALAVRAS ──
+// ── BACKGROUND ANIMADO ──
 const words = [
   'HTML5', 'CSS3', 'JavaScript', 'TypeScript', 'React', 'Next.js',
   'Node.js', 'Python', 'Docker', 'Kubernetes', 'AWS', 'GCP',
@@ -64,6 +64,66 @@ function createFloatingWords() {
 createFloatingWords();
 
 // ══════════════════════════════════════════════════════════
+// ── TERMINAL — efeito de digitação das competências ──
+// ══════════════════════════════════════════════════════════
+const terminalCommands = [
+  { cmd: 'whoami',          out: 'malvscode — Desenvolvedor Full Stack' },
+  { cmd: 'cat skills.txt',  out: 'HTML5 · CSS3 · JavaScript · TypeScript' },
+  { cmd: 'ls stack/',       out: 'React · Next.js · Node.js · Express' },
+  { cmd: 'cat backend.txt', out: 'APIs REST · SQL · PostgreSQL · MongoDB' },
+  { cmd: 'cat deploy.txt',  out: 'Vercel · Render · Git · DNS · Cloud' },
+  { cmd: 'echo $STATUS',    out: 'Disponível para novos projetos ✓' }
+];
+
+const terminalTyped  = document.getElementById('terminalTyped');
+const terminalSkills = document.getElementById('terminalSkills');
+
+let tCmdIndex = 0;
+
+function typeCommand(text, onDone) {
+  let i = 0;
+  terminalTyped.textContent = '';
+  const timer = setInterval(() => {
+    terminalTyped.textContent = text.slice(0, ++i);
+    if (i >= text.length) {
+      clearInterval(timer);
+      setTimeout(onDone, 380);
+    }
+  }, 55);
+}
+
+function pushOutput(text) {
+  const line = document.createElement('div');
+  line.className = 'terminal-output';
+  line.textContent = '> ' + text;
+  terminalSkills.appendChild(line);
+  while (terminalSkills.children.length > 3) {
+    terminalSkills.removeChild(terminalSkills.firstChild);
+  }
+}
+
+function runTerminalCycle() {
+  const item = terminalCommands[tCmdIndex % terminalCommands.length];
+  typeCommand(item.cmd, () => {
+    pushOutput(item.out);
+    tCmdIndex++;
+    setTimeout(runTerminalCycle, 900);
+  });
+}
+
+if (terminalTyped && terminalSkills) {
+  const termObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        runTerminalCycle();
+        termObs.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  termObs.observe(document.querySelector('.terminal'));
+}
+
+// ══════════════════════════════════════════════════════════
 // ── CARROSSEL DE MÓDULOS — INFINITO + SWIPE + AUTOPLAY ──
 // ══════════════════════════════════════════════════════════
 const modulosTrack     = document.getElementById('modulosTrack');
@@ -74,7 +134,6 @@ const modulosDots      = document.getElementById('modulosDots');
 const originalModuloCards = Array.from(modulosTrack.children);
 const totalModulos = originalModuloCards.length;
 
-// Clona o conjunto original antes e depois para loop infinito
 const beforeFrag = document.createDocumentFragment();
 originalModuloCards.forEach(card => beforeFrag.appendChild(card.cloneNode(true)));
 modulosTrack.insertBefore(beforeFrag, modulosTrack.firstChild);
@@ -89,9 +148,9 @@ let autoModuloInterval;
 let modulosGap = 22;
 
 function getModulosPerView() {
-  if (window.innerWidth <= 600) return 1;    // celular → 1 card
-  if (window.innerWidth <= 1024) return 2;   // tablet → 2 cards
-  return 3;                                   // desktop → 3 cards
+  if (window.innerWidth <= 600) return 1;
+  if (window.innerWidth <= 1024) return 2;
+  return 3;
 }
 
 function readCssGap() {
@@ -214,7 +273,7 @@ window.addEventListener('resize', () => {
     const newPerView = getModulosPerView();
     if (newPerView !== modulosPerView) {
       modulosPerView = newPerView;
-      cardIndex = totalModulos; // reancora
+      cardIndex = totalModulos;
       createModulosDots();
       setTrackPosition(true);
     } else {
@@ -306,10 +365,9 @@ const translations = {
     'nav-sistemas': 'Systems',
     'nav-sites': 'Websites',
     'nav-contato': 'Contact',
-    'hero-tag': 'Software that drives business',
-    'hero-title1': 'The future starts',
-    'hero-title2': 'in one bit.',
-    'hero-role': '<strong>Cloud Architecture</strong> · Information Security<br>Web Systems · APIs · Scalable Solutions<br><span style="color:var(--blue-b)">—</span> MALVSCODE',
+    'hero-tag': 'Welcome to my portfolio!',
+    'hero-title1': 'Developer',
+    'hero-title2': 'Full <span style="color:var(--blue-b);">Stack.</span>',
     'btn-projetos': 'View Projects',
     'btn-contato': 'Contact Us',
     'sistemas-label': 'Developed Systems',
@@ -353,10 +411,9 @@ const translations = {
     'nav-sistemas': 'Sistemas',
     'nav-sites': 'Sitios',
     'nav-contato': 'Contacto',
-    'hero-tag': 'Software que impulsa negocios',
-    'hero-title1': 'El futuro comienza',
-    'hero-title2': 'en un bit.',
-    'hero-role': '<strong>Arquitectura Cloud</strong> · Seguridad de la Información<br>Sistemas Web · APIs · Soluciones Escalables<br><span style="color:var(--blue-b)">—</span> MALVSCODE',
+    'hero-tag': '¡Bienvenido(a) a mi portafolio!',
+    'hero-title1': 'Desarrollador',
+    'hero-title2': 'Full <span style="color:var(--blue-b);">Stack.</span>',
     'btn-projetos': 'Ver Proyectos',
     'btn-contato': 'Contáctenos',
     'sistemas-label': 'Sistemas desarrollados',
