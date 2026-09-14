@@ -32,6 +32,23 @@
     <li><a href="#sistemas" class="nav-link" data-key="nav-sistemas">Sistemas</a></li>
     <li><a href="#sites" class="nav-link" data-key="nav-sites">Sites</a></li>
     <li><a href="#contato" class="nav-link" data-key="nav-contato">Contato</a></li>
+
+    <!-- ⚠️ Redes sociais monocromáticas — TROQUE os href="#" pelas URLs reais -->
+    <li class="nav-socials">
+      <a href="#" target="_blank" rel="noopener" class="nav-social" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <a href="#" target="_blank" rel="noopener" class="nav-social" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.03 11.03 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .3.21.67.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
+        </svg>
+      </a>
+    </li>
+
     <li>
       <div class="language-selector" id="langSelector">
         <button type="button" class="lang-current" id="langCurrent">PT-BR <span class="lang-arrow">▾</span></button>
@@ -59,16 +76,31 @@
   <div class="orb orb-3"></div>
   <div class="container">
     <div class="hero-inner">
-      <p class="hero-tag" data-key="hero-tag">Bem-vindo(a) ao meu portifólio!</p>
-      <h1 class="hero-name">
-        <span data-key="hero-title1">MALVS</span>
-        <span class="hero-name-accent" data-key="hero-title2">CO<span style="color:var(--blue-b);">DE.</span></span>
+
+      <p class="hero-tag" data-key="hero-tag">Bem-vindo(a) ao meu portfólio!</p>
+
+      <!-- Logo como título principal -->
+      <h1 class="hero-brand" aria-label="MALVSCODE">
+        <img src="imagens/malvscode-logo.png" alt="MALVSCODE" class="hero-brand-img"/>
       </h1>
-      <p class="hero-role" data-key="hero-role">
-        <strong>Desenvolvimento Web</strong> HTML5 · CSS  JavaScript · TypeScript · React.js<br> 
-        Next.js · Node.js · DNS · Banco de Dados · API REST · JSON · Deploy<br>
-        <span style="color:var(--blue-b)">—</span> MALVSCODE
-      </p>
+
+      <!-- Terminal com competências técnicas -->
+      <div class="terminal" aria-label="Competências técnicas">
+        <div class="terminal-bar">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="terminal-title">malvscode@portfolio: ~/skills</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line">
+            <span class="prompt">$</span>
+            <span class="command" id="terminalTyped"></span><span class="caret" id="terminalCaret">▌</span>
+          </div>
+          <div class="terminal-skills" id="terminalSkills"></div>
+        </div>
+      </div>
+
       <div class="hero-actions">
         <a href="#sistemas" class="btn btn-blue" data-key="btn-projetos">Ver Projetos</a>
         <a href="#contato" class="btn btn-outline" data-key="btn-contato">Fale Conosco</a>
@@ -89,20 +121,13 @@
       <div class="modulos-carousel-viewport">
         <div class="modulos-carousel-track" id="modulosTrack">
 
-          <!-- Módulo 1 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/sistema-interno.png" alt="Sistema Interno Empresarial"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo1-nome">Sistema Interno Empresarial</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/sistema-interno.png" alt="Sistema Interno Empresarial"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo1-nome">Sistema Interno Empresarial</h3></div>
             <p class="modulo-desc" data-key="modulo1-desc">Sistema completo para gestão empresarial com controle de estoque, vendas, relatórios e muito mais.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">HTML</span>
-              <span class="modulo-tag">CSS</span>
-              <span class="modulo-tag">JavaScript</span>
-              <span class="modulo-tag">SQL</span>
+              <span class="modulo-tag">HTML</span><span class="modulo-tag">CSS</span>
+              <span class="modulo-tag">JavaScript</span><span class="modulo-tag">SQL</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -111,20 +136,13 @@
             </div>
           </div>
 
-          <!-- Módulo 2 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/controle-frete.png" alt="Controle de Frete"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo2-nome">Controle de Frete</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/controle-frete.png" alt="Controle de Frete"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo2-nome">Controle de Frete</h3></div>
             <p class="modulo-desc" data-key="modulo2-desc">Gerencie fretes, rotas, custos e entregas com eficiência e rastreabilidade completa.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">JavaScript</span>
-              <span class="modulo-tag">Node.js</span>
-              <span class="modulo-tag">Render</span>
-              <span class="modulo-tag">.env</span>
+              <span class="modulo-tag">JavaScript</span><span class="modulo-tag">Node.js</span>
+              <span class="modulo-tag">Render</span><span class="modulo-tag">.env</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -133,20 +151,13 @@
             </div>
           </div>
 
-          <!-- Módulo 3 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/contas-pagar.png" alt="Contas a Pagar"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo3-nome">Contas a Pagar</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/contas-pagar.png" alt="Contas a Pagar"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo3-nome">Contas a Pagar</h3></div>
             <p class="modulo-desc" data-key="modulo3-desc">Controle total de contas a pagar, vencimentos, fluxo de caixa e conciliação bancária.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">HTML</span>
-              <span class="modulo-tag">CSS</span>
-              <span class="modulo-tag">JavaScript</span>
-              <span class="modulo-tag">SQL</span>
+              <span class="modulo-tag">HTML</span><span class="modulo-tag">CSS</span>
+              <span class="modulo-tag">JavaScript</span><span class="modulo-tag">SQL</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -155,20 +166,13 @@
             </div>
           </div>
 
-          <!-- Módulo 4 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/contas-receber.png" alt="Contas a Receber"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo4-nome">Contas a Receber</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/contas-receber.png" alt="Contas a Receber"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo4-nome">Contas a Receber</h3></div>
             <p class="modulo-desc" data-key="modulo4-desc">Gerencie recebimentos, clientes, prazos e acompanhe o fluxo de caixa da sua empresa.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">Node.js</span>
-              <span class="modulo-tag">SQL</span>
-              <span class="modulo-tag">server.js</span>
-              <span class="modulo-tag">package.json</span>
+              <span class="modulo-tag">Node.js</span><span class="modulo-tag">SQL</span>
+              <span class="modulo-tag">server.js</span><span class="modulo-tag">package.json</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -177,20 +181,13 @@
             </div>
           </div>
 
-          <!-- Módulo 5 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/tabela-precos.png" alt="Tabela de Preços"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo5-nome">Tabela de Preços</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/tabela-precos.png" alt="Tabela de Preços"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo5-nome">Tabela de Preços</h3></div>
             <p class="modulo-desc" data-key="modulo5-desc">Gerencie tabelas de preços, promoções, descontos e atualizações em tempo real.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">HTML</span>
-              <span class="modulo-tag">CSS</span>
-              <span class="modulo-tag">JavaScript</span>
-              <span class="modulo-tag">APIs</span>
+              <span class="modulo-tag">HTML</span><span class="modulo-tag">CSS</span>
+              <span class="modulo-tag">JavaScript</span><span class="modulo-tag">APIs</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -199,20 +196,13 @@
             </div>
           </div>
 
-          <!-- Módulo 6 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/estoque.png" alt="Estoque"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo6-nome">Estoque</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/estoque.png" alt="Estoque"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo6-nome">Estoque</h3></div>
             <p class="modulo-desc" data-key="modulo6-desc">Controle de inventário, movimentações, alertas de estoque baixo e relatórios gerenciais.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">Node.js</span>
-              <span class="modulo-tag">Render</span>
-              <span class="modulo-tag">.env</span>
-              <span class="modulo-tag">Git</span>
+              <span class="modulo-tag">Node.js</span><span class="modulo-tag">Render</span>
+              <span class="modulo-tag">.env</span><span class="modulo-tag">Git</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -221,20 +211,13 @@
             </div>
           </div>
 
-          <!-- Módulo 7 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/login.png" alt="Login e Autenticação"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo7-nome">Login e Autenticação</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/login.png" alt="Login e Autenticação"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo7-nome">Login e Autenticação</h3></div>
             <p class="modulo-desc" data-key="modulo7-desc">Sistema seguro de login, autenticação JWT, recuperação de senha e níveis de acesso.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">JavaScript</span>
-              <span class="modulo-tag">Node.js</span>
-              <span class="modulo-tag">server.js</span>
-              <span class="modulo-tag">package.json</span>
+              <span class="modulo-tag">JavaScript</span><span class="modulo-tag">Node.js</span>
+              <span class="modulo-tag">server.js</span><span class="modulo-tag">package.json</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -243,20 +226,13 @@
             </div>
           </div>
 
-          <!-- Módulo 8 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/jornada-academica.png" alt="Jornada Acadêmica"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo8-nome">Jornada Acadêmica</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/jornada-academica.png" alt="Jornada Acadêmica"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo8-nome">Jornada Acadêmica</h3></div>
             <p class="modulo-desc" data-key="modulo8-desc">Plataforma para gerenciamento de cursos, alunos, turmas e acompanhamento acadêmico.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">HTML</span>
-              <span class="modulo-tag">CSS</span>
-              <span class="modulo-tag">JavaScript</span>
-              <span class="modulo-tag">SQL</span>
+              <span class="modulo-tag">HTML</span><span class="modulo-tag">CSS</span>
+              <span class="modulo-tag">JavaScript</span><span class="modulo-tag">SQL</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -265,20 +241,13 @@
             </div>
           </div>
 
-          <!-- Módulo 9 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/fornecedores.png" alt="Fornecedores"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo9-nome">Fornecedores</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/fornecedores.png" alt="Fornecedores"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo9-nome">Fornecedores</h3></div>
             <p class="modulo-desc" data-key="modulo9-desc">Gerencie fornecedores, contratos, avaliações e histórico de compras.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">Node.js</span>
-              <span class="modulo-tag">Render</span>
-              <span class="modulo-tag">.env</span>
-              <span class="modulo-tag">Git</span>
+              <span class="modulo-tag">Node.js</span><span class="modulo-tag">Render</span>
+              <span class="modulo-tag">.env</span><span class="modulo-tag">Git</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -287,20 +256,13 @@
             </div>
           </div>
 
-          <!-- Módulo 10 -->
           <div class="modulo-card">
-            <div class="modulo-image">
-              <img src="imagens/transportadoras.png" alt="Transportadoras"/>
-            </div>
-            <div class="modulo-header">
-              <h3 class="modulo-nome" data-key="modulo10-nome">Transportadoras</h3>
-            </div>
+            <div class="modulo-image"><img src="imagens/transportadoras.png" alt="Transportadoras"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo10-nome">Transportadoras</h3></div>
             <p class="modulo-desc" data-key="modulo10-desc">Gerencie transportadoras, contratos, rotas e acompanhamento de entregas.</p>
             <div class="modulo-tags">
-              <span class="modulo-tag">JavaScript</span>
-              <span class="modulo-tag">Node.js</span>
-              <span class="modulo-tag">server.js</span>
-              <span class="modulo-tag">package.json</span>
+              <span class="modulo-tag">JavaScript</span><span class="modulo-tag">Node.js</span>
+              <span class="modulo-tag">server.js</span><span class="modulo-tag">package.json</span>
               <span class="modulo-tag">+ outras</span>
             </div>
             <div class="modulo-footer">
@@ -322,9 +284,7 @@
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-header">
-      <h3 class="modal-title" id="modalTitle">Módulo</h3>
-    </div>
+    <div class="modal-header"><h3 class="modal-title" id="modalTitle">Módulo</h3></div>
     <div class="modal-divider"></div>
     <div class="modal-body-wrapper">
       <p class="modal-body" id="modalBody">Descrição do módulo</p>
@@ -346,9 +306,7 @@
       <div class="site-card reveal" data-d="1">
         <div class="site-preview">
           <img src="imagens/elevatevision.png" alt="Elevate Vision Agency" class="site-thumbnail"/>
-          <div class="site-preview-overlay">
-            <span class="site-preview-icon">+</span>
-          </div>
+          <div class="site-preview-overlay"><span class="site-preview-icon">+</span></div>
         </div>
         <div class="site-info">
           <div class="site-name" data-key="site1-nome">Elevate Vision Agency</div>
