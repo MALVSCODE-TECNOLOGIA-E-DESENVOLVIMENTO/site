@@ -12,19 +12,14 @@ window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY
 // Hamburger
 const ham = document.getElementById('hamburger');
 const links = document.getElementById('navLinks');
-const langSelector = document.getElementById('langSelector');
 
 ham.addEventListener('click', () => {
   ham.classList.toggle('open');
   links.classList.toggle('open');
-  if (!links.classList.contains('open')) {
-    langSelector.classList.remove('open');
-  }
 });
 links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
   ham.classList.remove('open');
   links.classList.remove('open');
-  langSelector.classList.remove('open');
 }));
 
 // Scroll reveal
@@ -285,166 +280,4 @@ modalOverlayEl.addEventListener('click', closeModal);
 modalOverlayEl.querySelector('.modal-content').addEventListener('click', (e) => e.stopPropagation());
 document.querySelectorAll('.modal-close, .modal-close-btn').forEach(btn => {
   btn.addEventListener('click', closeModal);
-});
-
-// ══════════════════════════════════════════════════════════
-// ── SISTEMA DE TRADUÇÃO CORRIGIDO ──
-// PT SEMPRE vem do HTML atual (nunca hardcoded)
-// EN/ES ficam em objetos fixos
-// ══════════════════════════════════════════════════════════
-const langCurrent = document.getElementById('langCurrent');
-const langLabels = { pt: 'PT-BR', en: 'EN', es: 'ES' };
-
-// Captura os textos em PT do HTML SEMPRE que for chamado
-function buildPtFromDOM() {
-  const pt = {};
-  document.querySelectorAll('[data-key]').forEach(el => {
-    const key = el.dataset.key;
-    if (!(key in pt)) {
-      pt[key] = el.innerHTML.trim();
-    }
-  });
-  return pt;
-}
-
-// Guarda uma cópia do PT "original" (do HTML) que nunca é alterada
-const ptOriginal = buildPtFromDOM();
-
-// Traduções fixas EN/ES
-const translations = {
-  en: {
-    'nav-sistemas': 'Systems',
-    'nav-sites': 'Websites',
-    'nav-contato': 'Contact',
-    'hero-tag': 'Welcome to my portfolio!',
-    'hero-title1': 'MALVS',
-    'hero-title2': 'CODE',
-    'hero-role': '<strong>Full Stack Developer</strong><br>Web Systems · Websites · Scalable Solutions<br>Databases · APIs · Deploy · DNS · Vercel · Render · JSON',
-    'btn-projetos': 'View Projects',
-    'btn-contato': 'Contact Us',
-    'sistemas-label': 'Developed Systems',
-    'sistemas-title': 'Projects & <span>Web Systems</span>',
-    'modulo1-nome': 'Business Management System',
-    'modulo1-desc': 'Complete business management system with inventory, sales, reports and much more.',
-    'modulo2-nome': 'Freight Control',
-    'modulo2-desc': 'Manage freight, routes, costs and deliveries with efficiency and complete traceability.',
-    'modulo3-nome': 'Accounts Payable',
-    'modulo3-desc': 'Total control of accounts payable, due dates, cash flow and bank reconciliation.',
-    'modulo5-nome': 'Price List',
-    'modulo5-desc': 'Manage price lists, promotions, discounts and real-time updates.',
-    'modulo6-nome': 'Inventory',
-    'modulo6-desc': 'Inventory control, movements, low stock alerts and management reports.',
-    'modulo8-nome': 'Purchases',
-    'modulo8-desc': 'Record and track your purchases, centralizing information about items, values, dates, payment methods and history.',
-    'modulo9-nome': 'Relationships',
-    'modulo9-desc': 'Centralize customer and supplier information, contacts and interaction history in a single environment.',
-    'ver-demo': 'View Demo',
-    'sites-label': 'Developed Websites',
-    'sites-title': 'Websites & <span>Interfaces</span>',
-    'site1-nome': 'Elevate Vision Agency',
-    'visitar-site': 'Visit site',
-    'contato-label': 'Contact',
-    'contato-title': "Let's <span>work together?</span>",
-    'contato-sub': 'Open for projects, consulting, and partnerships.<br>Get in touch and let\'s talk about your idea.',
-    'telefone': 'WhatsApp / Phone',
-    'email': 'E-mail',
-    'instagram-label': 'Instagram',
-    'github-label': 'GitHub',
-    'whatsapp': 'Call on WhatsApp',
-    'email-btn': 'Send E-mail',
-    'fechar': 'Close'
-  },
-  es: {
-    'nav-sistemas': 'Sistemas',
-    'nav-sites': 'Sitios',
-    'nav-contato': 'Contacto',
-    'hero-tag': '¡Bienvenido(a) a mi portafolio!',
-    'hero-title1': 'MALVS',
-    'hero-title2': 'CODE',
-    'hero-role': '<strong>Desarrollador Full Stack</strong><br>Sistemas Web · Sitios · Soluciones Escalables<br>Bases de Datos · APIs · Deploy · DNS · Vercel · Render · JSON',
-    'btn-projetos': 'Ver Proyectos',
-    'btn-contato': 'Contáctenos',
-    'sistemas-label': 'Sistemas desarrollados',
-    'sistemas-title': 'Proyectos & <span>Sistemas Web</span>',
-    'modulo1-nome': 'Sistema Interno Empresarial',
-    'modulo1-desc': 'Sistema completo de gestión empresarial con control de inventario, ventas, informes y más.',
-    'modulo2-nome': 'Control de Flete',
-    'modulo2-desc': 'Gestione fletes, rutas, costos y entregas con eficiencia y trazabilidad completa.',
-    'modulo3-nome': 'Cuentas a Pagar',
-    'modulo3-desc': 'Control total de cuentas a pagar, vencimientos, flujo de caja y conciliación bancaria.',
-    'modulo5-nome': 'Tabla de Precios',
-    'modulo5-desc': 'Gestione tablas de precios, promociones, descuentos y actualizaciones en tiempo real.',
-    'modulo6-nome': 'Inventario',
-    'modulo6-desc': 'Control de inventario, movimientos, alertas de stock bajo e informes gerenciales.',
-    'modulo8-nome': 'Compras',
-    'modulo8-desc': 'Registre y realice el seguimiento de sus compras, centralizando información sobre artículos, valores, fechas, formas de pago e historial.',
-    'modulo9-nome': 'Relaciones',
-    'modulo9-desc': 'Centralice información de clientes y proveedores, contactos e historial de interacciones en un solo entorno.',
-    'ver-demo': 'Ver Demo',
-    'sites-label': 'Sitios desarrollados',
-    'sites-title': 'Sitios web & <span>Interfaces</span>',
-    'site1-nome': 'Elevate Vision Agency',
-    'visitar-site': 'Visitar sitio',
-    'contato-label': 'Contacto',
-    'contato-title': '¿Vamos a <span>trabajar juntos?</span>',
-    'contato-sub': 'Abiertos a proyectos, consultorías y alianzas.<br>Póngase en contacto y hablemos de su idea.',
-    'telefone': 'WhatsApp / Teléfono',
-    'email': 'Correo electrónico',
-    'instagram-label': 'Instagram',
-    'github-label': 'GitHub',
-    'whatsapp': 'Llamar por WhatsApp',
-    'email-btn': 'Enviar correo',
-    'fechar': 'Cerrar'
-  }
-};
-
-let currentLang = 'pt';
-
-// Lista de todas as chaves que têm tradução (para saber o que restaurar em PT)
-const allKeys = new Set();
-document.querySelectorAll('[data-key]').forEach(el => allKeys.add(el.dataset.key));
-
-function applyLanguage(lang) {
-  currentLang = lang;
-
-  // Atualiza label do botão
-  langCurrent.childNodes[0].textContent = langLabels[lang] + ' ';
-
-  // Marca opção ativa
-  document.querySelectorAll('.lang-option').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.lang === lang);
-  });
-
-  // Aplica textos
-  document.querySelectorAll('[data-key]').forEach(el => {
-    const key = el.dataset.key;
-
-    if (lang === 'pt') {
-      // PT: pega SEMPRE do HTML original (nunca sobrescreve com valor antigo)
-      if (ptOriginal[key] !== undefined) {
-        el.innerHTML = ptOriginal[key];
-      }
-    } else {
-      // EN/ES: pega do objeto de tradução
-      if (translations[lang] && translations[lang][key] !== undefined) {
-        el.innerHTML = translations[lang][key];
-      }
-    }
-  });
-}
-
-langCurrent.addEventListener('click', (e) => {
-  e.stopPropagation();
-  langSelector.classList.toggle('open');
-});
-document.addEventListener('click', (e) => {
-  if (!langSelector.contains(e.target)) {
-    langSelector.classList.remove('open');
-  }
-});
-document.querySelectorAll('.lang-option').forEach(btn => {
-  btn.addEventListener('click', () => {
-    applyLanguage(btn.dataset.lang);
-    langSelector.classList.remove('open');
-  });
 });
