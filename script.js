@@ -12,19 +12,14 @@ window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY
 // Hamburger
 const ham = document.getElementById('hamburger');
 const links = document.getElementById('navLinks');
-const langSelector = document.getElementById('langSelector');
 
 ham.addEventListener('click', () => {
   ham.classList.toggle('open');
   links.classList.toggle('open');
-  if (!links.classList.contains('open')) {
-    langSelector.classList.remove('open');
-  }
 });
 links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
   ham.classList.remove('open');
   links.classList.remove('open');
-  langSelector.classList.remove('open');
 }));
 
 // Scroll reveal
@@ -287,154 +282,3 @@ modalOverlayEl.querySelector('.modal-content').addEventListener('click', (e) => 
 document.querySelectorAll('.modal-close, .modal-close-btn').forEach(btn => {
   btn.addEventListener('click', closeModal);
 });
-
-// ── LANGUAGE SYSTEM ──
-const langCurrent = document.getElementById('langCurrent');
-const langLabels = { pt: 'PT-BR', en: 'EN', es: 'ES' };
-
-langCurrent.addEventListener('click', (e) => {
-  e.stopPropagation();
-  langSelector.classList.toggle('open');
-});
-document.addEventListener('click', (e) => {
-  if (!langSelector.contains(e.target)) {
-    langSelector.classList.remove('open');
-  }
-});
-document.querySelectorAll('.lang-option').forEach(btn => {
-  btn.addEventListener('click', () => changeLanguage(btn.dataset.lang));
-});
-
-function buildPtFromDOM() {
-  const pt = {};
-  document.querySelectorAll('[data-key]').forEach(el => {
-    const key = el.dataset.key;
-    if (!(key in pt)) {
-      pt[key] = el.innerHTML.trim();
-    }
-  });
-  return pt;
-}
-
-const translations = {
-  pt: buildPtFromDOM(),
-  en: {
-    'nav-sobre': 'About Us',
-    'nav-sistemas': 'Systems',
-    'nav-sites': 'Websites',
-    'nav-contato': 'Contact',
-    'hero-tag': 'Welcome to my portfolio!',
-    'hero-title1': 'MALVS',
-    'hero-title2': 'CODE',
-    'hero-role': '<strong>Full Stack Developer</strong><br>Web Systems · Websites · Scalable Solutions<br>Databases · APIs · Deploy · DNS · Vercel · Render · JSON',
-    'btn-projetos': 'View Projects',
-    'btn-contato': 'Contact Us',
-    'sistemas-label': 'Developed Systems',
-    'sistemas-title': 'Projects & <span>Web Systems</span>',
-    'modulo1-nome': 'Business Management System',
-    'modulo1-desc': 'Complete business management system with inventory, sales, reports and much more.',
-    'modulo2-nome': 'Freight Control',
-    'modulo2-desc': 'Manage freight, routes, costs and deliveries with efficiency and complete traceability.',
-    'modulo3-nome': 'Accounts Payable',
-    'modulo3-desc': 'Total control of accounts payable, due dates, cash flow and bank reconciliation.',
-    'modulo4-nome': 'Accounts Receivable',
-    'modulo4-desc': 'Manage receipts, customers, deadlines and monitor your company\'s cash flow.',
-    'modulo5-nome': 'Price List',
-    'modulo5-desc': 'Manage price lists, promotions, discounts and real-time updates.',
-    'modulo6-nome': 'Inventory',
-    'modulo6-desc': 'Inventory control, movements, low stock alerts and management reports.',
-    'modulo7-nome': 'Login & Authentication',
-    'modulo7-desc': 'Secure login system, JWT authentication, password recovery and access levels.',
-    'modulo8-nome': 'Academic Journey',
-    'modulo8-desc': 'Platform for managing courses, students, classes and academic tracking.',
-    'modulo9-nome': 'Suppliers',
-    'modulo9-desc': 'Manage suppliers, contracts, evaluations and purchase history.',
-    'modulo10-nome': 'Carriers',
-    'modulo10-desc': 'Manage carriers, contracts, routes and delivery tracking.',
-    'ver-demo': 'View Demo',
-    'sites-label': 'Developed Websites',
-    'sites-title': 'Websites & <span>Interfaces</span>',
-    'site1-nome': 'Elevate Vision Agency',
-    'visitar-site': 'Visit site',
-    'contato-label': 'Contact',
-    'contato-title': "Let's <span>work together?</span>",
-    'contato-sub': 'Open for projects, consulting, and partnerships.<br>Get in touch and let\'s talk about your idea.',
-    'telefone': 'WhatsApp / Phone',
-    'email': 'E-mail',
-    'instagram-label': 'Instagram',
-    'github-label': 'GitHub',
-    'whatsapp': 'Call on WhatsApp',
-    'email-btn': 'Send E-mail',
-    'fechar': 'Close'
-  },
-  es: {
-    'nav-sobre': 'La Empresa',
-    'nav-sistemas': 'Sistemas',
-    'nav-sites': 'Sitios',
-    'nav-contato': 'Contacto',
-    'hero-tag': '¡Bienvenido(a) a mi portafolio!',
-    'hero-title1': 'MALVS',
-    'hero-title2': 'CODE',
-    'hero-role': '<strong>Desarrollador Full Stack</strong><br>Sistemas Web · Sitios · Soluciones Escalables<br>Bases de Datos · APIs · Deploy · DNS · Vercel · Render · JSON',
-    'btn-projetos': 'Ver Proyectos',
-    'btn-contato': 'Contáctenos',
-    'sistemas-label': 'Sistemas desarrollados',
-    'sistemas-title': 'Proyectos & <span>Sistemas Web</span>',
-    'modulo1-nome': 'Sistema Interno Empresarial',
-    'modulo1-desc': 'Sistema completo de gestión empresarial con control de inventario, ventas, informes y más.',
-    'modulo2-nome': 'Control de Flete',
-    'modulo2-desc': 'Gestione fletes, rutas, costos y entregas con eficiencia y trazabilidad completa.',
-    'modulo3-nome': 'Cuentas a Pagar',
-    'modulo3-desc': 'Control total de cuentas a pagar, vencimientos, flujo de caja y conciliación bancaria.',
-    'modulo4-nome': 'Cuentas a Cobrar',
-    'modulo4-desc': 'Gestione cobros, clientes, plazos y monitoree el flujo de caja de su empresa.',
-    'modulo5-nome': 'Tabla de Precios',
-    'modulo5-desc': 'Gestione tablas de precios, promociones, descuentos y actualizaciones en tiempo real.',
-    'modulo6-nome': 'Inventario',
-    'modulo6-desc': 'Control de inventario, movimientos, alertas de stock bajo e informes gerenciales.',
-    'modulo7-nome': 'Login y Autenticación',
-    'modulo7-desc': 'Sistema seguro de login, autenticación JWT, recuperación de contraseña y niveles de acceso.',
-    'modulo8-nome': 'Jornada Académica',
-    'modulo8-desc': 'Plataforma para gestión de cursos, alumnos, clases y seguimiento académico.',
-    'modulo9-nome': 'Proveedores',
-    'modulo9-desc': 'Gestione proveedores, contratos, evaluaciones e historial de compras.',
-    'modulo10-nome': 'Transportadoras',
-    'modulo10-desc': 'Gestione transportadoras, contratos, rutas y seguimiento de entregas.',
-    'ver-demo': 'Ver Demo',
-    'sites-label': 'Sitios desarrollados',
-    'sites-title': 'Sitios web & <span>Interfaces</span>',
-    'site1-nome': 'Elevate Vision Agency',
-    'visitar-site': 'Visitar sitio',
-    'contato-label': 'Contacto',
-    'contato-title': '¿Vamos a <span>trabajar juntos?</span>',
-    'contato-sub': 'Abiertos a proyectos, consultorías y alianzas.<br>Póngase en contacto y hablemos de su idea.',
-    'telefone': 'WhatsApp / Teléfono',
-    'email': 'Correo electrónico',
-    'instagram-label': 'Instagram',
-    'github-label': 'GitHub',
-    'whatsapp': 'Llamar por WhatsApp',
-    'email-btn': 'Enviar correo',
-    'fechar': 'Cerrar'
-  }
-};
-
-let currentLang = 'pt';
-
-function changeLanguage(lang) {
-  currentLang = lang;
-
-  langCurrent.childNodes[0].textContent = langLabels[lang] + ' ';
-
-  document.querySelectorAll('.lang-option').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.lang === lang);
-  });
-
-  document.querySelectorAll('[data-key]').forEach(el => {
-    const key = el.dataset.key;
-    if (translations[lang] && translations[lang][key] !== undefined) {
-      el.innerHTML = translations[lang][key];
-    }
-  });
-
-  langSelector.classList.remove('open');
-}
