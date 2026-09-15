@@ -31,7 +31,7 @@
   <ul class="nav-links" id="navLinks">
     <li><a href="#sistemas" class="nav-link" data-key="nav-sistemas">Sistemas</a></li>
     <li><a href="#sites" class="nav-link" data-key="nav-sites">Sites</a></li>
-    <li><a href="#processo" class="nav-link" data-key="nav-processo">Processo</a></li>
+    <li><a href="#processo" class="nav-link" data-key="nav-processo">Sobre</a></li>
     <li><a href="#contato" class="nav-link" data-key="nav-contato">Contato</a></li>
 
     <li class="nav-socials">
@@ -118,66 +118,83 @@
       <div class="modulos-carousel-viewport">
         <div class="modulos-carousel-track" id="modulosTrack">
 
-          <div class="modulo-card">
-            <div class="modulo-image"><img src="imagens/sistema-interno.png" alt="Sistema Interno Empresarial" loading="lazy"/></div>
+          <!-- Card: Sistema Integrado -->
+          <div class="modulo-card" data-modulo="sistema-integrado">
+            <div class="modulo-image"><img src="imagens/sistema-integrado/login.png" alt="Sistema Integrado" loading="lazy"/></div>
             <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo1-nome">Sistema Integrado</h3></div>
             <p class="modulo-desc" data-key="modulo1-desc">Plataforma web que unifica diferentes áreas operacionais em um só painel. Conta com autenticação de usuários, controle de permissões, registro de atividades e módulos independentes que se comunicam entre si.</p>
             <div class="modulo-footer">
-              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="modulo1" data-key="saiba-mais">Saiba mais</button>
+              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="sistema-integrado" data-key="saiba-mais">Saiba mais</button>
             </div>
           </div>
 
-          <div class="modulo-card">
-            <div class="modulo-image"><img src="imagens/controle-frete.png" alt="Controle de Frete" loading="lazy"/></div>
-            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo2-nome">Logística</h3></div>
-            <p class="modulo-desc" data-key="modulo2-desc">Ferramenta para registrar e acompanhar transportadoras, cotações de frete e envios. Permite comparar opções, monitorar prazos, acompanhar status em tempo real e registrar confirmações de entrega.</p>
+          <!-- Card: Login e Autenticação -->
+          <div class="modulo-card" data-modulo="login-autenticacao">
+            <div class="modulo-image"><img src="imagens/login-autenticacao/login-autenticacao.png" alt="Login e Autenticação" loading="lazy"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo-login-nome">Login e Autenticação</h3></div>
+            <p class="modulo-desc" data-key="modulo-login-desc">Sistema seguro de acesso com autenticação de usuários, recuperação de senha e níveis de permissão. Garante que cada pessoa veja apenas o que lhe é permitido.</p>
             <div class="modulo-footer">
-              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="modulo2" data-key="saiba-mais">Saiba mais</button>
+              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="login-autenticacao" data-key="saiba-mais">Saiba mais</button>
             </div>
           </div>
 
-          <div class="modulo-card">
-            <div class="modulo-image"><img src="imagens/contas-pagar.png" alt="Contas a Pagar" loading="lazy"/></div>
-            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo3-nome">Gestão de Pagamentos</h3></div>
-            <p class="modulo-desc" data-key="modulo3-desc">Organize contas a pagar e a receber, pagamentos realizados e atrasados, além de histórico e relatórios financeiros. Tenha uma visão clara do seu fluxo de caixa em um só lugar.</p>
-            <div class="modulo-footer">
-              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="modulo3" data-key="saiba-mais">Saiba mais</button>
-            </div>
-          </div>
-
-          <div class="modulo-card">
-            <div class="modulo-image"><img src="imagens/tabela-precos.png" alt="Tabela de Preços" loading="lazy"/></div>
-            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo5-nome">Controle de Preços</h3></div>
-            <p class="modulo-desc" data-key="modulo5-desc">Acompanhe os preços de itens e produtos cotados, compare valores entre fornecedores, identifique as melhores oportunidades e consulte o histórico de variações.</p>
-            <div class="modulo-footer">
-              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="modulo5" data-key="saiba-mais">Saiba mais</button>
-            </div>
-          </div>
-
-          <div class="modulo-card">
-            <div class="modulo-image"><img src="imagens/estoque.png" alt="Estoque" loading="lazy"/></div>
-            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo6-nome">Estoque</h3></div>
-            <p class="modulo-desc" data-key="modulo6-desc">Monitore a movimentação de itens e produtos com entradas, saídas, quantidades disponíveis e alertas de estoque baixo. O histórico completo garante rastreabilidade e controle.</p>
-            <div class="modulo-footer">
-              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="modulo6" data-key="saiba-mais">Saiba mais</button>
-            </div>
-          </div>
-
-          <div class="modulo-card">
-            <div class="modulo-image"><img src="imagens/jornada-academica.png" alt="Compras" loading="lazy"/></div>
-            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo8-nome">Compras</h3></div>
-            <p class="modulo-desc" data-key="modulo8-desc">Tenha o histórico completo das suas compras organizado por itens, valores, datas, formas de pagamento e fornecedores. Fácil de consultar e comparar.</p>
-            <div class="modulo-footer">
-              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="modulo8" data-key="saiba-mais">Saiba mais</button>
-            </div>
-          </div>
-
-          <div class="modulo-card">
-            <div class="modulo-image"><img src="imagens/fornecedores.png" alt="Fornecedores" loading="lazy"/></div>
+          <!-- Card: Relacionamentos -->
+          <div class="modulo-card" data-modulo="relacionamentos">
+            <div class="modulo-image"><img src="imagens/relacionamentos/relacionamentos.png" alt="Relacionamentos" loading="lazy"/></div>
             <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo9-nome">Relacionamentos</h3></div>
             <p class="modulo-desc" data-key="modulo9-desc">Reúna informações de clientes e fornecedores, contatos e histórico de interações em um ambiente único. Ideal para manter o relacionamento comercial organizado.</p>
             <div class="modulo-footer">
-              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="modulo9" data-key="saiba-mais">Saiba mais</button>
+              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="relacionamentos" data-key="saiba-mais">Saiba mais</button>
+            </div>
+          </div>
+
+          <!-- Card: Logística -->
+          <div class="modulo-card" data-modulo="logistica">
+            <div class="modulo-image"><img src="imagens/logistica/logistica.png" alt="Logística" loading="lazy"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo2-nome">Logística</h3></div>
+            <p class="modulo-desc" data-key="modulo2-desc">Ferramenta para registrar e acompanhar transportadoras, cotações de frete e envios. Permite comparar opções, monitorar prazos, acompanhar status em tempo real e registrar confirmações de entrega.</p>
+            <div class="modulo-footer">
+              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="logistica" data-key="saiba-mais">Saiba mais</button>
+            </div>
+          </div>
+
+          <!-- Card: Controle de Preços -->
+          <div class="modulo-card" data-modulo="controle-precos">
+            <div class="modulo-image"><img src="imagens/controle-precos/controle-precos.png" alt="Controle de Preços" loading="lazy"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo5-nome">Controle de Preços</h3></div>
+            <p class="modulo-desc" data-key="modulo5-desc">Acompanhe os preços de itens e produtos cotados, compare valores entre fornecedores, identifique as melhores oportunidades e consulte o histórico de variações.</p>
+            <div class="modulo-footer">
+              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="controle-precos" data-key="saiba-mais">Saiba mais</button>
+            </div>
+          </div>
+
+          <!-- Card: Estoque -->
+          <div class="modulo-card" data-modulo="estoque">
+            <div class="modulo-image"><img src="imagens/estoque/estoque.png" alt="Estoque" loading="lazy"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo6-nome">Estoque</h3></div>
+            <p class="modulo-desc" data-key="modulo6-desc">Monitore a movimentação de itens e produtos com entradas, saídas, quantidades disponíveis e alertas de estoque baixo. O histórico completo garante rastreabilidade e controle.</p>
+            <div class="modulo-footer">
+              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="estoque" data-key="saiba-mais">Saiba mais</button>
+            </div>
+          </div>
+
+          <!-- Card: Compras -->
+          <div class="modulo-card" data-modulo="compras">
+            <div class="modulo-image"><img src="imagens/compras/compras.png" alt="Compras" loading="lazy"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo8-nome">Compras</h3></div>
+            <p class="modulo-desc" data-key="modulo8-desc">Tenha o histórico completo das suas compras organizado por itens, valores, datas, formas de pagamento e fornecedores. Fácil de consultar e comparar.</p>
+            <div class="modulo-footer">
+              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="compras" data-key="saiba-mais">Saiba mais</button>
+            </div>
+          </div>
+
+          <!-- Card: Gestão de Pagamentos -->
+          <div class="modulo-card" data-modulo="gestao-pagamentos">
+            <div class="modulo-image"><img src="imagens/gestao-pagamentos/gestao-pagamentos.png" alt="Gestão de Pagamentos" loading="lazy"/></div>
+            <div class="modulo-header"><h3 class="modulo-nome" data-key="modulo3-nome">Gestão de Pagamentos</h3></div>
+            <p class="modulo-desc" data-key="modulo3-desc">Organize contas a pagar e a receber, pagamentos realizados e atrasados, além de histórico e relatórios financeiros. Tenha uma visão clara do seu fluxo de caixa em um só lugar.</p>
+            <div class="modulo-footer">
+              <button class="btn btn-blue btn-sm modulo-info-btn" data-modulo="gestao-pagamentos" data-key="saiba-mais">Saiba mais</button>
             </div>
           </div>
 
@@ -194,12 +211,33 @@
 <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-content">
     <button class="modal-close" aria-label="Fechar">✕</button>
-    <div class="modal-header"><h3 class="modal-title" id="modalTitle">Módulo</h3></div>
-    <div class="modal-divider"></div>
-    <div class="modal-body-wrapper">
-      <p class="modal-body" id="modalBody">Descrição do módulo</p>
-      <div class="modal-topics" id="modalTopics"></div>
+
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalTitle">Módulo</h3>
     </div>
+
+    <div class="modal-divider"></div>
+
+    <div class="modal-slider">
+      <button class="modal-slider-btn prev" id="modalPrev" aria-label="Slide anterior">‹</button>
+
+      <div class="modal-slider-viewport">
+        <div class="modal-slider-track" id="modalTrack">
+          <!-- slides injetados via JS -->
+        </div>
+      </div>
+
+      <button class="modal-slider-btn next" id="modalNext" aria-label="Próximo slide">›</button>
+    </div>
+
+    <p class="modal-caption" id="modalCaption">—</p>
+
+    <div class="modal-slider-dots" id="modalDots"></div>
+
+    <p class="modal-note" data-key="modal-note">
+      Imagens de demonstração inicial. Ajustes e adaptações podem ser feitos conforme sua necessidade.
+    </p>
+
     <button class="btn btn-blue modal-close-btn" data-key="fechar">Fechar</button>
   </div>
 </div>
@@ -233,22 +271,22 @@
           <span class="coming-icon">+</span>
         </div>
         <div class="site-info">
-          <div class="site-name" data-key="site-coming-title">Próximo projeto</div>
-          <p class="site-desc" data-key="site-coming-desc">Estamos captando novos clientes para desenvolver sites sob medida. Em breve, mais projetos publicados aqui.</p>
+          <div class="site-name" data-key="site-coming-title">Novos projetos em breve</div>
+          <p class="site-desc" data-key="site-coming-desc">Novos sites serão lançados em breve. Enquanto isso, veja o projeto já publicado acima.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── PROCESSO ── -->
+<!-- ── SOBRE O MEU TRABALHO ── -->
 <section class="processo-section" id="processo">
   <div class="divider"></div>
   <div class="container">
     <div class="sec-header reveal">
-      <div class="label" data-key="processo-label">Como trabalhamos</div>
-      <h2 class="sec-title" data-key="processo-title">Do briefing ao <span>deploy</span></h2>
-      <p class="sec-subtitle" data-key="processo-sub">Um processo claro, transparente e sem surpresas — para você saber exatamente o que esperar em cada etapa.</p>
+      <div class="label" data-key="processo-label">Sobre o meu trabalho</div>
+      <h2 class="sec-title" data-key="processo-title">Como eu <span>trabalho</span></h2>
+      <p class="sec-subtitle" data-key="processo-sub">Um processo claro e transparente, do primeiro contato ao suporte contínuo — para você saber exatamente o que esperar em cada etapa.</p>
     </div>
 
     <div class="processo-grid">
