@@ -592,9 +592,9 @@ section{
   background: var(--bg2);
   border: 1px solid rgba(10,86,245,0.25);
   border-radius: 12px;
-  max-width: 560px;
+  max-width: 720px;
   width: 100%;
-  padding: 34px 30px;
+  padding: 34px 30px 26px;
   position: relative;
   max-height: 90vh;
   overflow-y: auto;
@@ -612,7 +612,7 @@ section{
   line-height: 1;
 }
 .modal-close:hover { color: var(--white); }
-.modal-header { margin-bottom: 16px; }
+.modal-header { margin-bottom: 8px; }
 .modal-title {
   font-family: var(--display);
   font-size: 1.35rem;
@@ -622,28 +622,114 @@ section{
 .modal-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(10,86,245,0.2), transparent);
-  margin: 16px 0;
+  margin: 14px 0 20px;
 }
-.modal-body-wrapper { margin-bottom: 24px; }
-.modal-body {
-  font-size: 0.94rem;
-  color: var(--soft);
-  line-height: 1.8;
+
+/* Slider dentro do modal */
+.modal-slider {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
 }
-.modal-topics{
-  margin-top: 16px;
+.modal-slider-viewport {
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--bg3);
+  border: 1px solid rgba(10,86,245,0.15);
+}
+.modal-slider-track {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  transition: transform 0.45s var(--ease);
+  will-change: transform;
 }
-.modal-topic-line{
+.modal-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg3);
+}
+.modal-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.modal-slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(5,10,20,0.7);
+  border: 1px solid var(--blue-bd);
+  color: var(--white);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s var(--ease);
+  z-index: 2;
+}
+.modal-slider-btn:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.modal-slider-btn.prev { left: 8px; }
+.modal-slider-btn.next { right: 8px; }
+
+.modal-caption {
+  margin-top: 14px;
   font-size: 0.88rem;
-  color: var(--muted);
-  line-height: 1.8;
+  color: var(--soft);
+  line-height: 1.6;
+  min-height: 1.4em;
+  text-align: center;
+  transition: opacity 0.2s var(--ease);
 }
+.modal-slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.modal-slider-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue-bd);
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  padding: 0;
+}
+.modal-slider-dot.active {
+  background: var(--blue);
+  width: 22px;
+  border-radius: 4px;
+}
+.modal-slider-dot:hover { background: var(--blue-b); }
+
+.modal-note {
+  margin-top: 18px;
+  padding: 12px 14px;
+  background: var(--blue-dim);
+  border-left: 2px solid var(--blue-b);
+  border-radius: 4px;
+  font-size: 0.78rem;
+  color: var(--soft);
+  line-height: 1.6;
+  font-family: var(--mono);
+}
+
 .modal-close-btn {
   width: 100%;
   justify-content: center;
+  margin-top: 20px;
 }
 
 /* ═══════════════════════════════════════════
@@ -716,7 +802,7 @@ section{
 }
 
 /* ═══════════════════════════════════════════
-   PROCESSO
+   SOBRE O MEU TRABALHO
 ═══════════════════════════════════════════ */
 .processo-section{background:var(--bg)}
 .processo-grid{
@@ -939,8 +1025,13 @@ section{
 
   .whatsapp-float { width: 48px; height: 48px; bottom: 18px; right: 18px; }
   .whatsapp-float svg { width: 24px; height: 24px; }
-  .modal-content { padding: 22px 18px; }
+
+  .modal-content { padding: 24px 18px 20px; }
   .modal-title { font-size: 1.15rem; }
+  .modal-slider-btn { width: 32px; height: 32px; font-size: 1rem; }
+  .modal-caption { font-size: 0.82rem; }
+  .modal-note { font-size: 0.72rem; }
+
   .sec-header { margin-bottom: 36px; }
 
   .btn { padding: 11px 20px; font-size: 0.72rem; }
