@@ -267,6 +267,8 @@ setTimeout(() => {
 // ══════════════════════════════════════════════════════════
 // ── MODAL — SLIDER DE IMAGENS POR MÓDULO ──
 // ══════════════════════════════════════════════════════════
+const WHATSAPP_NUMBER = '5527997099444';
+
 const modalData = {
   'sistema-integrado': {
     title: 'Sistema Integrado',
@@ -332,17 +334,35 @@ const modalData = {
   }
 };
 
+// ── Templates de mensagem por idioma ──
+const waMessageTemplates = {
+  pt: (title) => `Olá! Vi o sistema "${title}" no site da MALVSCODE e gostaria de algo parecido. Podemos conversar?`,
+  en: (title) => `Hi! I saw the "${title}" system on the MALVSCODE website and I'd like something similar. Can we talk?`,
+  es: (title) => `¡Hola! Vi el sistema "${title}" en el sitio de MALVSCODE y me gustaría algo parecido. ¿Podemos hablar?`
+};
+
+let currentLang = 'pt';
+
 // ── Estado do slider do modal ──
 let modalSlides = [];
 let modalIndex = 0;
+let currentModalTitle = '';
 
-const modalOverlayEl   = document.getElementById('modalOverlay');
-const modalTrack       = document.getElementById('modalTrack');
-const modalDotsEl      = document.getElementById('modalDots');
-const modalCaptionEl   = document.getElementById('modalCaption');
-const modalPrevBtn     = document.getElementById('modalPrev');
-const modalNextBtn     = document.getElementById('modalNext');
-const modalTitleEl     = document.getElementById('modalTitle');
+const modalOverlayEl     = document.getElementById('modalOverlay');
+const modalTrack         = document.getElementById('modalTrack');
+const modalDotsEl        = document.getElementById('modalDots');
+const modalCaptionEl     = document.getElementById('modalCaption');
+const modalPrevBtn       = document.getElementById('modalPrev');
+const modalNextBtn       = document.getElementById('modalNext');
+const modalTitleEl       = document.getElementById('modalTitle');
+const modalWhatsappBtn   = document.getElementById('modalWhatsappBtn');
+
+function updateWhatsappLink() {
+  if (!currentModalTitle) return;
+  const template = waMessageTemplates[currentLang] || waMessageTemplates.pt;
+  const msg = template(currentModalTitle);
+  modalWhatsappBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
 
 function renderModalSlide(instant) {
   if (!modalSlides.length) return;
@@ -399,12 +419,14 @@ function openModal(moduloId) {
   modalTitleEl.textContent = data.title;
   modalSlides = data.slides.slice();
   modalIndex = 0;
+  currentModalTitle = data.title;
 
   buildModalSlider(modalSlides);
+  updateWhatsappLink();
+
   modalOverlayEl.classList.add('active');
   document.body.style.overflow = 'hidden';
 
-  // Aguarda layout pra calcular largura e já posicionar
   requestAnimationFrame(() => {
     modalTrack.style.transition = 'none';
     modalTrack.style.transform = 'translateX(0px)';
@@ -469,8 +491,6 @@ window.addEventListener('resize', () => {
 
 // ══════════════════════════════════════════════════════════
 // ── SISTEMA DE TRADUÇÃO ──
-// PT é lido SEMPRE do HTML atual (nunca sobrescreve suas edições)
-// EN/ES ficam em objetos fixos abaixo
 // ══════════════════════════════════════════════════════════
 
 // Captura uma cópia "imutável" do PT do HTML no carregamento
@@ -482,7 +502,6 @@ document.querySelectorAll('[data-key]').forEach(el => {
   }
 });
 
-// Traduções fixas EN/ES
 const translations = {
   en: {
     'nav-sistemas': 'Systems',
@@ -514,6 +533,7 @@ const translations = {
     'modulo3-nome': 'Payment Management',
     'modulo3-desc': 'Organize accounts payable and receivable, completed and overdue payments, plus history and financial reports. Get a clear view of your cash flow in one place.',
     'saiba-mais': 'Learn more',
+    'quero-projeto': 'I want this project',
     'sites-label': 'Developed Websites',
     'sites-title': 'Websites & <span>Interfaces</span>',
     'sites-sub': 'Published and in-development projects. New websites will be added soon.',
@@ -543,7 +563,7 @@ const translations = {
     'github-label': 'GitHub',
     'whatsapp': 'Call on WhatsApp',
     'email-btn': 'Send E-mail',
-    'modal-note': 'Initial demonstration images. Adjustments and adaptations can be made according to your needs.',
+    'modal-note': 'Initial demonstration images. Adjustments can be made as needed.',
     'fechar': 'Close'
   },
   es: {
@@ -576,6 +596,7 @@ const translations = {
     'modulo3-nome': 'Gestión de Pagos',
     'modulo3-desc': 'Organice cuentas por pagar y por cobrar, pagos realizados y atrasados, además de historial e informes financieros. Tenga una visión clara de su flujo de caja en un solo lugar.',
     'saiba-mais': 'Saber más',
+    'quero-projeto': 'Quiero este proyecto',
     'sites-label': 'Sitios desarrollados',
     'sites-title': 'Sitios web & <span>Interfaces</span>',
     'sites-sub': 'Proyectos publicados y en desarrollo. Pronto se agregarán nuevos sitios.',
@@ -605,7 +626,7 @@ const translations = {
     'github-label': 'GitHub',
     'whatsapp': 'Llamar por WhatsApp',
     'email-btn': 'Enviar correo',
-    'modal-note': 'Imágenes de demostración inicial. Los ajustes y adaptaciones se pueden realizar según su necesidad.',
+    'modal-note': 'Imágenes de demostración inicial. Los ajustes se pueden realizar según sea necesario.',
     'fechar': 'Cerrar'
   }
 };
@@ -614,6 +635,8 @@ const langCurrent = document.getElementById('langCurrent');
 const langLabels = { pt: 'PT-BR', en: 'EN', es: 'ES' };
 
 function applyLanguage(lang) {
+  currentLang = lang;
+
   // Atualiza label do botão
   langCurrent.childNodes[0].textContent = langLabels[lang] + ' ';
 
@@ -636,6 +659,9 @@ function applyLanguage(lang) {
       }
     }
   });
+
+  // Atualiza o link do WhatsApp do modal se ele já estiver com um título carregado
+  if (currentModalTitle) updateWhatsappLink();
 }
 
 langCurrent.addEventListener('click', (e) => {
