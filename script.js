@@ -65,6 +65,7 @@ createFloatingWords();
 
 // ══════════════════════════════════════════════════════════
 // ── CARROSSEL DE MÓDULOS — INFINITO + SWIPE + AUTOPLAY ──
+// ── + PAUSA NO HOVER + FIX DO WRAP INFINITO ──
 // ══════════════════════════════════════════════════════════
 const modulosTrack     = document.getElementById('modulosTrack');
 const modulosPrevBtn   = document.getElementById('modulosPrev');
@@ -84,8 +85,9 @@ modulosTrack.appendChild(afterFrag);
 
 let cardIndex = totalModulos;
 let modulosPerView = getModulosPerView();
-let autoModuloInterval;
+let autoModuloInterval = null;
 let modulosGap = 22;
+let isTransitioning = false;
 
 function getModulosPerView() {
   if (window.innerWidth <= 600) return 1;
@@ -113,7 +115,10 @@ function updateDots() {
   const totalDots = Math.ceil(totalModulos / modulosPerView);
   let rel = (cardIndex - totalModulos) % totalModulos;
   if (rel < 0) rel += totalModulos;
-  const activeDot = Math.min(totalDots - 1, Math.round(rel / modulosPerView) % totalDots);
+  const activeDot = Math.min(
+    totalDots - 1,
+    Math.floor(rel / modulosPerView) % totalDots
+  );
   document.querySelectorAll('.modulos-carousel-dot').forEach((dot, i) => {
     dot.classList.toggle('active', i === activeDot);
   });
@@ -122,11 +127,13 @@ function updateDots() {
 function setTrackPosition(instant) {
   modulosGap = readCssGap();
   const step = getStep();
+  isTransitioning = !instant;
   if (instant) modulosTrack.style.transition = 'none';
   modulosTrack.style.transform = `translateX(${-step * cardIndex}px)`;
   if (instant) {
     void modulosTrack.offsetHeight;
     modulosTrack.style.transition = '';
+    isTransitioning = false;
   }
   updateDots();
 }
@@ -147,16 +154,27 @@ function createModulosDots() {
   }
 }
 
+// ── WRAP INFINITO CORRIGIDO ──
 function wrapIfNeeded() {
-  if (cardIndex >= totalModulos * 2) {
+  if (isTransitioning) return;
+  const lowerBound = totalModulos;
+  const upperBound = totalModulos * 2;
+
+  if (cardIndex >= upperBound) {
     cardIndex -= totalModulos;
     setTrackPosition(true);
-  } else if (cardIndex < totalModulos) {
+  } else if (cardIndex < lowerBound) {
     cardIndex += totalModulos;
     setTrackPosition(true);
   }
 }
-modulosTrack.addEventListener('transitionend', wrapIfNeeded);
+
+modulosTrack.addEventListener('transitionend', (e) => {
+  if (e.target !== modulosTrack) return;
+  if (e.propertyName !== 'transform') return;
+  isTransitioning = false;
+  wrapIfNeeded();
+});
 
 modulosTrack.addEventListener('click', (e) => {
   const infoBtn = e.target.closest('.modulo-info-btn');
@@ -182,6 +200,11 @@ function resetModulosAutoSlide() {
   autoModuloInterval = setInterval(nextModulo, 6000);
 }
 
+function stopModulosAutoSlide() {
+  clearInterval(autoModuloInterval);
+  autoModuloInterval = null;
+}
+
 modulosPrevBtn.addEventListener('click', () => {
   prevModulo();
   resetModulosAutoSlide();
@@ -192,14 +215,19 @@ modulosNextBtn.addEventListener('click', () => {
   resetModulosAutoSlide();
 });
 
-// Swipe
+// ── PAUSA NO HOVER ──
+const carouselContainer = document.querySelector('.modulos-carousel-container');
+carouselContainer.addEventListener('mouseenter', stopModulosAutoSlide);
+carouselContainer.addEventListener('mouseleave', resetModulosAutoSlide);
+
+// ── SWIPE ──
 let modTouchStartX = 0;
 let modIsSwiping = false;
 
 modulosTrack.addEventListener('touchstart', (e) => {
   modTouchStartX = e.changedTouches[0].screenX;
   modIsSwiping = true;
-  clearInterval(autoModuloInterval);
+  stopModulosAutoSlide();
 }, { passive: true });
 
 modulosTrack.addEventListener('touchend', (e) => {
@@ -236,122 +264,207 @@ setTimeout(() => {
   resetModulosAutoSlide();
 }, 150);
 
-// ── MODAL ──
+// ══════════════════════════════════════════════════════════
+// ── MODAL — SLIDER DE IMAGENS POR MÓDULO ──
+// ══════════════════════════════════════════════════════════
 const modalData = {
-  modulo1: {
+  'sistema-integrado': {
     title: 'Sistema Integrado',
-    desc: 'Plataforma web que unifica diferentes áreas operacionais em um só painel. Conta com autenticação de usuários, controle de permissões, registro de atividades e módulos independentes que se comunicam entre si.',
-    topics: [
-      'Autenticação e níveis de acesso',
-      'Módulos independentes e integrados',
-      'Registro de atividades (log)',
-      'Dashboard com visão geral',
-      'Personalizável conforme o negócio'
+    slides: [
+      { img: 'imagens/sistema-integrado/login.png',        caption: 'Tela de acesso ao sistema, com autenticação segura.' },
+      { img: 'imagens/sistema-integrado/carregamento.png', caption: 'Tela de carregamento e inicialização do painel.' },
+      { img: 'imagens/sistema-integrado/interface.png',    caption: 'Interface principal com visão geral dos módulos.' }
     ]
   },
-  modulo2: {
-    title: 'Logística',
-    desc: 'Ferramenta para registrar e acompanhar transportadoras, cotações de frete e envios. Permite comparar opções, monitorar prazos, acompanhar status em tempo real e registrar confirmações de entrega.',
-    topics: [
-      'Cadastro de transportadoras',
-      'Cotação e comparação de fretes',
-      'Acompanhamento de prazos e status',
-      'Confirmação de entrega',
-      'Histórico de envios'
+  'login-autenticacao': {
+    title: 'Login e Autenticação',
+    slides: [
+      { img: 'imagens/login-autenticacao/tela-login.png',    caption: 'Tela de login com validação de credenciais.' },
+      { img: 'imagens/login-autenticacao/carregamento.png',  caption: 'Carregamento e verificação de sessão.' }
     ]
   },
-  modulo3: {
-    title: 'Gestão de Pagamentos',
-    desc: 'Organize contas a pagar e a receber, pagamentos realizados e atrasados, além de histórico e relatórios financeiros. Tenha uma visão clara do seu fluxo de caixa em um só lugar.',
-    topics: [
-      'Contas a pagar e a receber',
-      'Alertas de vencimento',
-      'Relatórios financeiros',
-      'Histórico de pagamentos',
-      'Visão de fluxo de caixa'
-    ]
-  },
-  modulo5: {
-    title: 'Controle de Preços',
-    desc: 'Acompanhe os preços de itens e produtos cotados, compare valores entre fornecedores, identifique as melhores oportunidades e consulte o histórico de variações.',
-    topics: [
-      'Registro de cotações',
-      'Comparação entre fornecedores',
-      'Histórico de preços',
-      'Identificação de melhores oportunidades',
-      'Exportação de dados'
-    ]
-  },
-  modulo6: {
-    title: 'Estoque',
-    desc: 'Monitore a movimentação de itens e produtos com entradas, saídas, quantidades disponíveis e alertas de estoque baixo. O histórico completo garante rastreabilidade e controle.',
-    topics: [
-      'Entradas e saídas de itens',
-      'Quantidade disponível em tempo real',
-      'Alertas de estoque baixo',
-      'Histórico de movimentações',
-      'Relatórios de inventário'
-    ]
-  },
-  modulo8: {
-    title: 'Compras',
-    desc: 'Tenha o histórico completo das suas compras organizado por itens, valores, datas, formas de pagamento e fornecedores. Fácil de consultar e comparar.',
-    topics: [
-      'Registro de compras',
-      'Itens, valores e datas',
-      'Formas de pagamento',
-      'Histórico por fornecedor',
-      'Relatórios de compras'
-    ]
-  },
-  modulo9: {
+  'relacionamentos': {
     title: 'Relacionamentos',
-    desc: 'Reúna informações de clientes e fornecedores, contatos e histórico de interações em um ambiente único. Ideal para manter o relacionamento comercial organizado.',
-    topics: [
-      'Cadastro de clientes e fornecedores',
-      'Histórico de interações',
-      'Contatos centralizados',
-      'Observações e anotações',
-      'Busca rápida e filtros'
+    slides: [
+      { img: 'imagens/relacionamentos/clientes.png',                   caption: 'Cadastro e listagem de clientes.' },
+      { img: 'imagens/relacionamentos/fornecedores.png',                caption: 'Cadastro e gestão de fornecedores.' },
+      { img: 'imagens/relacionamentos/historico-relacionamentos.png',   caption: 'Histórico completo de interações.' }
+    ]
+  },
+  'logistica': {
+    title: 'Logística',
+    slides: [
+      { img: 'imagens/logistica/transportadoras.png',       caption: 'Cadastro e gestão de transportadoras.' },
+      { img: 'imagens/logistica/cotacoes.png',              caption: 'Cotação e comparação de fretes.' },
+      { img: 'imagens/logistica/controle-frete.png',        caption: 'Acompanhamento de envios e prazos.' },
+      { img: 'imagens/logistica/relatorio-logistica.png',   caption: 'Relatórios de logística e desempenho.' }
+    ]
+  },
+  'controle-precos': {
+    title: 'Controle de Preços',
+    slides: [
+      { img: 'imagens/controle-precos/cotacoes.png',         caption: 'Registro de cotações de itens e produtos.' },
+      { img: 'imagens/controle-precos/tabela.png',           caption: 'Tabela comparativa de preços por fornecedor.' }
+    ]
+  },
+  'estoque': {
+    title: 'Estoque',
+    slides: [
+      { img: 'imagens/estoque/deposito.png',                 caption: 'Visão do depósito e itens disponíveis.' },
+      { img: 'imagens/estoque/relatorio-estoque.png',        caption: 'Relatório de movimentações e inventário.' }
+    ]
+  },
+  'compras': {
+    title: 'Compras',
+    slides: [
+      { img: 'imagens/compras/compras-registradas.png',      caption: 'Compras registradas no sistema.' },
+      { img: 'imagens/compras/compras-realizadas.png',       caption: 'Compras realizadas e concluídas.' },
+      { img: 'imagens/compras/relatorio-compra.png',         caption: 'Relatório detalhado de compras.' }
+    ]
+  },
+  'gestao-pagamentos': {
+    title: 'Gestão de Pagamentos',
+    slides: [
+      { img: 'imagens/gestao-pagamentos/contas-pagar.png',         caption: 'Contas a pagar e controle de vencimentos.' },
+      { img: 'imagens/gestao-pagamentos/contas-receber.png',       caption: 'Contas a receber e acompanhamento.' },
+      { img: 'imagens/gestao-pagamentos/registro-financeiro.png',  caption: 'Registro financeiro consolidado.' }
     ]
   }
 };
+
+// ── Estado do slider do modal ──
+let modalSlides = [];
+let modalIndex = 0;
+
+const modalOverlayEl   = document.getElementById('modalOverlay');
+const modalTrack       = document.getElementById('modalTrack');
+const modalDotsEl      = document.getElementById('modalDots');
+const modalCaptionEl   = document.getElementById('modalCaption');
+const modalPrevBtn     = document.getElementById('modalPrev');
+const modalNextBtn     = document.getElementById('modalNext');
+const modalTitleEl     = document.getElementById('modalTitle');
+
+function renderModalSlide(instant) {
+  if (!modalSlides.length) return;
+  const step = modalTrack.parentElement.getBoundingClientRect().width;
+  if (instant) modalTrack.style.transition = 'none';
+  modalTrack.style.transform = `translateX(${-step * modalIndex}px)`;
+  if (instant) {
+    void modalTrack.offsetHeight;
+    modalTrack.style.transition = '';
+  }
+
+  // Caption
+  modalCaptionEl.style.opacity = '0';
+  setTimeout(() => {
+    modalCaptionEl.textContent = modalSlides[modalIndex].caption;
+    modalCaptionEl.style.opacity = '1';
+  }, 100);
+
+  // Dots
+  modalDotsEl.querySelectorAll('.modal-slider-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === modalIndex);
+  });
+}
+
+function buildModalSlider(slides) {
+  modalTrack.innerHTML = '';
+  modalDotsEl.innerHTML = '';
+
+  slides.forEach((slide, i) => {
+    const div = document.createElement('div');
+    div.className = 'modal-slide';
+    const img = document.createElement('img');
+    img.src = slide.img;
+    img.alt = slide.caption;
+    img.loading = 'lazy';
+    div.appendChild(img);
+    modalTrack.appendChild(div);
+
+    const dot = document.createElement('button');
+    dot.className = 'modal-slider-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Ir para slide ' + (i + 1));
+    dot.addEventListener('click', () => {
+      modalIndex = i;
+      renderModalSlide(false);
+    });
+    modalDotsEl.appendChild(dot);
+  });
+}
 
 function openModal(moduloId) {
   const data = modalData[moduloId];
   if (!data) return;
 
-  document.getElementById('modalTitle').textContent = data.title;
-  document.getElementById('modalBody').textContent = data.desc;
+  modalTitleEl.textContent = data.title;
+  modalSlides = data.slides.slice();
+  modalIndex = 0;
 
-  const topicsContainer = document.getElementById('modalTopics');
-  topicsContainer.innerHTML = '';
-  data.topics.forEach(topic => {
-    const line = document.createElement('p');
-    line.className = 'modal-topic-line';
-    line.textContent = '› ' + topic;
-    topicsContainer.appendChild(line);
-  });
-
-  document.getElementById('modalOverlay').classList.add('active');
+  buildModalSlider(modalSlides);
+  modalOverlayEl.classList.add('active');
   document.body.style.overflow = 'hidden';
+
+  // Aguarda layout pra calcular largura e já posicionar
+  requestAnimationFrame(() => {
+    modalTrack.style.transition = 'none';
+    modalTrack.style.transform = 'translateX(0px)';
+    requestAnimationFrame(() => {
+      modalTrack.style.transition = '';
+      modalCaptionEl.textContent = modalSlides[0].caption;
+    });
+  });
 }
 
 function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('active');
+  modalOverlayEl.classList.remove('active');
   document.body.style.overflow = '';
 }
 
-const modalOverlayEl = document.getElementById('modalOverlay');
+modalPrevBtn.addEventListener('click', () => {
+  if (!modalSlides.length) return;
+  modalIndex = (modalIndex - 1 + modalSlides.length) % modalSlides.length;
+  renderModalSlide(false);
+});
+modalNextBtn.addEventListener('click', () => {
+  if (!modalSlides.length) return;
+  modalIndex = (modalIndex + 1) % modalSlides.length;
+  renderModalSlide(false);
+});
+
+// Swipe no modal
+let modalTouchStartX = 0;
+modalTrack.addEventListener('touchstart', (e) => {
+  modalTouchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+modalTrack.addEventListener('touchend', (e) => {
+  const diff = modalTouchStartX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 40) {
+    if (diff > 0) {
+      modalIndex = (modalIndex + 1) % modalSlides.length;
+    } else {
+      modalIndex = (modalIndex - 1 + modalSlides.length) % modalSlides.length;
+    }
+    renderModalSlide(false);
+  }
+});
+
 modalOverlayEl.addEventListener('click', closeModal);
 modalOverlayEl.querySelector('.modal-content').addEventListener('click', (e) => e.stopPropagation());
 document.querySelectorAll('.modal-close, .modal-close-btn').forEach(btn => {
   btn.addEventListener('click', closeModal);
 });
-
-// Fechar modal com ESC
 document.addEventListener('keydown', (e) => {
+  if (!modalOverlayEl.classList.contains('active')) return;
   if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowRight') modalNextBtn.click();
+  if (e.key === 'ArrowLeft')  modalPrevBtn.click();
+});
+
+// Recalcular posição do slide ao redimensionar com modal aberto
+window.addEventListener('resize', () => {
+  if (modalOverlayEl.classList.contains('active')) {
+    renderModalSlide(true);
+  }
 });
 
 // ══════════════════════════════════════════════════════════
@@ -374,7 +487,7 @@ const translations = {
   en: {
     'nav-sistemas': 'Systems',
     'nav-sites': 'Websites',
-    'nav-processo': 'Process',
+    'nav-processo': 'About',
     'nav-contato': 'Contact',
     'hero-tag': 'Welcome to my portfolio!',
     'hero-title1': 'MALVS',
@@ -386,29 +499,31 @@ const translations = {
     'sistemas-title': 'Projects & <span>Web Systems</span>',
     'modulo1-nome': 'Integrated System',
     'modulo1-desc': 'A web platform that unifies different operational areas into a single dashboard. It features user authentication, role-based access control, activity logging, and independent modules that communicate with each other.',
+    'modulo-login-nome': 'Login & Authentication',
+    'modulo-login-desc': 'A secure access system with user authentication, password recovery, and permission levels. Ensures each person only sees what they are allowed to.',
+    'modulo9-nome': 'Relationships',
+    'modulo9-desc': 'Bring together customer and supplier information, contacts, and interaction history in one environment. Ideal for keeping business relationships organized.',
     'modulo2-nome': 'Logistics',
     'modulo2-desc': 'A tool to register and track carriers, freight quotes, and shipments. It allows comparing options, monitoring deadlines, tracking real-time status, and registering delivery confirmations.',
-    'modulo3-nome': 'Payment Management',
-    'modulo3-desc': 'Organize accounts payable and receivable, completed and overdue payments, plus history and financial reports. Get a clear view of your cash flow in one place.',
     'modulo5-nome': 'Price Control',
     'modulo5-desc': 'Track prices for quoted items and products, compare values across suppliers, identify the best opportunities, and check price variation history.',
     'modulo6-nome': 'Inventory',
     'modulo6-desc': 'Monitor item and product movements with inbound, outbound, available quantities, and low-stock alerts. The complete history ensures traceability and control.',
     'modulo8-nome': 'Purchases',
     'modulo8-desc': 'Keep a complete purchase history organized by items, values, dates, payment methods, and suppliers. Easy to consult and compare.',
-    'modulo9-nome': 'Relationships',
-    'modulo9-desc': 'Bring together customer and supplier information, contacts, and interaction history in one environment. Ideal for keeping business relationships organized.',
+    'modulo3-nome': 'Payment Management',
+    'modulo3-desc': 'Organize accounts payable and receivable, completed and overdue payments, plus history and financial reports. Get a clear view of your cash flow in one place.',
     'saiba-mais': 'Learn more',
     'sites-label': 'Developed Websites',
     'sites-title': 'Websites & <span>Interfaces</span>',
     'sites-sub': 'Published and in-development projects. New websites will be added soon.',
     'site1-nome': 'Elevate Vision Agency',
-    'site-coming-title': 'Next project',
-    'site-coming-desc': 'We are looking for new clients to build custom websites. More published projects coming soon.',
+    'site-coming-title': 'New projects coming soon',
+    'site-coming-desc': 'New websites will be launched soon. In the meantime, check out the project above.',
     'visitar-site': 'Visit site',
-    'processo-label': 'How we work',
-    'processo-title': 'From briefing to <span>deploy</span>',
-    'processo-sub': 'A clear, transparent process with no surprises — so you know exactly what to expect at each stage.',
+    'processo-label': 'About my work',
+    'processo-title': 'How I <span>work</span>',
+    'processo-sub': 'A clear and transparent process, from first contact to ongoing support — so you know exactly what to expect at each stage.',
     'processo1-title': 'Discovery',
     'processo1-desc': 'We talk about your idea, goals, and needs. I understand your business context before proposing any solution.',
     'processo2-title': 'Planning',
@@ -428,12 +543,13 @@ const translations = {
     'github-label': 'GitHub',
     'whatsapp': 'Call on WhatsApp',
     'email-btn': 'Send E-mail',
+    'modal-note': 'Initial demonstration images. Adjustments and adaptations can be made according to your needs.',
     'fechar': 'Close'
   },
   es: {
     'nav-sistemas': 'Sistemas',
     'nav-sites': 'Sitios',
-    'nav-processo': 'Proceso',
+    'nav-processo': 'Sobre',
     'nav-contato': 'Contacto',
     'hero-tag': '¡Bienvenido(a) a mi portafolio!',
     'hero-title1': 'MALVS',
@@ -445,29 +561,31 @@ const translations = {
     'sistemas-title': 'Proyectos & <span>Sistemas Web</span>',
     'modulo1-nome': 'Sistema Integrado',
     'modulo1-desc': 'Plataforma web que unifica diferentes áreas operativas en un solo panel. Cuenta con autenticación de usuarios, control de permisos, registro de actividades y módulos independientes que se comunican entre sí.',
+    'modulo-login-nome': 'Login y Autenticación',
+    'modulo-login-desc': 'Sistema de acceso seguro con autenticación de usuarios, recuperación de contraseña y niveles de permiso. Garantiza que cada persona vea solo lo que le corresponde.',
+    'modulo9-nome': 'Relaciones',
+    'modulo9-desc': 'Reúna información de clientes y proveedores, contactos e historial de interacciones en un solo entorno. Ideal para mantener organizadas las relaciones comerciales.',
     'modulo2-nome': 'Logística',
     'modulo2-desc': 'Herramienta para registrar y hacer seguimiento de transportistas, cotizaciones de flete y envíos. Permite comparar opciones, monitorear plazos, seguir el estado en tiempo real y registrar confirmaciones de entrega.',
-    'modulo3-nome': 'Gestión de Pagos',
-    'modulo3-desc': 'Organice cuentas por pagar y por cobrar, pagos realizados y atrasados, además de historial e informes financieros. Tenga una visión clara de su flujo de caja en un solo lugar.',
     'modulo5-nome': 'Control de Precios',
     'modulo5-desc': 'Haga seguimiento de los precios de artículos y productos cotizados, compare valores entre proveedores, identifique las mejores oportunidades y consulte el historial de variaciones.',
     'modulo6-nome': 'Inventario',
     'modulo6-desc': 'Monitoree el movimiento de artículos y productos con entradas, salidas, cantidades disponibles y alertas de stock bajo. El historial completo garantiza trazabilidad y control.',
     'modulo8-nome': 'Compras',
     'modulo8-desc': 'Mantenga un historial completo de sus compras organizado por artículos, valores, fechas, formas de pago y proveedores. Fácil de consultar y comparar.',
-    'modulo9-nome': 'Relaciones',
-    'modulo9-desc': 'Reúna información de clientes y proveedores, contactos e historial de interacciones en un solo entorno. Ideal para mantener organizadas las relaciones comerciales.',
+    'modulo3-nome': 'Gestión de Pagos',
+    'modulo3-desc': 'Organice cuentas por pagar y por cobrar, pagos realizados y atrasados, además de historial e informes financieros. Tenga una visión clara de su flujo de caja en un solo lugar.',
     'saiba-mais': 'Saber más',
     'sites-label': 'Sitios desarrollados',
     'sites-title': 'Sitios web & <span>Interfaces</span>',
     'sites-sub': 'Proyectos publicados y en desarrollo. Pronto se agregarán nuevos sitios.',
     'site1-nome': 'Elevate Vision Agency',
-    'site-coming-title': 'Próximo proyecto',
-    'site-coming-desc': 'Estamos buscando nuevos clientes para desarrollar sitios a medida. Pronto más proyectos publicados aquí.',
+    'site-coming-title': 'Nuevos proyectos pronto',
+    'site-coming-desc': 'Pronto se lanzarán nuevos sitios web. Mientras tanto, vea el proyecto publicado arriba.',
     'visitar-site': 'Visitar sitio',
-    'processo-label': 'Cómo trabajamos',
-    'processo-title': 'Del briefing al <span>deploy</span>',
-    'processo-sub': 'Un proceso claro, transparente y sin sorpresas — para que sepa exactamente qué esperar en cada etapa.',
+    'processo-label': 'Sobre mi trabajo',
+    'processo-title': 'Cómo <span>trabajo</span>',
+    'processo-sub': 'Un proceso claro y transparente, desde el primer contacto hasta el soporte continuo — para que sepa exactamente qué esperar en cada etapa.',
     'processo1-title': 'Descubrimiento',
     'processo1-desc': 'Hablamos sobre su idea, objetivos y necesidades. Entiendo el contexto de su negocio antes de proponer cualquier solución.',
     'processo2-title': 'Planificación',
@@ -487,6 +605,7 @@ const translations = {
     'github-label': 'GitHub',
     'whatsapp': 'Llamar por WhatsApp',
     'email-btn': 'Enviar correo',
+    'modal-note': 'Imágenes de demostración inicial. Los ajustes y adaptaciones se pueden realizar según su necesidad.',
     'fechar': 'Cerrar'
   }
 };
