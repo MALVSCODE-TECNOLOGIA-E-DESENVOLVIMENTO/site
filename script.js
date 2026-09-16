@@ -65,7 +65,7 @@ createFloatingWords();
 
 // ══════════════════════════════════════════════════════════
 // ── CARROSSEL DE MÓDULOS — INFINITO + SWIPE + AUTOPLAY ──
-// ── + PAUSA NO HOVER + FIX DO WRAP INFINITO ──
+// ── + PAUSA NO HOVER + FIX DEFINITIVO DO WRAP ──
 // ══════════════════════════════════════════════════════════
 const modulosTrack     = document.getElementById('modulosTrack');
 const modulosPrevBtn   = document.getElementById('modulosPrev');
@@ -88,6 +88,7 @@ let modulosPerView = getModulosPerView();
 let autoModuloInterval = null;
 let modulosGap = 22;
 let isTransitioning = false;
+let wrapGuardTimeout = null;
 
 function getModulosPerView() {
   if (window.innerWidth <= 600) return 1;
@@ -124,16 +125,15 @@ function updateDots() {
   });
 }
 
+// ⚠️ IMPORTANTE: NÃO altera isTransitioning aqui (evita condição de corrida)
 function setTrackPosition(instant) {
   modulosGap = readCssGap();
   const step = getStep();
-  isTransitioning = !instant;
   if (instant) modulosTrack.style.transition = 'none';
   modulosTrack.style.transform = `translateX(${-step * cardIndex}px)`;
   if (instant) {
     void modulosTrack.offsetHeight;
     modulosTrack.style.transition = '';
-    isTransitioning = false;
   }
   updateDots();
 }
@@ -149,14 +149,14 @@ function createModulosDots() {
       cardIndex = totalModulos + (i * modulosPerView);
       setTrackPosition(false);
       resetModulosAutoSlide();
+      safeWrapGuard();
     });
     modulosDots.appendChild(dot);
   }
 }
 
-// ── WRAP INFINITO CORRIGIDO ──
+// ── WRAP INFINITO À PROVA DE FALHAS ──
 function wrapIfNeeded() {
-  if (isTransitioning) return;
   const lowerBound = totalModulos;
   const upperBound = totalModulos * 2;
 
@@ -169,9 +169,19 @@ function wrapIfNeeded() {
   }
 }
 
+// Fallback: destrava isTransitioning e força wrap se o transitionend não disparar
+function safeWrapGuard() {
+  clearTimeout(wrapGuardTimeout);
+  wrapGuardTimeout = setTimeout(() => {
+    isTransitioning = false;
+    wrapIfNeeded();
+  }, 700); // 700ms > 0.5s da transição + margem
+}
+
 modulosTrack.addEventListener('transitionend', (e) => {
   if (e.target !== modulosTrack) return;
   if (e.propertyName !== 'transform') return;
+  clearTimeout(wrapGuardTimeout);
   isTransitioning = false;
   wrapIfNeeded();
 });
@@ -185,14 +195,18 @@ modulosTrack.addEventListener('click', (e) => {
 
 function nextModulo() {
   modulosPerView = getModulosPerView();
+  isTransitioning = true;
   cardIndex += modulosPerView;
   setTrackPosition(false);
+  safeWrapGuard();
 }
 
 function prevModulo() {
   modulosPerView = getModulosPerView();
+  isTransitioning = true;
   cardIndex -= modulosPerView;
   setTrackPosition(false);
+  safeWrapGuard();
 }
 
 function resetModulosAutoSlide() {
@@ -374,14 +388,12 @@ function renderModalSlide(instant) {
     modalTrack.style.transition = '';
   }
 
-  // Caption
   modalCaptionEl.style.opacity = '0';
   setTimeout(() => {
     modalCaptionEl.textContent = modalSlides[modalIndex].caption;
     modalCaptionEl.style.opacity = '1';
   }, 100);
 
-  // Dots
   modalDotsEl.querySelectorAll('.modal-slider-dot').forEach((dot, i) => {
     dot.classList.toggle('active', i === modalIndex);
   });
@@ -482,7 +494,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft')  modalPrevBtn.click();
 });
 
-// Recalcular posição do slide ao redimensionar com modal aberto
 window.addEventListener('resize', () => {
   if (modalOverlayEl.classList.contains('active')) {
     renderModalSlide(true);
@@ -637,15 +648,12 @@ const langLabels = { pt: 'PT-BR', en: 'EN', es: 'ES' };
 function applyLanguage(lang) {
   currentLang = lang;
 
-  // Atualiza label do botão
   langCurrent.childNodes[0].textContent = langLabels[lang] + ' ';
 
-  // Marca opção ativa
   document.querySelectorAll('.lang-option').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
   });
 
-  // Aplica textos
   document.querySelectorAll('[data-key]').forEach(el => {
     const key = el.dataset.key;
 
@@ -660,7 +668,6 @@ function applyLanguage(lang) {
     }
   });
 
-  // Atualiza o link do WhatsApp do modal se ele já estiver com um título carregado
   if (currentModalTitle) updateWhatsappLink();
 }
 
