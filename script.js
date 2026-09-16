@@ -64,17 +64,18 @@ function createFloatingWords() {
 createFloatingWords();
 
 // ══════════════════════════════════════════════════════════
-// ── CARROSSEL DE MÓDULOS — INFINITO + SWIPE + AUTOPLAY ──
-// ── + PAUSA NO HOVER + FIX DEFINITIVO DO WRAP ──
+// ── CARROSSEL DE MÓDULOS — INFINITO REAL (À PROVA DE FALHAS) ──
 // ══════════════════════════════════════════════════════════
 const modulosTrack     = document.getElementById('modulosTrack');
 const modulosPrevBtn   = document.getElementById('modulosPrev');
 const modulosNextBtn   = document.getElementById('modulosNext');
 const modulosDots      = document.getElementById('modulosDots');
 
+// Guarda os 8 cards originais
 const originalModuloCards = Array.from(modulosTrack.children);
 const totalModulos = originalModuloCards.length;
 
+// Clona ANTES (buffer esquerdo) e DEPOIS (buffer direito)
 const beforeFrag = document.createDocumentFragment();
 originalModuloCards.forEach(card => beforeFrag.appendChild(card.cloneNode(true)));
 modulosTrack.insertBefore(beforeFrag, modulosTrack.firstChild);
@@ -83,12 +84,13 @@ const afterFrag = document.createDocumentFragment();
 originalModuloCards.forEach(card => afterFrag.appendChild(card.cloneNode(true)));
 modulosTrack.appendChild(afterFrag);
 
-let cardIndex = totalModulos;
+// ── Estado do carrossel ──
+let cardIndex = totalModulos;                 // começa no 1º original
 let modulosPerView = getModulosPerView();
 let autoModuloInterval = null;
 let modulosGap = 22;
-let isTransitioning = false;
-let wrapGuardTimeout = null;
+let wrapTimeout = null;
+let isAnimating = false;
 
 function getModulosPerView() {
   if (window.innerWidth <= 600) return 1;
@@ -112,6 +114,20 @@ function getStep() {
   return getCardWidth() + modulosGap;
 }
 
+// ── NORMALIZAÇÃO: mantém cardIndex SEMPRE no range válido ──
+// Range válido = [totalModulos, 2*totalModulos)
+// Se sair, corrige instantaneamente (sem animação) ANTES de mover.
+function normalizeIndex() {
+  const lower = totalModulos;
+  const upper = totalModulos * 2;
+
+  if (cardIndex >= upper) {
+    cardIndex -= totalModulos;
+  } else if (cardIndex < lower) {
+    cardIndex += totalModulos;
+  }
+}
+
 function updateDots() {
   const totalDots = Math.ceil(totalModulos / modulosPerView);
   let rel = (cardIndex - totalModulos) % totalModulos;
@@ -125,16 +141,22 @@ function updateDots() {
   });
 }
 
-// ⚠️ IMPORTANTE: NÃO altera isTransitioning aqui (evita condição de corrida)
 function setTrackPosition(instant) {
   modulosGap = readCssGap();
   const step = getStep();
-  if (instant) modulosTrack.style.transition = 'none';
-  modulosTrack.style.transform = `translateX(${-step * cardIndex}px)`;
+
   if (instant) {
+    modulosTrack.style.transition = 'none';
+  }
+
+  modulosTrack.style.transform = `translateX(${-step * cardIndex}px)`;
+
+  if (instant) {
+    // Força reflow para aplicar o "sem transição" antes de restaurar
     void modulosTrack.offsetHeight;
     modulosTrack.style.transition = '';
   }
+
   updateDots();
 }
 
@@ -147,67 +169,69 @@ function createModulosDots() {
     dot.setAttribute('aria-label', 'Ir para slide ' + (i + 1));
     dot.addEventListener('click', () => {
       cardIndex = totalModulos + (i * modulosPerView);
+      normalizeIndex();
       setTrackPosition(false);
       resetModulosAutoSlide();
-      safeWrapGuard();
     });
     modulosDots.appendChild(dot);
   }
 }
 
-// ── WRAP INFINITO À PROVA DE FALHAS ──
-function wrapIfNeeded() {
-  const lowerBound = totalModulos;
-  const upperBound = totalModulos * 2;
+// ══════════════════════════════════════════════════════════
+// ── MECÂNICA DO CARROSSEL ──
+// A regra de ouro: ANTES de mover, normaliza o índice.
+// DEPOIS que a animação termina, normaliza de novo (instantâneo).
+// Assim cardIndex NUNCA fica fora do range e NUNCA vai pro vazio.
+// ══════════════════════════════════════════════════════════
 
-  if (cardIndex >= upperBound) {
-    cardIndex -= totalModulos;
-    setTrackPosition(true);
-  } else if (cardIndex < lowerBound) {
-    cardIndex += totalModulos;
-    setTrackPosition(true);
-  }
+function afterTransition() {
+  isAnimating = false;
+  normalizeIndex();
+  setTrackPosition(true);   // reposiciona instantâneo se precisou normalizar
 }
 
-// Fallback: destrava isTransitioning e força wrap se o transitionend não disparar
-function safeWrapGuard() {
-  clearTimeout(wrapGuardTimeout);
-  wrapGuardTimeout = setTimeout(() => {
-    isTransitioning = false;
-    wrapIfNeeded();
-  }, 700); // 700ms > 0.5s da transição + margem
+function scheduleAfterTransition() {
+  clearTimeout(wrapTimeout);
+  // 600ms > 500ms da transição CSS + margem de segurança
+  wrapTimeout = setTimeout(afterTransition, 600);
 }
-
-modulosTrack.addEventListener('transitionend', (e) => {
-  if (e.target !== modulosTrack) return;
-  if (e.propertyName !== 'transform') return;
-  clearTimeout(wrapGuardTimeout);
-  isTransitioning = false;
-  wrapIfNeeded();
-});
-
-modulosTrack.addEventListener('click', (e) => {
-  const infoBtn = e.target.closest('.modulo-info-btn');
-  if (infoBtn && infoBtn.dataset.modulo) {
-    openModal(infoBtn.dataset.modulo);
-  }
-});
 
 function nextModulo() {
+  if (isAnimating) return;
+  isAnimating = true;
+
   modulosPerView = getModulosPerView();
-  isTransitioning = true;
+
+  // Normaliza ANTES de somar (garante que parte de um índice válido)
+  normalizeIndex();
+
   cardIndex += modulosPerView;
   setTrackPosition(false);
-  safeWrapGuard();
+  scheduleAfterTransition();
+  resetModulosAutoSlide();
 }
 
 function prevModulo() {
+  if (isAnimating) return;
+  isAnimating = true;
+
   modulosPerView = getModulosPerView();
-  isTransitioning = true;
+
+  normalizeIndex();
+
   cardIndex -= modulosPerView;
   setTrackPosition(false);
-  safeWrapGuard();
+  scheduleAfterTransition();
+  resetModulosAutoSlide();
 }
+
+// Também escuta o transitionend (redundância segura)
+modulosTrack.addEventListener('transitionend', (e) => {
+  if (e.target !== modulosTrack) return;
+  if (e.propertyName !== 'transform') return;
+  clearTimeout(wrapTimeout);
+  afterTransition();
+});
 
 function resetModulosAutoSlide() {
   clearInterval(autoModuloInterval);
@@ -219,6 +243,7 @@ function stopModulosAutoSlide() {
   autoModuloInterval = null;
 }
 
+// ── Botões ──
 modulosPrevBtn.addEventListener('click', () => {
   prevModulo();
   resetModulosAutoSlide();
@@ -229,12 +254,12 @@ modulosNextBtn.addEventListener('click', () => {
   resetModulosAutoSlide();
 });
 
-// ── PAUSA NO HOVER ──
+// ── Pausa no hover ──
 const carouselContainer = document.querySelector('.modulos-carousel-container');
 carouselContainer.addEventListener('mouseenter', stopModulosAutoSlide);
 carouselContainer.addEventListener('mouseleave', resetModulosAutoSlide);
 
-// ── SWIPE ──
+// ── Swipe ──
 let modTouchStartX = 0;
 let modIsSwiping = false;
 
@@ -256,6 +281,7 @@ modulosTrack.addEventListener('touchend', (e) => {
   resetModulosAutoSlide();
 });
 
+// ── Resize ──
 let modulosResizeTimeout;
 window.addEventListener('resize', () => {
   clearTimeout(modulosResizeTimeout);
@@ -272,11 +298,20 @@ window.addEventListener('resize', () => {
   }, 120);
 });
 
+// ── Init ──
 createModulosDots();
 setTimeout(() => {
   setTrackPosition(true);
   resetModulosAutoSlide();
 }, 150);
+
+// ── Clique nos cards (abre modal) ──
+modulosTrack.addEventListener('click', (e) => {
+  const infoBtn = e.target.closest('.modulo-info-btn');
+  if (infoBtn && infoBtn.dataset.modulo) {
+    openModal(infoBtn.dataset.modulo);
+  }
+});
 
 // ══════════════════════════════════════════════════════════
 // ── MODAL — SLIDER DE IMAGENS POR MÓDULO ──
@@ -503,8 +538,6 @@ window.addEventListener('resize', () => {
 // ══════════════════════════════════════════════════════════
 // ── SISTEMA DE TRADUÇÃO ──
 // ══════════════════════════════════════════════════════════
-
-// Captura uma cópia "imutável" do PT do HTML no carregamento
 const ptOriginal = {};
 document.querySelectorAll('[data-key]').forEach(el => {
   const key = el.dataset.key;
