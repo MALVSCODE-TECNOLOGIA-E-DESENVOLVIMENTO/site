@@ -720,7 +720,6 @@ section{
   flex-shrink: 0;
 }
 
-/* ── Ações do modal ── */
 .modal-actions {
   margin-top: 20px;
   display: flex;
@@ -735,16 +734,15 @@ section{
 }
 .modal-cta {
   text-decoration: none;
-  gap: 10px;                /* 👈 respiro entre ícone e texto */
+  gap: 10px;
 }
 .modal-cta svg {
-  fill: #fff !important;    /* 👈 ícone branco — não fica verde sobre azul */
+  fill: #fff !important;
   flex-shrink: 0;
   width: 17px;
   height: 17px;
 }
 
-/* Ajustes de altura em telas pequenas */
 @media (max-height: 720px) {
   .modal-slide { height: clamp(160px, 34vh, 300px); }
   .modal-content { padding: 18px 18px; }
