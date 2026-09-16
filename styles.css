@@ -140,7 +140,7 @@ body::after{
 .btn-outline:hover{border-color:var(--blue);color:var(--cyan);transform:translateY(-2px)}
 .btn-sm{padding:9px 22px;font-size:0.72rem}
 
-/* ── WHATSAPP FLOAT — SEM GLOW ── */
+/* ── WHATSAPP FLOAT ── */
 .whatsapp-float {
   position: fixed;
   bottom: 30px;
@@ -205,7 +205,6 @@ body::after{
 .nav-link:hover{color:var(--white)}
 .nav-link:hover::after{transform:scaleX(1)}
 
-/* ── Redes sociais monocromáticas no nav ── */
 .nav-socials{
   display:flex;
   align-items:center;
@@ -390,39 +389,21 @@ body::after{
 }
 .scroll-indicator:hover{ color:var(--blue-b); }
 
-.scroll-mouse{
-  display:block;
-  width:22px;
-  height:36px;
-  border:1px solid currentColor;
-  border-radius:12px;
-  position:relative;
-  opacity:0.7;
-}
-.scroll-wheel{
-  position:absolute;
-  top:6px;
-  left:50%;
-  width:2px;
-  height:6px;
-  background:currentColor;
-  border-radius:2px;
-  transform:translateX(-50%);
-  animation:scrollWheel 1.8s ease-in-out infinite;
-}
-@keyframes scrollWheel{
-  0%   { opacity:0; transform:translate(-50%, 0); }
-  30%  { opacity:1; }
-  60%  { opacity:1; transform:translate(-50%, 10px); }
-  100% { opacity:0; transform:translate(-50%, 14px); }
-}
-
 .scroll-text{
   font-family:var(--mono);
   font-size:0.6rem;
   letter-spacing:0.28em;
   text-transform:uppercase;
   opacity:0.7;
+}
+.scroll-chevron{
+  width:20px;
+  height:20px;
+  animation:scrollBounce 1.8s ease-in-out infinite;
+}
+@keyframes scrollBounce{
+  0%,100%{ transform:translateY(0); opacity:0.5; }
+  50%    { transform:translateY(6px); opacity:1; }
 }
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
@@ -576,7 +557,7 @@ section{
 .modulos-carousel-dot:hover { background: var(--blue-b); }
 
 /* ═══════════════════════════════════════════
-   MODAL — SEM SCROLL
+   MODAL
 ═══════════════════════════════════════════ */
 .modal-overlay {
   display: none;
@@ -597,7 +578,6 @@ section{
   border-radius: 12px;
   width: 100%;
   max-width: 640px;
-  /* Limita pela altura disponível SEM gerar scroll interno */
   max-height: calc(100vh - 40px);
   max-height: calc(100dvh - 40px);
   padding: clamp(20px, 3.2vh, 30px) clamp(18px, 2.4vw, 28px);
@@ -637,7 +617,6 @@ section{
   flex-shrink: 0;
 }
 
-/* Slider dentro do modal */
 .modal-slider {
   position: relative;
   width: 100%;
@@ -657,7 +636,6 @@ section{
 .modal-slide {
   flex: 0 0 100%;
   width: 100%;
-  /* Altura responsiva baseada na viewport — evita scroll */
   height: clamp(200px, 42vh, 400px);
   display: flex;
   align-items: center;
@@ -732,7 +710,6 @@ section{
 }
 .modal-slider-dot:hover { background: var(--blue-b); }
 
-/* Nota simples — sem caixa, sem fundo, sem borda */
 .modal-note {
   margin-top: 10px;
   font-size: 0.72rem;
@@ -743,7 +720,7 @@ section{
   flex-shrink: 0;
 }
 
-/* Ações do modal */
+/* ── Ações do modal ── */
 .modal-actions {
   margin-top: 20px;
   display: flex;
@@ -758,9 +735,16 @@ section{
 }
 .modal-cta {
   text-decoration: none;
+  gap: 10px;                /* 👈 respiro entre ícone e texto */
+}
+.modal-cta svg {
+  fill: #fff !important;    /* 👈 ícone branco — não fica verde sobre azul */
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
 }
 
-/* Ajustes de altura em telas pequenas — evita scroll */
+/* Ajustes de altura em telas pequenas */
 @media (max-height: 720px) {
   .modal-slide { height: clamp(160px, 34vh, 300px); }
   .modal-content { padding: 18px 18px; }
@@ -825,7 +809,6 @@ section{
 }
 .site-link:hover{gap:10px;color:var(--cyan)}
 
-/* Card "em breve" */
 .site-card-coming {
   border-style: dashed;
   border-color: rgba(10,86,245,0.25);
@@ -947,8 +930,6 @@ section{
 /* ═══════════════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════════════ */
-
-/* Desktop → 3 cards */
 @media (min-width: 1025px) {
   :root {
     --carousel-cards: 3;
@@ -956,7 +937,6 @@ section{
   }
 }
 
-/* Tablet → 2 cards */
 @media (max-width: 1024px) {
   :root {
     --carousel-cards: 2;
@@ -968,7 +948,6 @@ section{
   .hero-inner { width: min(94vw, 720px); }
 }
 
-/* Menu mobile (até 960px) */
 @media (max-width: 960px){
   .nav{padding:18px 24px}
   .nav.scrolled{padding:12px 24px}
@@ -1023,7 +1002,6 @@ section{
   .hero-name { font-size: clamp(2.4rem, 8.5vw, 4rem); }
 }
 
-/* Celular → 1 card por vez */
 @media (max-width: 600px) {
   :root {
     --carousel-cards: 1;
@@ -1048,7 +1026,6 @@ section{
   .modulo-footer .btn { flex: 1; min-width: 0; padding: 9px 12px; font-size: 0.68rem; }
   .modulo-info-btn { font-size: 0.66rem !important; }
 
-  /* HERO mobile */
   .hero { padding: 88px 0 48px; min-height: auto; }
   .hero-inner { width: 100%; }
   .hero-tag { font-size: 0.62rem; letter-spacing: 0.18em; }
@@ -1070,7 +1047,6 @@ section{
   .whatsapp-float { width: 48px; height: 48px; bottom: 18px; right: 18px; }
   .whatsapp-float svg { width: 24px; height: 24px; }
 
-  /* Modal mobile */
   .modal-content {
     padding: 20px 16px;
     max-width: 100%;
@@ -1089,7 +1065,6 @@ section{
   .btn-sm { padding: 7px 14px; font-size: 0.62rem; }
 }
 
-/* Celulares muito estreitos */
 @media (max-width: 380px) {
   .nav-logo-txt { font-size: 1.15rem; }
   .hero-name { font-size: 2rem; }
