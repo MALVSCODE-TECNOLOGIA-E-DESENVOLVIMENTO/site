@@ -32,7 +32,6 @@ const Storage = {
     }
 };
 
-/* IDs e datas */
 const uid = (prefix = 'id') =>
     `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
 
@@ -53,7 +52,6 @@ const fmtDateTime = iso => {
     return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
-/* Sigla ME-XXXX */
 function nextAgendamentoCodigo() {
     const list = DB.getAgendamentos();
     let max = 0;
@@ -65,10 +63,10 @@ function nextAgendamentoCodigo() {
 }
 
 /* ============================================================
-   SEED (v3)
+   SEED (v4 — sempre que mudar a estrutura, incrementar)
    ============================================================ */
 function seed() {
-    if (Storage.read('seeded.v3', false)) return;
+    if (Storage.read('seeded.v4', false)) return;
 
     const clientes = [
         { id: 'ME-0001', nome: 'Ana Paula Ribeiro', contato: '(27) 99811-1001', email: 'ana.ribeiro@exemplo.com', observacoes: 'Prefere contato por WhatsApp.', dataCadastro: '2025-08-14' },
@@ -99,7 +97,6 @@ function seed() {
     const em3 = new Date(hoje); em3.setDate(em3.getDate() + 3);
     const em7 = new Date(hoje); em7.setDate(em7.getDate() + 7);
 
-    /* Agendamentos com clienteId já apontando para os ME-* do seed */
     const agendamentos = [
         { id: 'ag_1', codigo: 'ME-0001', clienteId: 'ME-0001', clienteNome: 'Ana Paula Ribeiro', clienteContato: '(27) 99811-1001', clienteEmail: 'ana.ribeiro@exemplo.com', servicoNome: 'Consultoria Inicial',   profissionalId: 'pr_1', data: isoHoje,            hora: '09:00', status: 'agendado',  canalId: 'cn_1', observacoes: '' },
         { id: 'ag_2', codigo: 'ME-0002', clienteId: 'ME-0003', clienteNome: 'Carla Menezes',     clienteContato: '(27) 99811-1003', clienteEmail: 'carla.menezes@exemplo.com', servicoNome: 'Instalação Padrão',     profissionalId: 'pr_2', data: isoHoje,            hora: '14:00', status: 'agendado',  canalId: 'cn_2', observacoes: '' },
@@ -109,7 +106,6 @@ function seed() {
         { id: 'ag_6', codigo: 'ME-0006', clienteId: 'ME-0003', clienteNome: 'Carla Menezes',     clienteContato: '(27) 99811-1003', clienteEmail: 'carla.menezes@exemplo.com', servicoNome: 'Consultoria Inicial',   profissionalId: 'pr_1', data: toDateInput(em7),   hora: '10:00', status: 'agendado',  canalId: 'cn_1', observacoes: '' }
     ];
 
-    /* Atendimentos — sempre 1:1 com agendamentos do seed */
     const atendimentos = agendamentos.map((ag, i) => ({
         id: `at_${i+1}`,
         agendamentoId: ag.id,
@@ -125,7 +121,6 @@ function seed() {
         observacoes: ag.observacoes ? [{ texto: ag.observacoes, autor: 'Recepção', timestamp: nowISO() }] : []
     }));
 
-    /* Mais um atendido e um avulso, para o seed não ficar uniforme */
     atendimentos.push({
         id: 'at_extra_1',
         agendamentoId: null,
@@ -171,7 +166,7 @@ function seed() {
     Storage.write('atendimentos', atendimentos);
     Storage.write('comunicacoes', comunicacoes);
     Storage.write('config.funcionamento', { inicio: '08:00', fim: '18:00', intervaloMin: 30, diasUteis: [1,2,3,4,5,6] });
-    Storage.write('seeded.v3', true);
+    Storage.write('seeded.v4', true);
 }
 seed();
 
@@ -185,7 +180,6 @@ const DB = {
     getAgendamentos:  () => Storage.read('agendamentos', []),
     getAtendimentos:  () => Storage.read('atendimentos', []),
     getComunicacoes:  () => Storage.read('comunicacoes', []),
-
     setClientes:      v => Storage.write('clientes', v),
     setProfissionais: v => Storage.write('profissionais', v),
     setCanais:        v => Storage.write('canais', v),
@@ -224,8 +218,14 @@ const ICONS = {
     settings:      `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`
 };
 
-const ICON_DOC  = `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>`;
-const ICON_CHAT = `<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+/* Ícone vermelho de alerta — só aparece quando há observações */
+const ICON_ALERT = `<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+
+/* Ícone de documento para "Ver detalhes" */
+const ICON_DOC = `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>`;
+
+/* Ícone de PDF */
+const ICON_PDF = `<svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>`;
 
 const MONTH_NAMES = [
     'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
@@ -308,7 +308,7 @@ function openModal({ title, bodyHTML, actions = [], size = '', neutral = false, 
     return { overlay, close };
 }
 
-function confirmDialog(message, { confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', onConfirm, onCancel } = {}) {
+function confirmDialog(message, { confirmLabel = 'Confirmar', cancelLabel = 'Cancelar' } = {}) {
     return new Promise(resolve => {
         const { overlay } = openModal({
             title: '',
@@ -319,8 +319,8 @@ function confirmDialog(message, { confirmLabel = 'Confirmar', cancelLabel = 'Can
                 </div>
             `,
             actions: [
-                { label: cancelLabel, class: 'confirm-nao', onClick: () => { resolve(false); if (onCancel) onCancel(); } },
-                { label: confirmLabel, class: 'confirm-sim', onClick: () => { resolve(true); if (onConfirm) onConfirm(); } }
+                { label: cancelLabel, class: 'confirm-nao', onClick: () => resolve(false) },
+                { label: confirmLabel, class: 'confirm-sim', onClick: () => resolve(true) }
             ]
         });
         overlay.querySelector('.modal-content').classList.add('confirm-modal-content');
@@ -386,13 +386,12 @@ function setupSidebarMobile() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
 
-    const existingMenuBtn = document.getElementById('menuToggle');
-    if (!existingMenuBtn) {
+    if (!document.getElementById('menuToggle')) {
         const btn = document.createElement('button');
         btn.id = 'menuToggle';
         btn.className = 'btn-icon';
         btn.setAttribute('aria-label', 'Abrir menu');
-        btn.style.cssText = 'position:fixed;top:1rem;right:1rem;z-index:950;width:40px;height:40px;background:rgba(255,255,255,.95);border:1px solid var(--border-color);border-radius:8px;box-shadow:var(--card-shadow);display:none;';
+        btn.style.cssText = 'position:fixed;top:0.75rem;right:0.75rem;z-index:950;width:36px;height:36px;background:rgba(255,255,255,.95);border:1px solid var(--border-color);border-radius:6px;box-shadow:var(--card-shadow);display:none;';
         btn.innerHTML = '<svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
         document.body.appendChild(btn);
         btn.addEventListener('click', () => sidebar.classList.add('open'));
@@ -403,8 +402,7 @@ function setupSidebarMobile() {
         btn.style.display = window.innerWidth <= 900 ? 'inline-flex' : 'none';
     }
 
-    const existingOverlay = document.getElementById('sidebarOverlay');
-    if (!existingOverlay) {
+    if (!document.getElementById('sidebarOverlay')) {
         const overlay = document.createElement('div');
         overlay.id = 'sidebarOverlay';
         overlay.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(2px);z-index:90;display:none;';
@@ -421,7 +419,7 @@ function setupSidebarMobile() {
 }
 
 /* ============================================================
-   Helpers de UI
+   Helpers UI
    ============================================================ */
 const statusLabel = {
     pendente:  'Pendente',
@@ -430,7 +428,6 @@ const statusLabel = {
     cancelado: 'Cancelado',
     aguardando:'Aguardando'
 };
-
 const statusBadge = s => `<span class="badge ${s}">${statusLabel[s] || s}</span>`;
 
 function emptyState(title, text) {
@@ -467,11 +464,11 @@ function ensureCalendarModal() {
             <div class="calendar-content">
                 <div class="calendar-header">
                     <button class="calendar-year-nav" onclick="changeCalendarYear(-1)">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
                     </button>
                     <h3 id="calendarYear">${new Date().getFullYear()}</h3>
                     <button class="calendar-year-nav" onclick="changeCalendarYear(1)">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
                     </button>
                 </div>
                 <div class="calendar-months" id="calendarMonths"></div>
@@ -479,8 +476,6 @@ function ensureCalendarModal() {
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', html);
-
-    // Fechar ao clicar fora
     const modal = document.getElementById('calendarModal');
     modal.addEventListener('click', e => {
         if (e.target === modal) modal.classList.remove('show');
@@ -493,12 +488,10 @@ window.changeCalendarYear = function (direction) {
     calendarYear += direction;
     renderCalendarMonths();
 };
-
 window.selectMonth = function (monthIndex) {
     window.setCurrentMonth(new Date(calendarYear, monthIndex, 1));
     document.getElementById('calendarModal')?.classList.remove('show');
 };
-
 window.toggleCalendar = function () {
     const modal = document.getElementById('calendarModal');
     if (!modal) return;
@@ -528,15 +521,15 @@ function monthNavBlock() {
     return `
         <div class="month-navigation-inline">
             <button class="month-nav-arrow" data-month-prev title="Mês anterior">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
             </button>
             <div class="month-display-inline"><span id="currentMonth">${MONTH_NAMES[ref.getMonth()]} ${ref.getFullYear()}</span></div>
             <button class="month-nav-arrow" data-month-next title="Próximo mês">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
         </div>
         <button class="calendar-btn" data-calendar-btn title="Selecionar mês">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         </button>
     `;
 }
@@ -555,30 +548,15 @@ function bindMonthNav(root) {
     }));
 }
 
-/* ============================================================
-   Match de cliente no agendamento (nome → contato → email)
-   ============================================================ */
+/* Match de cliente (nome → contato → email) */
 function encontrarClienteExistente({ nome, contato, email }) {
     const clientes = DB.getClientes();
     const n = (nome || '').trim().toLowerCase();
     const c = (contato || '').trim().toLowerCase();
     const e = (email || '').trim().toLowerCase();
-
-    // 1) Nome
-    if (n) {
-        const byNome = clientes.find(cl => (cl.nome || '').trim().toLowerCase() === n);
-        if (byNome) return byNome;
-    }
-    // 2) Contato
-    if (c) {
-        const byContato = clientes.find(cl => (cl.contato || '').trim().toLowerCase() === c);
-        if (byContato) return byContato;
-    }
-    // 3) E-mail
-    if (e) {
-        const byEmail = clientes.find(cl => (cl.email || '').trim().toLowerCase() === e);
-        if (byEmail) return byEmail;
-    }
+    if (n) { const x = clientes.find(cl => (cl.nome || '').trim().toLowerCase() === n); if (x) return x; }
+    if (c) { const x = clientes.find(cl => (cl.contato || '').trim().toLowerCase() === c); if (x) return x; }
+    if (e) { const x = clientes.find(cl => (cl.email || '').trim().toLowerCase() === e); if (x) return x; }
     return null;
 }
 
@@ -675,6 +653,9 @@ function openProfissionalModal(editId) {
 
 /* ============================================================
    MÓDULO · CONTROLE DE ATENDIMENTO
+   ------------------------------------------------------------
+   - Sem coluna Canal
+   - Ícone de alerta vermelho quando há observações
    ============================================================ */
 let atendFilters = { status: '', clienteId: '', profissionalId: '', q: '' };
 
@@ -691,7 +672,7 @@ function atendimentosFiltrados() {
         if (clienteId && a.clienteId !== clienteId) return false;
         if (profissionalId && a.profissionalId !== profissionalId) return false;
         if (ql) {
-            const hay = (clienteNome(a.clienteId) + ' ' + (a.clienteNome || '') + ' ' + profissionalNome(a.profissionalId) + ' ' + (a.servicoNome || '')).toLowerCase();
+            const hay = ((a.codigo || '') + ' ' + clienteNome(a.clienteId) + ' ' + (a.clienteNome || '') + ' ' + profissionalNome(a.profissionalId) + ' ' + (a.servicoNome || '')).toLowerCase();
             if (!hay.includes(ql)) return false;
         }
         return true;
@@ -713,6 +694,10 @@ function nomeDoAtendimento(a) {
     return a.clienteNome || 'Atendimento avulso';
 }
 
+function temObservacoes(a) {
+    return (a.observacoes || []).length > 0;
+}
+
 function renderAtendimentos(root) {
     const clientes = DB.getClientes();
     const profissionais = DB.getProfissionais();
@@ -732,37 +717,25 @@ function renderAtendimentos(root) {
         <div class="dashboard-grid">
             <div class="stat-card">
                 <div class="stat-icon stat-icon-default"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value">${total}</div>
-                    <div class="stat-label">Total no período</div>
-                </div>
+                <div class="stat-content"><div class="stat-value">${total}</div><div class="stat-label">Total no período</div></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon stat-icon-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value stat-value-info">${agendados}</div>
-                    <div class="stat-label">Agendados</div>
-                </div>
+                <div class="stat-content"><div class="stat-value stat-value-info">${agendados}</div><div class="stat-label">Agendados</div></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon stat-icon-success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value stat-value-success">${atendidos}</div>
-                    <div class="stat-label">Atendidos</div>
-                </div>
+                <div class="stat-content"><div class="stat-value stat-value-success">${atendidos}</div><div class="stat-label">Atendidos</div></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon stat-icon-danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value stat-value-danger">${cancelados}</div>
-                    <div class="stat-label">Cancelados</div>
-                </div>
+                <div class="stat-content"><div class="stat-value stat-value-danger">${cancelados}</div><div class="stat-label">Cancelados</div></div>
             </div>
         </div>
 
         <div class="search-bar-wrapper">
             <div class="search-bar">
-                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 <input type="text" id="atQ" placeholder="Pesquisar por ID, cliente, profissional ou serviço" value="${atendFilters.q}">
                 <div class="search-bar-filters">
                     <div class="filter-dropdown-inline">
@@ -797,14 +770,13 @@ function renderAtendimentos(root) {
                 <table>
                     <thead>
                         <tr>
-                            <th style="width:44px;text-align:center;">✓</th>
+                            <th style="width:40px;text-align:center;">✓</th>
                             <th>ID</th>
                             <th>Data</th>
                             <th>Hora</th>
                             <th>Cliente</th>
                             <th>Serviço</th>
                             <th>Profissional</th>
-                            <th>Canal</th>
                             <th>Status</th>
                             <th style="text-align:right;">Ações</th>
                         </tr>
@@ -830,7 +802,7 @@ function renderAtendRows() {
     const list = atendimentosFiltrados();
 
     if (!list.length) {
-        tbody.innerHTML = `<tr><td colspan="10">${emptyState('Nenhum atendimento no período', 'Ajuste os filtros acima ou crie agendamentos para este mês.')}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9">${emptyState('Nenhum atendimento no período', 'Ajuste os filtros acima ou crie agendamentos para este mês.')}</td></tr>`;
         return;
     }
 
@@ -840,6 +812,9 @@ function renderAtendRows() {
         const rowClass  = concluido ? 'row-atendido' : cancelado ? 'row-cancelado' : '';
         const codigo    = codigoDoAtendimento(a);
         const nome      = nomeDoAtendimento(a);
+        const alerta    = temObservacoes(a)
+            ? `<button class="btn-icon alert" data-chat="${a.id}" title="Ver observações">${ICON_ALERT}</button>`
+            : '';
 
         const checkboxCell = cancelado
             ? `<td style="text-align:center;"></td>`
@@ -861,12 +836,11 @@ function renderAtendRows() {
                 <td>${nome}</td>
                 <td>${a.servicoNome || '—'}</td>
                 <td>${profissionalNome(a.profissionalId)}</td>
-                <td>${canalNome(a.canalId)}</td>
                 <td>${statusBadge(a.status)}</td>
                 <td>
-                    <div style="display:flex;gap:4px;justify-content:flex-end;">
+                    <div style="display:flex;gap:4px;justify-content:flex-end;align-items:center;">
                         <button class="btn-icon" data-view="${a.id}" title="Ver detalhes">${ICON_DOC}</button>
-                        <button class="btn-icon" data-chat="${a.id}" title="Observações">${ICON_CHAT}</button>
+                        ${alerta}
                     </div>
                 </td>
             </tr>
@@ -912,7 +886,7 @@ function viewAtendimento(id, abaAtiva = 'dados') {
                 <div class="observacao-texto">${o.texto}</div>
             </div>
         `).join('')}</div>`
-        : '<p style="color:var(--text-secondary);font-size:0.85rem;">Nenhuma observação registrada.</p>';
+        : '<p style="color:var(--text-secondary);font-size:0.78rem;">Nenhuma observação registrada.</p>';
 
     const { overlay } = openModal({
         title: `Atendimento ${codigo || '—'} · ${nome}`,
@@ -932,7 +906,6 @@ function viewAtendimento(id, abaAtiva = 'dados') {
                         <p><strong>Cliente:</strong> ${nome}</p>
                         <p><strong>Serviço:</strong> ${a.servicoNome || '—'}</p>
                         <p><strong>Profissional:</strong> ${profissionalNome(a.profissionalId)}</p>
-                        <p><strong>Canal:</strong> ${canalNome(a.canalId)}</p>
                         <p><strong>Status:</strong> ${statusBadge(a.status)}</p>
                     </div>
                 </div>
@@ -940,11 +913,11 @@ function viewAtendimento(id, abaAtiva = 'dados') {
                     <div class="info-section">
                         <h4>Observações</h4>
                         ${obsHTML}
-                        <div class="nova-observacao" style="margin-top:1rem;">
-                            <label for="newObs" style="font-size:0.8rem;">Nova observação</label>
+                        <div class="nova-observacao" style="margin-top:0.85rem;">
+                            <label for="newObs" style="font-size:0.75rem;">Nova observação</label>
                             <textarea id="newObs" rows="3" placeholder="Escreva uma observação..."></textarea>
                             <button class="btn-add-obs small" id="addObsBtn">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                 Adicionar
                             </button>
                         </div>
@@ -981,6 +954,10 @@ function viewAtendimento(id, abaAtiva = 'dados') {
 
 /* ============================================================
    MÓDULO · AGENDAMENTOS
+   ------------------------------------------------------------
+   - Sem coluna Status, sem botão cancelar
+   - Cancelado (vindo do Controle) = linha translúcida
+   - Atendido = linha verde
    ============================================================ */
 let agFilters = { status: '', clienteId: '', profissionalId: '', q: '' };
 
@@ -1016,9 +993,9 @@ function renderAgendamentos(root) {
     root.innerHTML = `
         ${moduleHead(
             'Agendamentos',
-            'Crie, atualize e cancele agendamentos. O status daqui reflete no Controle de Atendimento.',
+            'Crie e atualize agendamentos. Cancelamentos são feitos pelo Controle de Atendimento.',
             `<button class="btn-new-order-header" id="btnNovoAg">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 Novo agendamento
             </button>`
         )}
@@ -1040,7 +1017,7 @@ function renderAgendamentos(root) {
 
         <div class="search-bar-wrapper">
             <div class="search-bar">
-                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 <input type="text" id="agQ" placeholder="Pesquisar por ID, cliente, profissional ou serviço" value="${agFilters.q}">
                 <div class="search-bar-filters">
                     <div class="filter-dropdown-inline">
@@ -1082,7 +1059,6 @@ function renderAgendamentos(root) {
                             <th>Serviço</th>
                             <th>Profissional</th>
                             <th>Canal</th>
-                            <th>Status</th>
                             <th style="text-align:right;">Ações</th>
                         </tr>
                     </thead>
@@ -1107,15 +1083,18 @@ function renderAgendRows() {
     if (!tbody) return;
     const list = agendamentosFiltrados();
     if (!list.length) {
-        tbody.innerHTML = `<tr><td colspan="9">${emptyState('Nenhum agendamento no período', 'Crie um novo agendamento ou ajuste os filtros.')}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8">${emptyState('Nenhum agendamento no período', 'Crie um novo agendamento ou ajuste os filtros.')}</td></tr>`;
         return;
     }
     tbody.innerHTML = list.map(a => {
         const nome = a.clienteId
             ? (byId(DB.getClientes(), a.clienteId)?.nome || a.clienteNome || '—')
             : (a.clienteNome || '—');
+        const concluido = a.status === 'atendido';
+        const cancelado = a.status === 'cancelado';
+        const rowClass = concluido ? 'row-atendido' : cancelado ? 'row-cancelado' : '';
         return `
-            <tr>
+            <tr class="${rowClass}">
                 <td><strong>${a.codigo || '—'}</strong></td>
                 <td>${fmtDate(a.data)}</td>
                 <td>${a.hora}</td>
@@ -1123,14 +1102,10 @@ function renderAgendRows() {
                 <td>${a.servicoNome || '—'}</td>
                 <td>${profissionalNome(a.profissionalId)}</td>
                 <td>${canalNome(a.canalId)}</td>
-                <td>${statusBadge(a.status)}</td>
                 <td>
                     <div style="display:flex;gap:4px;justify-content:flex-end;">
-                        <button class="btn-icon" data-edit="${a.id}" title="Editar">
+                        <button class="btn-icon" data-edit="${a.id}" title="Editar" ${cancelado ? 'disabled' : ''}>
                             <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
-                        </button>
-                        <button class="btn-icon" data-cancel="${a.id}" title="Cancelar" ${a.status === 'cancelado' ? 'disabled' : ''}>
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
                         </button>
                     </div>
                 </td>
@@ -1139,28 +1114,6 @@ function renderAgendRows() {
     }).join('');
 
     tbody.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openAgendamentoModal(b.dataset.edit)));
-    tbody.querySelectorAll('[data-cancel]').forEach(b => b.addEventListener('click', () => cancelarAgendamento(b.dataset.cancel)));
-}
-
-async function cancelarAgendamento(id) {
-    const ok = await confirmDialog('Deseja cancelar este agendamento? O status também mudará no Controle de Atendimento.');
-    if (!ok) return;
-    const list = DB.getAgendamentos();
-    const idx = list.findIndex(x => x.id === id);
-    if (idx < 0) return;
-    list[idx].status = 'cancelado';
-    DB.setAgendamentos(list);
-
-    const ats = DB.getAtendimentos();
-    const iat = ats.findIndex(x => x.agendamentoId === id);
-    if (iat >= 0) {
-        ats[iat].status = 'cancelado';
-        ats[iat].observacoes = [...(ats[iat].observacoes || []), { texto: 'Agendamento cancelado.', autor: 'Operador', timestamp: nowISO() }];
-        DB.setAtendimentos(ats);
-    }
-
-    renderAgendRows();
-    toast('Agendamento cancelado.', 'error');
 }
 
 /* Modal de agendamento com verificação de cliente + criação condicional */
@@ -1241,7 +1194,6 @@ function openAgendamentoModal(editId) {
                     return false;
                 }
 
-                /* Verifica cliente existente (nome → contato → email) */
                 let clienteEncontrado = encontrarClienteExistente({
                     nome: data.clienteNome,
                     contato: data.clienteContato,
@@ -1258,18 +1210,16 @@ function openAgendamentoModal(editId) {
                     );
 
                     if (querCadastrar) {
-                        /* Cria o cliente com o ID do agendamento (novo ou código já existente) */
                         const codigoAg = a?.codigo || nextAgendamentoCodigo();
                         const clientes = DB.getClientes();
-                        const novoCliente = {
+                        clientes.push({
                             id: codigoAg,
                             nome: data.clienteNome.trim(),
                             contato: (data.clienteContato || '').trim(),
                             email: (data.clienteEmail || '').trim(),
                             observacoes: '',
                             dataCadastro: todayInput()
-                        };
-                        clientes.push(novoCliente);
+                        });
                         DB.setClientes(clientes);
                         clienteId = codigoAg;
                     } else {
@@ -1280,7 +1230,6 @@ function openAgendamentoModal(editId) {
                 const list = DB.getAgendamentos();
                 const ats = DB.getAtendimentos();
 
-                /* Atualizar */
                 if (a) {
                     const idx = list.findIndex(x => x.id === a.id);
                     list[idx] = {
@@ -1291,7 +1240,6 @@ function openAgendamentoModal(editId) {
                         clienteContato: data.clienteContato,
                         clienteEmail: data.clienteEmail
                     };
-
                     const iat = ats.findIndex(x => x.agendamentoId === a.id);
                     if (iat >= 0) {
                         ats[iat] = {
@@ -1306,7 +1254,6 @@ function openAgendamentoModal(editId) {
                         };
                     }
                 } else {
-                    /* Criar */
                     const codigo = nextAgendamentoCodigo();
                     const novoId = uid('ag');
                     list.push({
@@ -1409,6 +1356,9 @@ function conflitoHorario(profissionalId, data, hora, ignorarId = null) {
 
 /* ============================================================
    MÓDULO · CANAIS DE ATENDIMENTO
+   ------------------------------------------------------------
+   - Sem coluna Status (checkbox = atendido, sem checkbox = aguardando)
+   - Ícone de alerta vermelho quando há observações
    ============================================================ */
 let cnFilters = { canalId: '', status: '', clienteId: '' };
 
@@ -1428,7 +1378,7 @@ function renderCanais(root) {
             'Canais de Atendimento',
             'Solicitações recebidas por canais. Listadas da mais antiga para a mais recente.',
             `<button class="btn-new-order-header" id="btnNovoCom">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 Nova comunicação
             </button>`
         )}
@@ -1436,30 +1386,21 @@ function renderCanais(root) {
         <div class="dashboard-grid">
             <div class="stat-card">
                 <div class="stat-icon stat-icon-default"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value">${total}</div>
-                    <div class="stat-label">Total de chamados</div>
-                </div>
+                <div class="stat-content"><div class="stat-value">${total}</div><div class="stat-label">Total de chamados</div></div>
             </div>
             <div class="stat-card ${aguardando > 0 ? 'stat-card-pulse' : ''}">
                 <div class="stat-icon stat-icon-danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value stat-value-danger">${aguardando}</div>
-                    <div class="stat-label">Aguardando</div>
-                </div>
+                <div class="stat-content"><div class="stat-value stat-value-danger">${aguardando}</div><div class="stat-label">Aguardando</div></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon stat-icon-success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value stat-value-success">${atendidas}</div>
-                    <div class="stat-label">Atendidos</div>
-                </div>
+                <div class="stat-content"><div class="stat-value stat-value-success">${atendidas}</div><div class="stat-label">Atendidos</div></div>
             </div>
         </div>
 
         <div class="search-bar-wrapper">
             <div class="search-bar">
-                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 <input type="text" placeholder="Pesquisar" id="cnSearch">
                 <div class="search-bar-filters">
                     <div class="filter-dropdown-inline">
@@ -1494,13 +1435,12 @@ function renderCanais(root) {
                 <table>
                     <thead>
                         <tr>
-                            <th style="width:44px;text-align:center;">✓</th>
+                            <th style="width:40px;text-align:center;">✓</th>
                             <th>Entrada</th>
                             <th>Concluído</th>
                             <th>Cliente</th>
                             <th>Canal</th>
                             <th>Assunto</th>
-                            <th>Status</th>
                             <th style="text-align:right;">Ações</th>
                         </tr>
                     </thead>
@@ -1543,12 +1483,12 @@ function renderCanaisRows(comunicacoes) {
     const tbody = document.getElementById('cnBody');
     if (!tbody) return;
     if (!comunicacoes.length) {
-        tbody.innerHTML = `<tr><td colspan="8">${emptyState('Sem comunicações', 'Nenhuma comunicação registrada com estes filtros.')}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7">${emptyState('Sem comunicações', 'Nenhuma comunicação registrada com estes filtros.')}</td></tr>`;
         return;
     }
     tbody.innerHTML = comunicacoes.map(c => {
         const concluido = c.status === 'atendido';
-        const rowClass = concluido ? 'row-concluido' : '';
+        const rowClass = concluido ? 'row-cancelado' : ''; /* translúcida quando concluído */
         return `
             <tr class="${rowClass}">
                 <td style="text-align:center;">
@@ -1564,9 +1504,8 @@ function renderCanaisRows(comunicacoes) {
                 <td><strong>${clienteNome(c.clienteId)}</strong></td>
                 <td>${canalNome(c.canalId)}</td>
                 <td>${c.assunto}</td>
-                <td>${statusBadge(c.status)}</td>
                 <td>
-                    <div style="display:flex;gap:4px;justify-content:flex-end;">
+                    <div style="display:flex;gap:4px;justify-content:flex-end;align-items:center;">
                         <button class="btn-icon" data-view="${c.id}" title="Ver detalhes">${ICON_DOC}</button>
                         <button class="btn-icon" data-edit="${c.id}" title="Editar">
                             <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
@@ -1582,11 +1521,9 @@ function renderCanaisRows(comunicacoes) {
             const id = cb.dataset.cnToggle;
             const checked = e.target.checked;
             if (checked) {
-                /* Reverte visualmente até a confirmação */
                 cb.checked = false;
                 confirmarConclusao(id, cb);
             } else {
-                /* Desmarcar: volta para aguardando */
                 const list = DB.getComunicacoes();
                 const idx = list.findIndex(x => x.id === id);
                 if (idx >= 0) {
@@ -1715,7 +1652,7 @@ function renderClientes(root) {
 
         <div class="search-bar-wrapper">
             <div class="search-bar">
-                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 <input type="text" id="cliQ" placeholder="Buscar por ID, nome, contato ou e-mail" value="${cliQ}">
             </div>
         </div>
@@ -1809,7 +1746,6 @@ function openClienteModal(editId) {
                 const list = DB.getClientes();
                 if (c) { const i = list.findIndex(x => x.id === c.id); list[i] = { ...list[i], ...data }; }
                 else {
-                    /* Novo cliente manual: gera um ID ME-* novo */
                     const codigo = nextAgendamentoCodigo();
                     list.push({ id: codigo, ...data, dataCadastro: todayInput() });
                 }
@@ -1847,7 +1783,7 @@ function viewHistoricoCliente(id) {
             <div class="timeline-title">${a.servicoNome || '—'}</div>
             <div class="timeline-desc">${profissionalNome(a.profissionalId)} · ${statusLabel[a.status] || a.status}</div>
         </div>
-    `).join('') : '<p style="color:var(--text-secondary);font-size:0.85rem;">Sem atendimentos registrados.</p>';
+    `).join('') : '<p style="color:var(--text-secondary);font-size:0.78rem;">Sem atendimentos registrados.</p>';
 
     const comsHTML = coms.length ? coms.map(c => `
         <div class="timeline-item">
@@ -1855,7 +1791,7 @@ function viewHistoricoCliente(id) {
             <div class="timeline-title">${c.assunto}</div>
             <div class="timeline-desc">${canalNome(c.canalId)} · ${statusLabel[c.status] || c.status}</div>
         </div>
-    `).join('') : '<p style="color:var(--text-secondary);font-size:0.85rem;">Sem comunicações.</p>';
+    `).join('') : '<p style="color:var(--text-secondary);font-size:0.78rem;">Sem comunicações.</p>';
 
     const { overlay } = openModal({
         title: `Histórico · ${c.nome}`,
@@ -1898,8 +1834,8 @@ function viewHistoricoCliente(id) {
 /* ============================================================
    MÓDULO · HISTÓRICO DE ATENDIMENTO
    ------------------------------------------------------------
-   Aqui só aparecem atendimentos de clientes cadastrados (recorrentes).
-   Avulsos (clienteId null) não entram.
+   - Só clientes cadastrados
+   - Ícone de alerta vermelho quando há observações
    ============================================================ */
 let histFilters = { clienteId: '', profissionalId: '', q: '' };
 
@@ -1915,7 +1851,7 @@ function renderHistorico(root) {
 
         <div class="search-bar-wrapper">
             <div class="search-bar">
-                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                 <input type="text" placeholder="Pesquisar" id="hiSearch" value="${histFilters.q}">
                 <div class="search-bar-filters">
                     <div class="filter-dropdown-inline">
@@ -1951,6 +1887,7 @@ function renderHistorico(root) {
                             <th>Canal</th>
                             <th>Status</th>
                             <th>Observações</th>
+                            <th style="text-align:right;width:40px;"></th>
                         </tr>
                     </thead>
                     <tbody id="hiBody"></tbody>
@@ -1963,12 +1900,15 @@ function renderHistorico(root) {
         const list = historicoFiltrado();
         const tbody = document.getElementById('hiBody');
         if (!list.length) {
-            tbody.innerHTML = `<tr><td colspan="9">${emptyState('Sem histórico', 'Nenhum atendimento encerrado com estes filtros.')}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="10">${emptyState('Sem histórico', 'Nenhum atendimento encerrado com estes filtros.')}</td></tr>`;
             return;
         }
         tbody.innerHTML = list.map(a => {
             const obs = (a.observacoes || []).map(o => o.texto).join(' • ') || '—';
             const codigo = codigoDoAtendimento(a) || '—';
+            const alerta = temObservacoes(a)
+                ? `<button class="btn-icon alert" data-chat="${a.id}" title="Ver observações">${ICON_ALERT}</button>`
+                : '';
             return `
                 <tr>
                     <td><strong>${codigo}</strong></td>
@@ -1979,10 +1919,13 @@ function renderHistorico(root) {
                     <td>${profissionalNome(a.profissionalId)}</td>
                     <td>${canalNome(a.canalId)}</td>
                     <td>${statusBadge(a.status)}</td>
-                    <td style="max-width:280px;white-space:normal;">${obs}</td>
+                    <td style="max-width:240px;white-space:normal;">${obs}</td>
+                    <td style="text-align:right;">${alerta}</td>
                 </tr>
             `;
         }).join('');
+
+        tbody.querySelectorAll('[data-chat]').forEach(b => b.addEventListener('click', () => viewAtendimento(b.dataset.chat, 'obs')));
     };
 
     render();
@@ -1997,7 +1940,7 @@ function renderHistorico(root) {
     if (head) {
         const btn = document.createElement('button');
         btn.className = 'btn-new-order-header';
-        btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Gerar PDF do mês`;
+        btn.innerHTML = `${ICON_PDF} Gerar PDF do mês`;
         head.appendChild(btn);
         btn.addEventListener('click', () => {
             if (!histFilters.profissionalId) {
@@ -2012,7 +1955,7 @@ function renderHistorico(root) {
         const pdfBtn = document.createElement('button');
         pdfBtn.className = 'calendar-btn';
         pdfBtn.title = 'Imprimir histórico (PDF)';
-        pdfBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>`;
+        pdfBtn.innerHTML = ICON_PDF;
         pdfBtn.addEventListener('click', () => {
             if (!histFilters.profissionalId) {
                 toast('Selecione um profissional para gerar o PDF.', 'warning');
@@ -2027,7 +1970,6 @@ function renderHistorico(root) {
 function historicoFiltrado() {
     const ref = window.currentMonth || new Date();
     return DB.getAtendimentos()
-        /* Só clientes cadastrados: clienteId não nulo e existente em Clientes */
         .filter(a => a.clienteId && byId(DB.getClientes(), a.clienteId))
         .filter(a => a.status === 'atendido' || a.status === 'cancelado')
         .filter(a => {
@@ -2046,7 +1988,7 @@ function historicoFiltrado() {
 }
 
 /* ============================================================
-   MÓDULO · RELATÓRIOS (geral, inclui avulsos)
+   MÓDULO · RELATÓRIOS
    ============================================================ */
 function renderRelatorios(root) {
     const atendimentos = DB.getAtendimentos();
@@ -2055,7 +1997,7 @@ function renderRelatorios(root) {
     const total = atendimentos.length;
     const atendidos = atendimentos.filter(a => a.status === 'atendido').length;
     const cancelados = atendimentos.filter(a => a.status === 'cancelado').length;
-    const avulsos = atendimentos.filter(a => !a.clienteId).length;
+    const semCadastro = atendimentos.filter(a => !a.clienteId).length;
 
     const porProf = {};
     const porCanal = {};
@@ -2081,7 +2023,7 @@ function renderRelatorios(root) {
     `;
 
     root.innerHTML = `
-        ${moduleHead('Relatórios', 'Indicadores consolidados da operação (inclui atendimentos avulsos).')}
+        ${moduleHead('Relatórios', 'Indicadores consolidados da operação.')}
 
         <div class="dashboard-grid">
             <div class="stat-card">
@@ -2098,7 +2040,7 @@ function renderRelatorios(root) {
             </div>
             <div class="stat-card">
                 <div class="stat-icon stat-icon-warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M2 12h20"/></svg></div>
-                <div class="stat-content"><div class="stat-value stat-value-warning">${avulsos}</div><div class="stat-label">Avulsos</div></div>
+                <div class="stat-content"><div class="stat-value stat-value-warning">${semCadastro}</div><div class="stat-label">Clientes s/ cadastro</div></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon stat-icon-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
@@ -2106,22 +2048,22 @@ function renderRelatorios(root) {
             </div>
         </div>
 
-        <div class="card" style="padding:1.5rem;">
+        <div class="card" style="padding:1.25rem;">
             <div class="info-section"><h4>Atendimentos por profissional</h4>
-                <div class="report-bars">${Object.entries(porProf).map(([id, v]) => bar(profissionalNome(id), v, maxProf)).join('') || '<span style="color:var(--text-secondary);font-size:0.85rem;">Sem dados.</span>'}</div>
+                <div class="report-bars">${Object.entries(porProf).map(([id, v]) => bar(profissionalNome(id), v, maxProf)).join('') || '<span style="color:var(--text-secondary);font-size:0.78rem;">Sem dados.</span>'}</div>
             </div>
         </div>
 
-        <div class="card" style="padding:1.5rem;">
+        <div class="card" style="padding:1.25rem;">
             <div class="info-section"><h4>Atendimentos por canal</h4>
-                <div class="report-bars">${Object.entries(porCanal).map(([id, v]) => bar(canalNome(id), v, maxCanal)).join('') || '<span style="color:var(--text-secondary);font-size:0.85rem;">Sem dados.</span>'}</div>
+                <div class="report-bars">${Object.entries(porCanal).map(([id, v]) => bar(canalNome(id), v, maxCanal)).join('') || '<span style="color:var(--text-secondary);font-size:0.78rem;">Sem dados.</span>'}</div>
             </div>
         </div>
 
-        <div class="card" style="padding:1.5rem;">
+        <div class="card" style="padding:1.25rem;">
             <div class="info-section"><h4>Serviços mais realizados</h4>
                 <div class="report-bars">
-                    ${Object.entries(porServico).sort((a,b) => b[1] - a[1]).map(([s, v]) => bar(s, v, maxServico)).join('') || '<span style="color:var(--text-secondary);font-size:0.85rem;">Sem dados.</span>'}
+                    ${Object.entries(porServico).sort((a,b) => b[1] - a[1]).map(([s, v]) => bar(s, v, maxServico)).join('') || '<span style="color:var(--text-secondary);font-size:0.78rem;">Sem dados.</span>'}
                 </div>
             </div>
         </div>
@@ -2135,10 +2077,10 @@ function renderConfig(root) {
     root.innerHTML = `
         ${moduleHead('Configurações', 'Preferências gerais e restauração de dados.')}
 
-        <div class="card" style="padding:1.75rem;">
+        <div class="card" style="padding:1.5rem;">
             <div class="info-section">
                 <h4>Dados da demonstração</h4>
-                <p style="color:var(--text-secondary);font-size:0.88rem;margin-bottom:1rem;">
+                <p style="color:var(--text-secondary);font-size:0.82rem;margin-bottom:0.85rem;">
                     Restaurar apaga todas as alterações feitas nesta demonstração e recarrega os dados iniciais.
                 </p>
                 <button class="danger" id="resetDemo">Restaurar dados de demonstração</button>
