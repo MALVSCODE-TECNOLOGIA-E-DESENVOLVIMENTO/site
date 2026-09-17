@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login · Autenticação</title>
+    <title>Login e Autenticação</title>
 
     <!-- Favicon — caminho absoluto para a raiz do domínio -->
     <link rel="icon" type="image/png" href="/imagens/malvscode-logo.png" sizes="32x32"/>
@@ -17,11 +17,11 @@
 </head>
 <body>
 
-    <!-- Botão "Voltar ao site" (visível nas duas telas) -->
-    <a class="back-link" href="/#sistemas">← Voltar ao site</a>
+    <!-- Botão "Voltar ao site" (global) -->
+    <a class="back-link" href="/#sistemas">Voltar ao site</a>
 
     <!-- ============================================ -->
-    <!-- TELA 1 — INTRODUÇÃO                          -->
+    <!-- TELA 1 — INTRODUÇÃO (azul)                   -->
     <!-- ============================================ -->
     <div id="introScreen" class="intro-screen">
         <span class="line line-h"></span>
@@ -34,13 +34,8 @@
         <span class="line line-v"></span>
 
         <div class="intro-inner">
-            <span class="eyebrow">Módulo · Demonstração</span>
+            <span class="eyebrow">Módulo</span>
             <h1 class="intro-title">Tela de Login<br>e Autenticação</h1>
-
-            <p class="intro-subtitle">
-                Uma demonstração funcional de como um sistema moderno recebe seus usuários:
-                identificação, validação de credenciais e confirmação de sessão.
-            </p>
 
             <div class="intro-features">
                 <div class="feature-line">
@@ -79,8 +74,8 @@
     <!-- ============================================ -->
     <div id="loginScreen" class="login-screen hidden">
 
-        <!-- Painel esquerdo (informativo) -->
-        <aside class="login-aside">
+        <!-- Painel azul (apenas decorativo, sem texto) -->
+        <aside class="login-aside" aria-hidden="true">
             <span class="line line-h"></span>
             <span class="line line-h"></span>
             <span class="line line-h"></span>
@@ -89,36 +84,9 @@
             <span class="line line-v"></span>
             <span class="line line-v"></span>
             <span class="line line-v"></span>
-
-            <div class="login-aside-inner">
-                <span class="eyebrow">Módulo</span>
-                <h1 class="module-name">Tela de Login<br>e Autenticação</h1>
-
-                <div class="login-features">
-                    <div class="feature-line">
-                        <span class="feature-index">01</span>
-                        <span>Identificação de usuário</span>
-                    </div>
-                    <div class="feature-line">
-                        <span class="feature-index">02</span>
-                        <span>Validação de credenciais</span>
-                    </div>
-                    <div class="feature-line">
-                        <span class="feature-index">03</span>
-                        <span>Confirmação de sessão</span>
-                    </div>
-                </div>
-
-                <div class="login-instructions">
-                    <div class="instructions-label">Como interagir</div>
-                    <p>Preencha o usuário e a senha para acessar o sistema.</p>
-                </div>
-            </div>
-
-            <div class="login-aside-footer">USO INTERNO</div>
         </aside>
 
-        <!-- Painel direito (formulário) -->
+        <!-- Painel do formulário -->
         <div class="login-form-side">
             <div class="login-form-wrapper">
 
