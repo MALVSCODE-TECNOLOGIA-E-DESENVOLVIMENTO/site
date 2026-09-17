@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login · Autenticação</title>
+
+    <!-- Favicon — caminho absoluto para a raiz do domínio -->
+    <link rel="icon" type="image/png" href="/imagens/malvscode-logo.png" sizes="32x32"/>
+    <link rel="shortcut icon" type="image/png" href="/imagens/malvscode-logo.png"/>
+    <link rel="apple-touch-icon" href="/imagens/malvscode-logo.png"/>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -11,21 +17,13 @@
 </head>
 <body>
 
-    <!-- ============================================ -->
-    <!-- BARRA DE DEMONSTRAÇÃO                        -->
-    <!-- ============================================ -->
+    <!-- Botão "Voltar ao site" -->
     <a class="back-link" href="/#sistemas">← Voltar ao site</a>
-    <span class="demo-tag">Demonstração interativa — dados fictícios</span>
 
-    <!-- ============================================ -->
-    <!-- TELA DE LOGIN                                -->
-    <!-- ============================================ -->
+    <!-- TELA DE LOGIN -->
     <div id="loginScreen" class="login-screen">
 
-        <!-- Painel esquerdo: descrição do módulo -->
         <aside class="login-aside">
-
-            <!-- Linhas animadas ao fundo -->
             <span class="line line-h"></span>
             <span class="line line-h"></span>
             <span class="line line-h"></span>
@@ -40,18 +38,9 @@
                 <h1 class="module-name">Tela de Login<br>e Autenticação</h1>
 
                 <div class="login-features">
-                    <div class="feature-line">
-                        <span class="feature-index">01</span>
-                        <span>Identificação de usuário</span>
-                    </div>
-                    <div class="feature-line">
-                        <span class="feature-index">02</span>
-                        <span>Validação de credenciais</span>
-                    </div>
-                    <div class="feature-line">
-                        <span class="feature-index">03</span>
-                        <span>Confirmação de sessão</span>
-                    </div>
+                    <div class="feature-line"><span class="feature-index">01</span><span>Identificação de usuário</span></div>
+                    <div class="feature-line"><span class="feature-index">02</span><span>Validação de credenciais</span></div>
+                    <div class="feature-line"><span class="feature-index">03</span><span>Confirmação de sessão</span></div>
                 </div>
 
                 <div class="login-instructions">
@@ -59,14 +48,13 @@
                     <p>Escreva seu nome e digite a senha <strong>2026</strong>.</p>
                 </div>
             </div>
+
             <div class="login-aside-footer">USO INTERNO</div>
         </aside>
 
-        <!-- Painel direito: formulário -->
         <div class="login-form-side">
             <div class="login-form-wrapper">
 
-                <!-- Caixa da logo (cantos 90º) -->
                 <div class="logo-box" aria-label="Espaço reservado para logotipo">
                     <span class="corner tl"></span>
                     <span class="corner tr"></span>
@@ -99,9 +87,7 @@
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- SPLASH DE CARREGAMENTO                       -->
-    <!-- ============================================ -->
+    <!-- SPLASH DE CARREGAMENTO -->
     <div id="splashScreen" class="splash-screen hidden">
         <div class="splash-inner">
             <div class="splash-greeting" id="splashGreeting"></div>
