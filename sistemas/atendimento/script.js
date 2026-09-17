@@ -32,11 +32,10 @@ const Storage = {
     }
 };
 
-/* IDs */
+/* IDs e datas */
 const uid = (prefix = 'id') =>
     `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`;
 
-/* Datas */
 const pad = n => String(n).padStart(2, '0');
 const toDateInput = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const todayInput  = () => toDateInput(new Date());
@@ -54,29 +53,29 @@ const fmtDateTime = iso => {
     return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
-/* Gera ID numérico formatado para agendamentos: AG-0001, AG-0002... */
+/* Sigla ME-XXXX */
 function nextAgendamentoCodigo() {
     const list = DB.getAgendamentos();
     let max = 0;
     list.forEach(a => {
-        const m = String(a.codigo || '').match(/AG-(\d+)/);
+        const m = String(a.codigo || '').match(/ME-(\d+)/);
         if (m) max = Math.max(max, Number(m[1]));
     });
-    return `AG-${String(max + 1).padStart(4, '0')}`;
+    return `ME-${String(max + 1).padStart(4, '0')}`;
 }
 
 /* ============================================================
-   SEED
+   SEED (v3)
    ============================================================ */
 function seed() {
-    if (Storage.read('seeded.v2', false)) return;
+    if (Storage.read('seeded.v3', false)) return;
 
     const clientes = [
-        { id: 'cl_1', nome: 'Ana Paula Ribeiro', contato: '(27) 99811-1001', email: 'ana.ribeiro@exemplo.com', documento: '000.111.222-33', observacoes: 'Prefere contato por WhatsApp.', dataCadastro: '2025-08-14' },
-        { id: 'cl_2', nome: 'Bruno Cardoso',     contato: '(27) 99811-1002', email: 'bruno.cardoso@exemplo.com', documento: '111.222.333-44', observacoes: '', dataCadastro: '2025-09-02' },
-        { id: 'cl_3', nome: 'Carla Menezes',     contato: '(27) 99811-1003', email: 'carla.menezes@exemplo.com', documento: '222.333.444-55', observacoes: 'Cliente recorrente.', dataCadastro: '2025-06-20' },
-        { id: 'cl_4', nome: 'Diego Farias',      contato: '(27) 99811-1004', email: 'diego.farias@exemplo.com', documento: '333.444.555-66', observacoes: '', dataCadastro: '2025-10-05' },
-        { id: 'cl_5', nome: 'Eduarda Lopes',     contato: '(27) 99811-1005', email: 'eduarda.lopes@exemplo.com', documento: '444.555.666-77', observacoes: 'Indicada pela Ana.', dataCadastro: '2025-11-18' }
+        { id: 'ME-0001', nome: 'Ana Paula Ribeiro', contato: '(27) 99811-1001', email: 'ana.ribeiro@exemplo.com', observacoes: 'Prefere contato por WhatsApp.', dataCadastro: '2025-08-14' },
+        { id: 'ME-0002', nome: 'Bruno Cardoso',     contato: '(27) 99811-1002', email: 'bruno.cardoso@exemplo.com', observacoes: '', dataCadastro: '2025-09-02' },
+        { id: 'ME-0003', nome: 'Carla Menezes',     contato: '(27) 99811-1003', email: 'carla.menezes@exemplo.com', observacoes: 'Cliente recorrente.', dataCadastro: '2025-06-20' },
+        { id: 'ME-0004', nome: 'Diego Farias',      contato: '(27) 99811-1004', email: 'diego.farias@exemplo.com', observacoes: '', dataCadastro: '2025-10-05' },
+        { id: 'ME-0005', nome: 'Eduarda Lopes',     contato: '(27) 99811-1005', email: 'eduarda.lopes@exemplo.com', observacoes: 'Indicada pela Ana.', dataCadastro: '2025-11-18' }
     ];
 
     const profissionais = [
@@ -100,32 +99,69 @@ function seed() {
     const em3 = new Date(hoje); em3.setDate(em3.getDate() + 3);
     const em7 = new Date(hoje); em7.setDate(em7.getDate() + 7);
 
+    /* Agendamentos com clienteId já apontando para os ME-* do seed */
     const agendamentos = [
-        { id: 'ag_1', codigo: 'AG-0001', clienteId: 'cl_1', servicoNome: 'Consultoria Inicial',   profissionalId: 'pr_1', data: isoHoje,            hora: '09:00', status: 'agendado',  canalId: 'cn_1', observacoes: '' },
-        { id: 'ag_2', codigo: 'AG-0002', clienteId: 'cl_3', servicoNome: 'Instalação Padrão',     profissionalId: 'pr_2', data: isoHoje,            hora: '14:00', status: 'agendado',  canalId: 'cn_2', observacoes: '' },
-        { id: 'ag_3', codigo: 'AG-0003', clienteId: 'cl_2', servicoNome: 'Suporte Avançado',      profissionalId: 'pr_1', data: toDateInput(ontem), hora: '10:30', status: 'cancelado', canalId: 'cn_3', observacoes: 'Cliente avisou que não poderá comparecer.' },
-        { id: 'ag_4', codigo: 'AG-0004', clienteId: 'cl_5', servicoNome: 'Manutenção Preventiva', profissionalId: 'pr_2', data: toDateInput(amanha),hora: '11:00', status: 'agendado',  canalId: 'cn_1', observacoes: '' },
-        { id: 'ag_5', codigo: 'AG-0005', clienteId: 'cl_1', servicoNome: 'Suporte Avançado',      profissionalId: 'pr_3', data: toDateInput(em3),   hora: '15:30', status: 'agendado',  canalId: 'cn_4', observacoes: '' },
-        { id: 'ag_6', codigo: 'AG-0006', clienteId: 'cl_3', servicoNome: 'Consultoria Inicial',   profissionalId: 'pr_1', data: toDateInput(em7),   hora: '10:00', status: 'agendado',  canalId: 'cn_1', observacoes: '' }
+        { id: 'ag_1', codigo: 'ME-0001', clienteId: 'ME-0001', clienteNome: 'Ana Paula Ribeiro', clienteContato: '(27) 99811-1001', clienteEmail: 'ana.ribeiro@exemplo.com', servicoNome: 'Consultoria Inicial',   profissionalId: 'pr_1', data: isoHoje,            hora: '09:00', status: 'agendado',  canalId: 'cn_1', observacoes: '' },
+        { id: 'ag_2', codigo: 'ME-0002', clienteId: 'ME-0003', clienteNome: 'Carla Menezes',     clienteContato: '(27) 99811-1003', clienteEmail: 'carla.menezes@exemplo.com', servicoNome: 'Instalação Padrão',     profissionalId: 'pr_2', data: isoHoje,            hora: '14:00', status: 'agendado',  canalId: 'cn_2', observacoes: '' },
+        { id: 'ag_3', codigo: 'ME-0003', clienteId: 'ME-0002', clienteNome: 'Bruno Cardoso',     clienteContato: '(27) 99811-1002', clienteEmail: 'bruno.cardoso@exemplo.com', servicoNome: 'Suporte Avançado',      profissionalId: 'pr_1', data: toDateInput(ontem), hora: '10:30', status: 'cancelado', canalId: 'cn_3', observacoes: 'Cliente avisou que não poderá comparecer.' },
+        { id: 'ag_4', codigo: 'ME-0004', clienteId: 'ME-0005', clienteNome: 'Eduarda Lopes',     clienteContato: '(27) 99811-1005', clienteEmail: 'eduarda.lopes@exemplo.com', servicoNome: 'Manutenção Preventiva', profissionalId: 'pr_2', data: toDateInput(amanha),hora: '11:00', status: 'agendado',  canalId: 'cn_1', observacoes: '' },
+        { id: 'ag_5', codigo: 'ME-0005', clienteId: 'ME-0001', clienteNome: 'Ana Paula Ribeiro', clienteContato: '(27) 99811-1001', clienteEmail: 'ana.ribeiro@exemplo.com', servicoNome: 'Suporte Avançado',      profissionalId: 'pr_3', data: toDateInput(em3),   hora: '15:30', status: 'agendado',  canalId: 'cn_4', observacoes: '' },
+        { id: 'ag_6', codigo: 'ME-0006', clienteId: 'ME-0003', clienteNome: 'Carla Menezes',     clienteContato: '(27) 99811-1003', clienteEmail: 'carla.menezes@exemplo.com', servicoNome: 'Consultoria Inicial',   profissionalId: 'pr_1', data: toDateInput(em7),   hora: '10:00', status: 'agendado',  canalId: 'cn_1', observacoes: '' }
     ];
 
-    const atendimentos = [
-        { id: 'at_1', agendamentoId: 'ag_1', clienteId: 'cl_1', servicoNome: 'Consultoria Inicial',   profissionalId: 'pr_1', data: isoHoje,            hora: '09:00', canalId: 'cn_1', status: 'agendado',  observacoes: [] },
-        { id: 'at_2', agendamentoId: 'ag_2', clienteId: 'cl_3', servicoNome: 'Instalação Padrão',     profissionalId: 'pr_2', data: isoHoje,            hora: '14:00', canalId: 'cn_2', status: 'agendado',  observacoes: [] },
-        { id: 'at_3', agendamentoId: 'ag_3', clienteId: 'cl_2', servicoNome: 'Suporte Avançado',      profissionalId: 'pr_1', data: toDateInput(ontem), hora: '10:30', canalId: 'cn_3', status: 'cancelado', observacoes: [{ texto: 'Cliente não compareceu. Reagendar.', autor: 'Recepção', timestamp: nowISO() }] },
-        { id: 'at_4', agendamentoId: 'ag_4', clienteId: 'cl_5', servicoNome: 'Manutenção Preventiva', profissionalId: 'pr_2', data: toDateInput(amanha),hora: '11:00', canalId: 'cn_1', status: 'agendado',  observacoes: [] },
-        { id: 'at_5', agendamentoId: 'ag_5', clienteId: 'cl_1', servicoNome: 'Suporte Avançado',      profissionalId: 'pr_3', data: toDateInput(em3),   hora: '15:30', canalId: 'cn_4', status: 'agendado',  observacoes: [] },
-        { id: 'at_6', agendamentoId: null,   clienteId: 'cl_3', servicoNome: 'Consultoria Inicial',   profissionalId: 'pr_1', data: toDateInput(ontem), hora: '16:00', canalId: 'cn_3', status: 'atendido',  observacoes: [{ texto: 'Atendimento concluído com sucesso.', autor: 'Mariana Alves', timestamp: nowISO() }] },
-        { id: 'at_7', agendamentoId: null,   clienteId: 'cl_4', servicoNome: 'Instalação Padrão',     profissionalId: 'pr_2', data: toDateInput(ontem), hora: '13:00', canalId: 'cn_5', status: 'cancelado', observacoes: [{ texto: 'Cliente solicitou cancelamento.', autor: 'Recepção', timestamp: nowISO() }] },
-        { id: 'at_8', agendamentoId: null,   clienteId: 'cl_5', servicoNome: 'Suporte Avançado',      profissionalId: 'pr_3', data: isoHoje,            hora: '08:00', canalId: 'cn_1', status: 'atendido',  observacoes: [] }
-    ];
+    /* Atendimentos — sempre 1:1 com agendamentos do seed */
+    const atendimentos = agendamentos.map((ag, i) => ({
+        id: `at_${i+1}`,
+        agendamentoId: ag.id,
+        codigo: ag.codigo,
+        clienteId: ag.clienteId,
+        clienteNome: ag.clienteNome,
+        servicoNome: ag.servicoNome,
+        profissionalId: ag.profissionalId,
+        data: ag.data,
+        hora: ag.hora,
+        canalId: ag.canalId,
+        status: ag.status,
+        observacoes: ag.observacoes ? [{ texto: ag.observacoes, autor: 'Recepção', timestamp: nowISO() }] : []
+    }));
+
+    /* Mais um atendido e um avulso, para o seed não ficar uniforme */
+    atendimentos.push({
+        id: 'at_extra_1',
+        agendamentoId: null,
+        codigo: null,
+        clienteId: 'ME-0003',
+        clienteNome: 'Carla Menezes',
+        servicoNome: 'Consultoria Inicial',
+        profissionalId: 'pr_1',
+        data: toDateInput(ontem),
+        hora: '16:00',
+        canalId: 'cn_3',
+        status: 'atendido',
+        observacoes: [{ texto: 'Atendimento concluído com sucesso.', autor: 'Mariana Alves', timestamp: nowISO() }]
+    });
+
+    atendimentos.push({
+        id: 'at_extra_2',
+        agendamentoId: null,
+        codigo: null,
+        clienteId: null,
+        clienteNome: 'Visitante — atendimento avulso',
+        servicoNome: 'Instalação Padrão',
+        profissionalId: 'pr_2',
+        data: toDateInput(ontem),
+        hora: '13:00',
+        canalId: 'cn_5',
+        status: 'cancelado',
+        observacoes: [{ texto: 'Cliente solicitou cancelamento.', autor: 'Recepção', timestamp: nowISO() }]
+    });
 
     const comunicacoes = [
-        { id: 'co_1', clienteId: 'cl_1', canalId: 'cn_1', assunto: 'Dúvida sobre prazos',      status: 'aguardando', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),  observacoes: [] },
-        { id: 'co_2', clienteId: 'cl_4', canalId: 'cn_3', assunto: 'Solicitação de orçamento', status: 'aguardando', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString(), observacoes: [] },
-        { id: 'co_3', clienteId: 'cl_2', canalId: 'cn_2', assunto: 'Reagendamento',            status: 'aguardando', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),  observacoes: [] },
-        { id: 'co_4', clienteId: 'cl_5', canalId: 'cn_4', assunto: 'Confirmação de cadastro',  status: 'atendido',   createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(), observacoes: [] },
-        { id: 'co_5', clienteId: 'cl_3', canalId: 'cn_1', assunto: 'Confirmação de horário',   status: 'aguardando', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(), observacoes: [] }
+        { id: 'co_1', clienteId: 'ME-0001', canalId: 'cn_1', assunto: 'Dúvida sobre prazos',      status: 'aguardando', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),  concluidoAt: null },
+        { id: 'co_2', clienteId: 'ME-0004', canalId: 'cn_3', assunto: 'Solicitação de orçamento', status: 'aguardando', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString(), concluidoAt: null },
+        { id: 'co_3', clienteId: 'ME-0002', canalId: 'cn_2', assunto: 'Reagendamento',            status: 'aguardando', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),  concluidoAt: null },
+        { id: 'co_4', clienteId: 'ME-0005', canalId: 'cn_4', assunto: 'Confirmação de cadastro',  status: 'atendido',   createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(), concluidoAt: new Date(Date.now() - 1000 * 60 * 60 * 47).toISOString() },
+        { id: 'co_5', clienteId: 'ME-0003', canalId: 'cn_1', assunto: 'Confirmação de horário',   status: 'aguardando', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(), concluidoAt: null }
     ];
 
     Storage.write('clientes', clientes);
@@ -134,18 +170,13 @@ function seed() {
     Storage.write('agendamentos', agendamentos);
     Storage.write('atendimentos', atendimentos);
     Storage.write('comunicacoes', comunicacoes);
-    Storage.write('config.funcionamento', {
-        inicio: '08:00',
-        fim: '18:00',
-        intervaloMin: 30,
-        diasUteis: [1, 2, 3, 4, 5, 6]
-    });
-    Storage.write('seeded.v2', true);
+    Storage.write('config.funcionamento', { inicio: '08:00', fim: '18:00', intervaloMin: 30, diasUteis: [1,2,3,4,5,6] });
+    Storage.write('seeded.v3', true);
 }
 seed();
 
 /* ============================================================
-   Helpers de dados
+   DB
    ============================================================ */
 const DB = {
     getClientes:      () => Storage.read('clientes', []),
@@ -169,17 +200,17 @@ const profissionalNome = id => byId(DB.getProfissionais(), id)?.nome || '—';
 const canalNome        = id => byId(DB.getCanais(), id)?.nome || '—';
 
 /* ============================================================
-   Módulos da sidebar — Profissionais antes de Controle de Atendimento
+   Módulos
    ============================================================ */
 const MODULES = [
-    { id: 'profissionais', label: 'Profissionais',           short: 'Profissionais', icon: 'userCheck' },
-    { id: 'atendimentos',  label: 'Controle de Atendimento', short: 'Atendimentos',  icon: 'calendarCheck' },
-    { id: 'agendamentos',  label: 'Agendamentos',            short: 'Agendamentos',  icon: 'clock' },
-    { id: 'canais',        label: 'Canais de Atendimento',   short: 'Canais',        icon: 'inbox' },
-    { id: 'clientes',      label: 'Clientes',                short: 'Clientes',      icon: 'users' },
-    { id: 'historico',     label: 'Histórico de Atendimento',short: 'Histórico',     icon: 'history' },
-    { id: 'relatorios',    label: 'Relatórios',              short: 'Relatórios',    icon: 'barChart' },
-    { id: 'config',        label: 'Configurações',           short: 'Configurações', icon: 'settings' }
+    { id: 'profissionais', label: 'Profissionais',            short: 'Profissionais', icon: 'userCheck' },
+    { id: 'atendimentos',  label: 'Controle de Atendimento',  short: 'Atendimentos',  icon: 'calendarCheck' },
+    { id: 'agendamentos',  label: 'Agendamentos',             short: 'Agendamentos',  icon: 'clock' },
+    { id: 'canais',        label: 'Canais de Atendimento',    short: 'Canais',        icon: 'inbox' },
+    { id: 'clientes',      label: 'Clientes',                 short: 'Clientes',      icon: 'users' },
+    { id: 'historico',     label: 'Histórico de Atendimento', short: 'Histórico',     icon: 'history' },
+    { id: 'relatorios',    label: 'Relatórios',               short: 'Relatórios',    icon: 'barChart' },
+    { id: 'config',        label: 'Configurações',            short: 'Configurações', icon: 'settings' }
 ];
 
 const ICONS = {
@@ -193,21 +224,21 @@ const ICONS = {
     settings:      `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`
 };
 
+const ICON_DOC  = `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>`;
+const ICON_CHAT = `<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
+
 const MONTH_NAMES = [
     'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
     'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
 ];
 
-/* Mês de referência global */
 window.currentMonth = new Date();
 window.setCurrentMonth = function (d) {
     window.currentMonth = d;
     const el = document.getElementById('currentMonth');
     if (el) el.textContent = `${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
-    // Atualiza o mês em qualquer módulo que tenha o botão
-    if (document.getElementById('appScreen') && !document.getElementById('appScreen').classList.contains('hidden')) {
-        renderRoute();
-    }
+    const app = document.getElementById('appScreen');
+    if (app && !app.classList.contains('hidden')) renderRoute();
 };
 
 /* ============================================================
@@ -228,7 +259,7 @@ function toast(message, type = 'info', ttl = 3000) {
     }, ttl);
 }
 
-function openModal({ title, bodyHTML, actions = [], size = '', neutral = false }) {
+function openModal({ title, bodyHTML, actions = [], size = '', neutral = false, closableByOverlay = true }) {
     const root = document.getElementById('modalRoot');
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay show';
@@ -253,12 +284,11 @@ function openModal({ title, bodyHTML, actions = [], size = '', neutral = false }
     };
 
     overlay.querySelector('[data-close]').addEventListener('click', close);
-    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    overlay.addEventListener('click', e => {
+        if (e.target === overlay && closableByOverlay) close();
+    });
     const escHandler = e => {
-        if (e.key === 'Escape') {
-            close();
-            document.removeEventListener('keydown', escHandler);
-        }
+        if (e.key === 'Escape') { close(); document.removeEventListener('keydown', escHandler); }
     };
     document.addEventListener('keydown', escHandler);
 
@@ -278,18 +308,19 @@ function openModal({ title, bodyHTML, actions = [], size = '', neutral = false }
     return { overlay, close };
 }
 
-function confirmDialog(message, { confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', danger = true } = {}) {
+function confirmDialog(message, { confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', onConfirm, onCancel } = {}) {
     return new Promise(resolve => {
         const { overlay } = openModal({
             title: '',
+            closableByOverlay: false,
             bodyHTML: `
                 <div class="confirm-modal-body">
                     <h3 class="confirm-modal-title">${message}</h3>
                 </div>
             `,
             actions: [
-                { label: cancelLabel, class: 'secondary', onClick: () => { resolve(false); } },
-                { label: confirmLabel, class: danger ? 'danger' : 'success', onClick: () => { resolve(true); } }
+                { label: cancelLabel, class: 'confirm-nao', onClick: () => { resolve(false); if (onCancel) onCancel(); } },
+                { label: confirmLabel, class: 'confirm-sim', onClick: () => { resolve(true); if (onConfirm) onConfirm(); } }
             ]
         });
         overlay.querySelector('.modal-content').classList.add('confirm-modal-content');
@@ -306,7 +337,7 @@ function confirmDialog(message, { confirmLabel = 'Confirmar', cancelLabel = 'Can
 function parseHash() {
     const raw = (location.hash || '').replace(/^#\/?/, '');
     const parts = raw.split('/').filter(Boolean);
-    return { module: parts[0] || 'atendimentos', rest: parts.slice(1) };
+    return { module: parts[0] || 'profissionais', rest: parts.slice(1) };
 }
 
 const RENDERERS = {
@@ -426,12 +457,8 @@ function moduleHead(title, subtitle, buttonHTML = '') {
     `;
 }
 
-/* Ícones reutilizáveis */
-const ICON_DOC = `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>`;
-const ICON_CHAT = `<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`;
-
 /* ============================================================
-   Calendário (compartilhado)
+   Calendário compartilhado
    ============================================================ */
 function ensureCalendarModal() {
     if (document.getElementById('calendarModal')) return;
@@ -452,6 +479,12 @@ function ensureCalendarModal() {
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', html);
+
+    // Fechar ao clicar fora
+    const modal = document.getElementById('calendarModal');
+    modal.addEventListener('click', e => {
+        if (e.target === modal) modal.classList.remove('show');
+    });
 }
 
 let calendarYear = new Date().getFullYear();
@@ -490,7 +523,6 @@ function renderCalendarMonths() {
     }).join('');
 }
 
-/* Bloco HTML de calendário + navegação de mês (para reaproveitar nos módulos) */
 function monthNavBlock() {
     const ref = window.currentMonth || new Date();
     return `
@@ -524,7 +556,34 @@ function bindMonthNav(root) {
 }
 
 /* ============================================================
-   MÓDULO · PROFISSIONAIS (primeiro da sidebar)
+   Match de cliente no agendamento (nome → contato → email)
+   ============================================================ */
+function encontrarClienteExistente({ nome, contato, email }) {
+    const clientes = DB.getClientes();
+    const n = (nome || '').trim().toLowerCase();
+    const c = (contato || '').trim().toLowerCase();
+    const e = (email || '').trim().toLowerCase();
+
+    // 1) Nome
+    if (n) {
+        const byNome = clientes.find(cl => (cl.nome || '').trim().toLowerCase() === n);
+        if (byNome) return byNome;
+    }
+    // 2) Contato
+    if (c) {
+        const byContato = clientes.find(cl => (cl.contato || '').trim().toLowerCase() === c);
+        if (byContato) return byContato;
+    }
+    // 3) E-mail
+    if (e) {
+        const byEmail = clientes.find(cl => (cl.email || '').trim().toLowerCase() === e);
+        if (byEmail) return byEmail;
+    }
+    return null;
+}
+
+/* ============================================================
+   MÓDULO · PROFISSIONAIS
    ============================================================ */
 function renderProfissionais(root) {
     const list = DB.getProfissionais();
@@ -616,11 +675,6 @@ function openProfissionalModal(editId) {
 
 /* ============================================================
    MÓDULO · CONTROLE DE ATENDIMENTO
-   ------------------------------------------------------------
-   Os status são lidos do Agendamento (que é quem comanda).
-   O checkbox marca como atendido direto no agendamento vinculado.
-   A edição é feita pelo módulo Agendamentos.
-   O botão de chat abre o modal Ver já na aba Observações.
    ============================================================ */
 let atendFilters = { status: '', clienteId: '', profissionalId: '', q: '' };
 
@@ -637,18 +691,26 @@ function atendimentosFiltrados() {
         if (clienteId && a.clienteId !== clienteId) return false;
         if (profissionalId && a.profissionalId !== profissionalId) return false;
         if (ql) {
-            const hay = (clienteNome(a.clienteId) + ' ' + profissionalNome(a.profissionalId) + ' ' + (a.servicoNome || '')).toLowerCase();
+            const hay = (clienteNome(a.clienteId) + ' ' + (a.clienteNome || '') + ' ' + profissionalNome(a.profissionalId) + ' ' + (a.servicoNome || '')).toLowerCase();
             if (!hay.includes(ql)) return false;
         }
         return true;
     }).sort((a, b) => (a.data + a.hora).localeCompare(b.data + b.hora));
 }
 
-/* Devolve o código visual do agendamento vinculado ao atendimento */
 function codigoDoAtendimento(a) {
-    if (!a.agendamentoId) return '—';
+    if (a.codigo) return a.codigo;
+    if (!a.agendamentoId) return null;
     const ag = DB.getAgendamentos().find(x => x.id === a.agendamentoId);
-    return ag?.codigo || '—';
+    return ag?.codigo || null;
+}
+
+function nomeDoAtendimento(a) {
+    if (a.clienteId) {
+        const cl = byId(DB.getClientes(), a.clienteId);
+        if (cl) return cl.nome;
+    }
+    return a.clienteNome || 'Atendimento avulso';
 }
 
 function renderAtendimentos(root) {
@@ -701,7 +763,7 @@ function renderAtendimentos(root) {
         <div class="search-bar-wrapper">
             <div class="search-bar">
                 <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                <input type="text" id="atQ" placeholder="Pesquisar por cliente, profissional ou serviço" value="${atendFilters.q}">
+                <input type="text" id="atQ" placeholder="Pesquisar por ID, cliente, profissional ou serviço" value="${atendFilters.q}">
                 <div class="search-bar-filters">
                     <div class="filter-dropdown-inline">
                         <select id="atStatus">
@@ -777,8 +839,8 @@ function renderAtendRows() {
         const cancelado = a.status === 'cancelado';
         const rowClass  = concluido ? 'row-atendido' : cancelado ? 'row-cancelado' : '';
         const codigo    = codigoDoAtendimento(a);
+        const nome      = nomeDoAtendimento(a);
 
-        /* Checkbox some quando cancelado */
         const checkboxCell = cancelado
             ? `<td style="text-align:center;"></td>`
             : `<td style="text-align:center;">
@@ -793,22 +855,18 @@ function renderAtendRows() {
         return `
             <tr class="${rowClass}">
                 ${checkboxCell}
-                <td><strong>${codigo}</strong></td>
+                <td><strong>${codigo || '—'}</strong></td>
                 <td>${fmtDate(a.data)}</td>
                 <td>${a.hora}</td>
-                <td>${clienteNome(a.clienteId)}</td>
+                <td>${nome}</td>
                 <td>${a.servicoNome || '—'}</td>
                 <td>${profissionalNome(a.profissionalId)}</td>
                 <td>${canalNome(a.canalId)}</td>
                 <td>${statusBadge(a.status)}</td>
                 <td>
                     <div style="display:flex;gap:4px;justify-content:flex-end;">
-                        <button class="btn-icon" data-view="${a.id}" title="Ver detalhes">
-                            ${ICON_DOC}
-                        </button>
-                        <button class="btn-icon" data-chat="${a.id}" title="Observações">
-                            ${ICON_CHAT}
-                        </button>
+                        <button class="btn-icon" data-view="${a.id}" title="Ver detalhes">${ICON_DOC}</button>
+                        <button class="btn-icon" data-chat="${a.id}" title="Observações">${ICON_CHAT}</button>
                     </div>
                 </td>
             </tr>
@@ -822,7 +880,6 @@ function renderAtendRows() {
     tbody.querySelectorAll('[data-chat]').forEach(b => b.addEventListener('click', () => viewAtendimento(b.dataset.chat, 'obs')));
 }
 
-/* Marcar como atendido altera o agendamento vinculado (que é quem comanda) */
 function toggleAtendimento(id, checked) {
     const ats = DB.getAtendimentos();
     const idx = ats.findIndex(x => x.id === id);
@@ -831,27 +888,22 @@ function toggleAtendimento(id, checked) {
     ats[idx].status = novoStatus;
     DB.setAtendimentos(ats);
 
-    // Reflete no agendamento vinculado
     if (ats[idx].agendamentoId) {
         const ags = DB.getAgendamentos();
         const iag = ags.findIndex(x => x.id === ats[idx].agendamentoId);
-        if (iag >= 0) {
-            ags[iag].status = novoStatus;
-            DB.setAgendamentos(ags);
-        }
+        if (iag >= 0) { ags[iag].status = novoStatus; DB.setAgendamentos(ags); }
     }
 
     renderAtendRows();
     toast(checked ? 'Atendimento marcado como atendido.' : 'Atendimento reaberto.', 'success');
 }
 
-/* Modal de visualização/observações.
-   A aba ativa pode ser 'dados' ou 'obs' — o chat abre em 'obs'. */
 function viewAtendimento(id, abaAtiva = 'dados') {
     const a = DB.getAtendimentos().find(x => x.id === id);
     if (!a) return;
 
     const codigo = codigoDoAtendimento(a);
+    const nome = nomeDoAtendimento(a);
     const obs = a.observacoes || [];
     const obsHTML = obs.length
         ? `<div class="observacoes-list">${obs.map(o => `
@@ -863,7 +915,7 @@ function viewAtendimento(id, abaAtiva = 'dados') {
         : '<p style="color:var(--text-secondary);font-size:0.85rem;">Nenhuma observação registrada.</p>';
 
     const { overlay } = openModal({
-        title: `Atendimento ${codigo} · ${clienteNome(a.clienteId)}`,
+        title: `Atendimento ${codigo || '—'} · ${nome}`,
         size: 'large',
         bodyHTML: `
             <div class="tabs-container">
@@ -874,10 +926,10 @@ function viewAtendimento(id, abaAtiva = 'dados') {
                 <div class="tab-content ${abaAtiva === 'dados' ? 'active' : ''}" data-pane="dados">
                     <div class="info-section">
                         <h4>Informações gerais</h4>
-                        <p><strong>ID:</strong> ${codigo}</p>
+                        <p><strong>ID:</strong> ${codigo || '—'}</p>
                         <p><strong>Data:</strong> ${fmtDate(a.data)}</p>
                         <p><strong>Hora:</strong> ${a.hora}</p>
-                        <p><strong>Cliente:</strong> ${clienteNome(a.clienteId)}</p>
+                        <p><strong>Cliente:</strong> ${nome}</p>
                         <p><strong>Serviço:</strong> ${a.servicoNome || '—'}</p>
                         <p><strong>Profissional:</strong> ${profissionalNome(a.profissionalId)}</p>
                         <p><strong>Canal:</strong> ${canalNome(a.canalId)}</p>
@@ -928,7 +980,7 @@ function viewAtendimento(id, abaAtiva = 'dados') {
 }
 
 /* ============================================================
-   MÓDULO · AGENDAMENTOS (quem comanda o fluxo)
+   MÓDULO · AGENDAMENTOS
    ============================================================ */
 let agFilters = { status: '', clienteId: '', profissionalId: '', q: '' };
 
@@ -945,7 +997,7 @@ function agendamentosFiltrados() {
         if (clienteId && a.clienteId !== clienteId) return false;
         if (profissionalId && a.profissionalId !== profissionalId) return false;
         if (ql) {
-            const hay = (a.codigo + ' ' + clienteNome(a.clienteId) + ' ' + profissionalNome(a.profissionalId) + ' ' + (a.servicoNome || '')).toLowerCase();
+            const hay = ((a.codigo || '') + ' ' + (a.clienteNome || '') + ' ' + profissionalNome(a.profissionalId) + ' ' + (a.servicoNome || '')).toLowerCase();
             if (!hay.includes(ql)) return false;
         }
         return true;
@@ -974,24 +1026,15 @@ function renderAgendamentos(root) {
         <div class="dashboard-grid">
             <div class="stat-card">
                 <div class="stat-icon stat-icon-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value stat-value-info">${agendados}</div>
-                    <div class="stat-label">Agendados</div>
-                </div>
+                <div class="stat-content"><div class="stat-value stat-value-info">${agendados}</div><div class="stat-label">Agendados</div></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon stat-icon-success"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value stat-value-success">${atendidos}</div>
-                    <div class="stat-label">Atendidos</div>
-                </div>
+                <div class="stat-content"><div class="stat-value stat-value-success">${atendidos}</div><div class="stat-label">Atendidos</div></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon stat-icon-danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
-                <div class="stat-content">
-                    <div class="stat-value stat-value-danger">${cancelados}</div>
-                    <div class="stat-label">Cancelados</div>
-                </div>
+                <div class="stat-content"><div class="stat-value stat-value-danger">${cancelados}</div><div class="stat-label">Cancelados</div></div>
             </div>
         </div>
 
@@ -1067,28 +1110,33 @@ function renderAgendRows() {
         tbody.innerHTML = `<tr><td colspan="9">${emptyState('Nenhum agendamento no período', 'Crie um novo agendamento ou ajuste os filtros.')}</td></tr>`;
         return;
     }
-    tbody.innerHTML = list.map(a => `
-        <tr>
-            <td><strong>${a.codigo || '—'}</strong></td>
-            <td>${fmtDate(a.data)}</td>
-            <td>${a.hora}</td>
-            <td>${clienteNome(a.clienteId)}</td>
-            <td>${a.servicoNome || '—'}</td>
-            <td>${profissionalNome(a.profissionalId)}</td>
-            <td>${canalNome(a.canalId)}</td>
-            <td>${statusBadge(a.status)}</td>
-            <td>
-                <div style="display:flex;gap:4px;justify-content:flex-end;">
-                    <button class="btn-icon" data-edit="${a.id}" title="Editar">
-                        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
-                    </button>
-                    <button class="btn-icon" data-cancel="${a.id}" title="Cancelar" ${a.status === 'cancelado' ? 'disabled' : ''}>
-                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                    </button>
-                </div>
-            </td>
-        </tr>
-    `).join('');
+    tbody.innerHTML = list.map(a => {
+        const nome = a.clienteId
+            ? (byId(DB.getClientes(), a.clienteId)?.nome || a.clienteNome || '—')
+            : (a.clienteNome || '—');
+        return `
+            <tr>
+                <td><strong>${a.codigo || '—'}</strong></td>
+                <td>${fmtDate(a.data)}</td>
+                <td>${a.hora}</td>
+                <td>${nome}</td>
+                <td>${a.servicoNome || '—'}</td>
+                <td>${profissionalNome(a.profissionalId)}</td>
+                <td>${canalNome(a.canalId)}</td>
+                <td>${statusBadge(a.status)}</td>
+                <td>
+                    <div style="display:flex;gap:4px;justify-content:flex-end;">
+                        <button class="btn-icon" data-edit="${a.id}" title="Editar">
+                            <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                        </button>
+                        <button class="btn-icon" data-cancel="${a.id}" title="Cancelar" ${a.status === 'cancelado' ? 'disabled' : ''}>
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
 
     tbody.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openAgendamentoModal(b.dataset.edit)));
     tbody.querySelectorAll('[data-cancel]').forEach(b => b.addEventListener('click', () => cancelarAgendamento(b.dataset.cancel)));
@@ -1103,7 +1151,6 @@ async function cancelarAgendamento(id) {
     list[idx].status = 'cancelado';
     DB.setAgendamentos(list);
 
-    // Reflete no atendimento vinculado
     const ats = DB.getAtendimentos();
     const iat = ats.findIndex(x => x.agendamentoId === id);
     if (iat >= 0) {
@@ -1116,13 +1163,17 @@ async function cancelarAgendamento(id) {
     toast('Agendamento cancelado.', 'error');
 }
 
+/* Modal de agendamento com verificação de cliente + criação condicional */
 function openAgendamentoModal(editId) {
-    const clientes = DB.getClientes();
     const profissionais = DB.getProfissionais();
     const canais = DB.getCanais().filter(c => c.status === 'ativo');
     const config = Storage.read('config.funcionamento', { inicio: '08:00', fim: '18:00', intervaloMin: 30 });
     const a = editId ? DB.getAgendamentos().find(x => x.id === editId) : null;
     const slots = gerarSlots(config.inicio, config.fim, config.intervaloMin);
+
+    const nomeAtual    = a?.clienteNome || (a?.clienteId ? (byId(DB.getClientes(), a.clienteId)?.nome || '') : '');
+    const contatoAtual = a?.clienteContato || (a?.clienteId ? (byId(DB.getClientes(), a.clienteId)?.contato || '') : '');
+    const emailAtual   = a?.clienteEmail || (a?.clienteId ? (byId(DB.getClientes(), a.clienteId)?.email || '') : '');
 
     const { overlay } = openModal({
         title: a ? `Editar agendamento ${a.codigo}` : 'Novo agendamento',
@@ -1131,11 +1182,16 @@ function openAgendamentoModal(editId) {
         bodyHTML: `
             <form id="formAg" class="form-grid">
                 <div class="form-group">
-                    <label>Cliente <span class="req">*</span></label>
-                    <select name="clienteId" required>
-                        <option value="">Selecione</option>
-                        ${clientes.map(c => `<option value="${c.id}" ${a?.clienteId === c.id ? 'selected' : ''}>${c.nome}</option>`).join('')}
-                    </select>
+                    <label>Nome do cliente <span class="req">*</span></label>
+                    <input type="text" name="clienteNome" required value="${nomeAtual}" placeholder="Nome do cliente">
+                </div>
+                <div class="form-group">
+                    <label>Contato</label>
+                    <input type="text" name="clienteContato" value="${contatoAtual}" placeholder="Telefone/WhatsApp">
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" name="clienteEmail" value="${emailAtual}" placeholder="email@exemplo.com">
                 </div>
                 <div class="form-group">
                     <label>Serviço <span class="req">*</span></label>
@@ -1172,7 +1228,7 @@ function openAgendamentoModal(editId) {
         `,
         actions: [
             { label: 'Cancelar', class: 'secondary' },
-            { label: a ? 'Atualizar' : 'Salvar', class: 'success', close: false, onClick: (ov, close) => {
+            { label: a ? 'Atualizar' : 'Salvar', class: 'success', close: false, onClick: async (ov, close) => {
                 const form = ov.querySelector('#formAg');
                 const hora = ov.querySelector('#agHora').value;
                 if (!hora) { toast('Selecione um horário.', 'warning'); return false; }
@@ -1185,25 +1241,96 @@ function openAgendamentoModal(editId) {
                     return false;
                 }
 
+                /* Verifica cliente existente (nome → contato → email) */
+                let clienteEncontrado = encontrarClienteExistente({
+                    nome: data.clienteNome,
+                    contato: data.clienteContato,
+                    email: data.clienteEmail
+                });
+
+                let clienteId = clienteEncontrado ? clienteEncontrado.id : null;
+                let clienteAvulso = false;
+
+                if (!clienteEncontrado) {
+                    const querCadastrar = await confirmDialog(
+                        'Você deseja cadastrar este cliente?',
+                        { confirmLabel: 'Sim', cancelLabel: 'Não' }
+                    );
+
+                    if (querCadastrar) {
+                        /* Cria o cliente com o ID do agendamento (novo ou código já existente) */
+                        const codigoAg = a?.codigo || nextAgendamentoCodigo();
+                        const clientes = DB.getClientes();
+                        const novoCliente = {
+                            id: codigoAg,
+                            nome: data.clienteNome.trim(),
+                            contato: (data.clienteContato || '').trim(),
+                            email: (data.clienteEmail || '').trim(),
+                            observacoes: '',
+                            dataCadastro: todayInput()
+                        };
+                        clientes.push(novoCliente);
+                        DB.setClientes(clientes);
+                        clienteId = codigoAg;
+                    } else {
+                        clienteAvulso = true;
+                    }
+                }
+
                 const list = DB.getAgendamentos();
                 const ats = DB.getAtendimentos();
 
+                /* Atualizar */
                 if (a) {
                     const idx = list.findIndex(x => x.id === a.id);
-                    list[idx] = { ...list[idx], ...data };
-                    // Atualiza atendimento vinculado
+                    list[idx] = {
+                        ...list[idx],
+                        ...data,
+                        clienteId: clienteId,
+                        clienteNome: data.clienteNome,
+                        clienteContato: data.clienteContato,
+                        clienteEmail: data.clienteEmail
+                    };
+
                     const iat = ats.findIndex(x => x.agendamentoId === a.id);
                     if (iat >= 0) {
-                        ats[iat] = { ...ats[iat], clienteId: data.clienteId, servicoNome: data.servicoNome, profissionalId: data.profissionalId, canalId: data.canalId, data: data.data, hora: data.hora };
+                        ats[iat] = {
+                            ...ats[iat],
+                            clienteId: clienteId,
+                            clienteNome: data.clienteNome,
+                            servicoNome: data.servicoNome,
+                            profissionalId: data.profissionalId,
+                            canalId: data.canalId,
+                            data: data.data,
+                            hora: data.hora
+                        };
                     }
                 } else {
-                    const novoCodigo = nextAgendamentoCodigo();
+                    /* Criar */
+                    const codigo = nextAgendamentoCodigo();
                     const novoId = uid('ag');
-                    list.push({ id: novoId, codigo: novoCodigo, ...data, status: 'agendado' });
+                    list.push({
+                        id: novoId,
+                        codigo,
+                        clienteId,
+                        clienteNome: data.clienteNome,
+                        clienteContato: data.clienteContato,
+                        clienteEmail: data.clienteEmail,
+                        clienteAvulso,
+                        servicoNome: data.servicoNome,
+                        profissionalId: data.profissionalId,
+                        canalId: data.canalId,
+                        data: data.data,
+                        hora: data.hora,
+                        status: 'agendado',
+                        observacoes: data.observacoes || ''
+                    });
                     ats.push({
                         id: uid('at'),
                         agendamentoId: novoId,
-                        clienteId: data.clienteId,
+                        codigo,
+                        clienteId,
+                        clienteNome: data.clienteNome,
                         servicoNome: data.servicoNome,
                         profissionalId: data.profissionalId,
                         canalId: data.canalId,
@@ -1232,12 +1359,12 @@ function openAgendamentoModal(editId) {
     function renderSlots() {
         const profissionalId = profSel.value;
         const data = dataInput.value;
-        const ags = DB.getAgendamentos().filter(x => x.status !== 'cancelado');
-        const ats = DB.getAtendimentos().filter(x => x.status !== 'cancelado' && x.status !== 'atendido');
+        const ags = DB.getAgendamentos().filter(x => x.status !== 'cancelado' && x.id !== a?.id);
+        const ats = DB.getAtendimentos().filter(x => x.status !== 'cancelado' && x.status !== 'atendido' && x.agendamentoId !== a?.id);
 
         slotsEl.innerHTML = slots.map(s => {
             const ocupado = (profissionalId && data) && (
-                ags.some(x => x.profissionalId === profissionalId && x.data === data && x.hora === s && x.id !== a?.id) ||
+                ags.some(x => x.profissionalId === profissionalId && x.data === data && x.hora === s) ||
                 ats.some(x => x.profissionalId === profissionalId && x.data === data && x.hora === s)
             );
             const cls = ['slot'];
@@ -1289,7 +1416,7 @@ function renderCanais(root) {
     const canais = DB.getCanais();
     const clientes = DB.getClientes();
 
-    const todas = DB.getComunicacoes().slice().sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    const todas = DB.getComunicacoes().slice();
     const filtradas = filtrarComunicacoes();
 
     const total = todas.length;
@@ -1314,10 +1441,10 @@ function renderCanais(root) {
                     <div class="stat-label">Total de chamados</div>
                 </div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card ${aguardando > 0 ? 'stat-card-pulse' : ''}">
                 <div class="stat-icon stat-icon-danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
                 <div class="stat-content">
-                    <div class="stat-value ${aguardando > 0 ? 'stat-value-pulse' : ''}">${aguardando}</div>
+                    <div class="stat-value stat-value-danger">${aguardando}</div>
                     <div class="stat-label">Aguardando</div>
                 </div>
             </div>
@@ -1368,7 +1495,8 @@ function renderCanais(root) {
                     <thead>
                         <tr>
                             <th style="width:44px;text-align:center;">✓</th>
-                            <th>Recebida há</th>
+                            <th>Entrada</th>
+                            <th>Concluído</th>
                             <th>Cliente</th>
                             <th>Canal</th>
                             <th>Assunto</th>
@@ -1397,7 +1525,6 @@ function renderCanais(root) {
     document.getElementById('btnNovoCom').addEventListener('click', () => openComunicacaoModal());
 }
 
-/* Filtra por mês de referência + filtros ativos */
 function filtrarComunicacoes() {
     const ref = window.currentMonth || new Date();
     return DB.getComunicacoes()
@@ -1416,17 +1543,14 @@ function renderCanaisRows(comunicacoes) {
     const tbody = document.getElementById('cnBody');
     if (!tbody) return;
     if (!comunicacoes.length) {
-        tbody.innerHTML = `<tr><td colspan="7">${emptyState('Sem comunicações', 'Nenhuma comunicação registrada com estes filtros.')}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8">${emptyState('Sem comunicações', 'Nenhuma comunicação registrada com estes filtros.')}</td></tr>`;
         return;
     }
     tbody.innerHTML = comunicacoes.map(c => {
-        const ageMin = Math.floor((Date.now() - new Date(c.createdAt).getTime()) / 60000);
-        const aging = ageMin > 60 * 24 ? `${Math.floor(ageMin / (60 * 24))}d`
-                   : ageMin > 60     ? `${Math.floor(ageMin / 60)}h`
-                   : `${ageMin}min`;
         const concluido = c.status === 'atendido';
+        const rowClass = concluido ? 'row-concluido' : '';
         return `
-            <tr>
+            <tr class="${rowClass}">
                 <td style="text-align:center;">
                     <div class="checkbox-wrapper">
                         <input type="checkbox" id="cn-check-${c.id}" class="styled-checkbox"
@@ -1435,16 +1559,15 @@ function renderCanaisRows(comunicacoes) {
                         <label for="cn-check-${c.id}" class="checkbox-label-styled"></label>
                     </div>
                 </td>
-                <td>${aging}</td>
+                <td>${fmtDateTime(c.createdAt)}</td>
+                <td>${c.concluidoAt ? fmtDateTime(c.concluidoAt) : '—'}</td>
                 <td><strong>${clienteNome(c.clienteId)}</strong></td>
                 <td>${canalNome(c.canalId)}</td>
                 <td>${c.assunto}</td>
                 <td>${statusBadge(c.status)}</td>
                 <td>
                     <div style="display:flex;gap:4px;justify-content:flex-end;">
-                        <button class="btn-icon" data-view="${c.id}" title="Ver detalhes">
-                            ${ICON_DOC}
-                        </button>
+                        <button class="btn-icon" data-view="${c.id}" title="Ver detalhes">${ICON_DOC}</button>
                         <button class="btn-icon" data-edit="${c.id}" title="Editar">
                             <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
                         </button>
@@ -1455,20 +1578,46 @@ function renderCanaisRows(comunicacoes) {
     }).join('');
 
     tbody.querySelectorAll('[data-cn-toggle]').forEach(cb => {
-        cb.addEventListener('change', e => toggleComunicacao(cb.dataset.cnToggle, e.target.checked));
+        cb.addEventListener('change', e => {
+            const id = cb.dataset.cnToggle;
+            const checked = e.target.checked;
+            if (checked) {
+                /* Reverte visualmente até a confirmação */
+                cb.checked = false;
+                confirmarConclusao(id, cb);
+            } else {
+                /* Desmarcar: volta para aguardando */
+                const list = DB.getComunicacoes();
+                const idx = list.findIndex(x => x.id === id);
+                if (idx >= 0) {
+                    list[idx].status = 'aguardando';
+                    list[idx].concluidoAt = null;
+                    DB.setComunicacoes(list);
+                    renderCanaisRows(filtrarComunicacoes());
+                    toast('Comunicação reaberta.', 'warning');
+                }
+            }
+        });
     });
     tbody.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => viewComunicacao(b.dataset.view)));
     tbody.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openComunicacaoModal(b.dataset.edit)));
 }
 
-function toggleComunicacao(id, checked) {
-    const list = DB.getComunicacoes();
-    const idx = list.findIndex(x => x.id === id);
-    if (idx < 0) return;
-    list[idx].status = checked ? 'atendido' : 'aguardando';
-    DB.setComunicacoes(list);
-    renderCanaisRows(filtrarComunicacoes());
-    toast(checked ? 'Comunicação marcada como atendida.' : 'Comunicação reaberta.', 'success');
+function confirmarConclusao(id, checkbox) {
+    confirmDialog(
+        'Você confirma o atendimento para este contato?',
+        { confirmLabel: 'Sim', cancelLabel: 'Não' }
+    ).then(confirmado => {
+        if (!confirmado) return;
+        const list = DB.getComunicacoes();
+        const idx = list.findIndex(x => x.id === id);
+        if (idx < 0) return;
+        list[idx].status = 'atendido';
+        list[idx].concluidoAt = nowISO();
+        DB.setComunicacoes(list);
+        renderCanaisRows(filtrarComunicacoes());
+        toast('Contato marcado como atendido.', 'success');
+    });
 }
 
 function viewComunicacao(id) {
@@ -1483,6 +1632,7 @@ function viewComunicacao(id) {
                 <p><strong>Canal:</strong> ${canalNome(c.canalId)}</p>
                 <p><strong>Assunto:</strong> ${c.assunto}</p>
                 <p><strong>Recebida em:</strong> ${fmtDateTime(c.createdAt)}</p>
+                <p><strong>Concluída em:</strong> ${c.concluidoAt ? fmtDateTime(c.concluidoAt) : '—'}</p>
                 <p><strong>Status:</strong> ${statusBadge(c.status)}</p>
             </div>
         `,
@@ -1517,10 +1667,6 @@ function openComunicacaoModal(editId) {
                     <label>Assunto <span class="req">*</span></label>
                     <input type="text" name="assunto" required value="${c?.assunto || ''}">
                 </div>
-                <div class="form-group full">
-                    <label>Observações</label>
-                    <textarea name="obsInterna" placeholder="Anotações internas..."></textarea>
-                </div>
             </form>
         `,
         actions: [
@@ -1541,7 +1687,7 @@ function openComunicacaoModal(editId) {
                         assunto: data.assunto,
                         status: 'aguardando',
                         createdAt: nowISO(),
-                        observacoes: data.obsInterna ? [{ texto: data.obsInterna, autor: 'Operador', timestamp: nowISO() }] : []
+                        concluidoAt: null
                     });
                 }
                 DB.setComunicacoes(list);
@@ -1555,7 +1701,7 @@ function openComunicacaoModal(editId) {
 }
 
 /* ============================================================
-   MÓDULO · CLIENTES (sem status)
+   MÓDULO · CLIENTES
    ============================================================ */
 let cliQ = '';
 
@@ -1570,7 +1716,7 @@ function renderClientes(root) {
         <div class="search-bar-wrapper">
             <div class="search-bar">
                 <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                <input type="text" id="cliQ" placeholder="Buscar por nome, contato ou e-mail" value="${cliQ}">
+                <input type="text" id="cliQ" placeholder="Buscar por ID, nome, contato ou e-mail" value="${cliQ}">
             </div>
         </div>
 
@@ -1579,7 +1725,7 @@ function renderClientes(root) {
                 <table>
                     <thead>
                         <tr>
-                            <th>Nome</th><th>Contato</th><th>E-mail</th><th>Último atendimento</th><th>Cadastro</th>
+                            <th>ID</th><th>Nome</th><th>Contato</th><th>E-mail</th><th>Último atendimento</th><th>Cadastro</th>
                             <th style="text-align:right;">Ações</th>
                         </tr>
                     </thead>
@@ -1594,21 +1740,23 @@ function renderClientes(root) {
         const ql = cliQ.trim().toLowerCase();
         const list = DB.getClientes().filter(c => {
             if (!ql) return true;
-            return c.nome.toLowerCase().includes(ql)
+            return (c.id || '').toLowerCase().includes(ql)
+                || c.nome.toLowerCase().includes(ql)
                 || (c.contato || '').toLowerCase().includes(ql)
                 || (c.email || '').toLowerCase().includes(ql);
         });
 
         const atendimentos = DB.getAtendimentos();
 
-        if (!list.length) { tbody.innerHTML = `<tr><td colspan="6">${emptyState('Nenhum cliente', 'Cadastre o primeiro cliente.')}</td></tr>`; return; }
+        if (!list.length) { tbody.innerHTML = `<tr><td colspan="7">${emptyState('Nenhum cliente', 'Cadastre o primeiro cliente.')}</td></tr>`; return; }
 
         tbody.innerHTML = list.map(c => {
             const ats = atendimentos.filter(a => a.clienteId === c.id && a.status === 'atendido');
             const ultimo = ats.sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora))[0];
             return `
                 <tr>
-                    <td><strong>${c.nome}</strong></td>
+                    <td><strong>${c.id}</strong></td>
+                    <td>${c.nome}</td>
                     <td>${c.contato || '—'}</td>
                     <td>${c.email || '—'}</td>
                     <td>${ultimo ? fmtDate(ultimo.data) : '—'}</td>
@@ -1621,6 +1769,9 @@ function renderClientes(root) {
                             <button class="btn-icon" data-edit="${c.id}" title="Editar">
                                 <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
                             </button>
+                            <button class="btn-icon" data-del="${c.id}" title="Excluir" style="color:#EF4444;">
+                                <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -1629,6 +1780,7 @@ function renderClientes(root) {
 
         tbody.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openClienteModal(b.dataset.edit)));
         tbody.querySelectorAll('[data-hist]').forEach(b => b.addEventListener('click', () => viewHistoricoCliente(b.dataset.hist)));
+        tbody.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => excluirCliente(b.dataset.del)));
     };
 
     render();
@@ -1645,7 +1797,6 @@ function openClienteModal(editId) {
                 <div class="form-group full"><label>Nome <span class="req">*</span></label><input type="text" name="nome" required value="${c?.nome || ''}"></div>
                 <div class="form-group"><label>Contato</label><input type="text" name="contato" value="${c?.contato || ''}"></div>
                 <div class="form-group"><label>E-mail</label><input type="email" name="email" value="${c?.email || ''}"></div>
-                <div class="form-group"><label>Documento</label><input type="text" name="documento" value="${c?.documento || ''}"></div>
                 <div class="form-group full"><label>Observações</label><textarea name="observacoes">${c?.observacoes || ''}</textarea></div>
             </form>
         `,
@@ -1657,7 +1808,11 @@ function openClienteModal(editId) {
                 const data = Object.fromEntries(new FormData(form).entries());
                 const list = DB.getClientes();
                 if (c) { const i = list.findIndex(x => x.id === c.id); list[i] = { ...list[i], ...data }; }
-                else { list.push({ id: uid('cl'), ...data, dataCadastro: todayInput() }); }
+                else {
+                    /* Novo cliente manual: gera um ID ME-* novo */
+                    const codigo = nextAgendamentoCodigo();
+                    list.push({ id: codigo, ...data, dataCadastro: todayInput() });
+                }
                 DB.setClientes(list);
                 toast(c ? 'Cliente atualizado.' : 'Cliente criado.', 'success');
                 close();
@@ -1666,6 +1821,14 @@ function openClienteModal(editId) {
             }}
         ]
     });
+}
+
+async function excluirCliente(id) {
+    const ok = await confirmDialog('Excluir este cliente? Agendamentos vinculados podem ficar órfãos.');
+    if (!ok) return;
+    DB.setClientes(DB.getClientes().filter(x => x.id !== id));
+    renderClientes(document.getElementById('content'));
+    toast('Cliente excluído.', 'error');
 }
 
 function viewHistoricoCliente(id) {
@@ -1709,10 +1872,10 @@ function viewHistoricoCliente(id) {
                 <div class="tab-content" data-pane="info">
                     <div class="info-section">
                         <h4>Dados do cliente</h4>
+                        <p><strong>ID:</strong> ${c.id}</p>
                         <p><strong>Nome:</strong> ${c.nome}</p>
                         <p><strong>Contato:</strong> ${c.contato || '—'}</p>
                         <p><strong>E-mail:</strong> ${c.email || '—'}</p>
-                        <p><strong>Documento:</strong> ${c.documento || '—'}</p>
                         <p><strong>Cadastro:</strong> ${fmtDate(c.dataCadastro)}</p>
                         <p><strong>Observações:</strong> ${c.observacoes || '—'}</p>
                     </div>
@@ -1734,18 +1897,20 @@ function viewHistoricoCliente(id) {
 
 /* ============================================================
    MÓDULO · HISTÓRICO DE ATENDIMENTO
+   ------------------------------------------------------------
+   Aqui só aparecem atendimentos de clientes cadastrados (recorrentes).
+   Avulsos (clienteId null) não entram.
    ============================================================ */
 let histFilters = { clienteId: '', profissionalId: '', q: '' };
 
 function renderHistorico(root) {
     const clientes = DB.getClientes();
     const profissionais = DB.getProfissionais();
-    const ref = window.currentMonth || new Date();
 
     root.innerHTML = `
         ${moduleHead(
             'Histórico de Atendimento',
-            'Atendimentos encerrados no mês. Use o ícone de PDF para imprimir por profissional.'
+            'Atendimentos encerrados no mês para clientes cadastrados. Use o ícone de PDF para imprimir por profissional.'
         )}
 
         <div class="search-bar-wrapper">
@@ -1803,9 +1968,10 @@ function renderHistorico(root) {
         }
         tbody.innerHTML = list.map(a => {
             const obs = (a.observacoes || []).map(o => o.texto).join(' • ') || '—';
+            const codigo = codigoDoAtendimento(a) || '—';
             return `
                 <tr>
-                    <td><strong>${codigoDoAtendimento(a)}</strong></td>
+                    <td><strong>${codigo}</strong></td>
                     <td>${fmtDate(a.data)}</td>
                     <td>${a.hora}</td>
                     <td>${clienteNome(a.clienteId)}</td>
@@ -1826,12 +1992,11 @@ function renderHistorico(root) {
     document.getElementById('hiProf').addEventListener('change', e => { histFilters.profissionalId = e.target.value; render(); });
     document.getElementById('hiSearch').addEventListener('input', e => { histFilters.q = e.target.value; render(); });
 
-    // Botão de PDF no cabeçalho
+    /* Botão de PDF */
     const head = root.querySelector('.module-head');
     if (head) {
         const btn = document.createElement('button');
         btn.className = 'btn-new-order-header';
-        btn.id = 'btnHistPDF';
         btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Gerar PDF do mês`;
         head.appendChild(btn);
         btn.addEventListener('click', () => {
@@ -1842,8 +2007,6 @@ function renderHistorico(root) {
             setTimeout(() => window.print(), 150);
         });
     }
-
-    // Segundo ícone de calendário (pedido: além do calendário, um ícone para PDF)
     const monthBlock = root.querySelector('.month-navigation-inline');
     if (monthBlock) {
         const pdfBtn = document.createElement('button');
@@ -1864,6 +2027,8 @@ function renderHistorico(root) {
 function historicoFiltrado() {
     const ref = window.currentMonth || new Date();
     return DB.getAtendimentos()
+        /* Só clientes cadastrados: clienteId não nulo e existente em Clientes */
+        .filter(a => a.clienteId && byId(DB.getClientes(), a.clienteId))
         .filter(a => a.status === 'atendido' || a.status === 'cancelado')
         .filter(a => {
             const d = new Date(a.data + 'T00:00:00');
@@ -1881,7 +2046,7 @@ function historicoFiltrado() {
 }
 
 /* ============================================================
-   MÓDULO · RELATÓRIOS
+   MÓDULO · RELATÓRIOS (geral, inclui avulsos)
    ============================================================ */
 function renderRelatorios(root) {
     const atendimentos = DB.getAtendimentos();
@@ -1890,6 +2055,7 @@ function renderRelatorios(root) {
     const total = atendimentos.length;
     const atendidos = atendimentos.filter(a => a.status === 'atendido').length;
     const cancelados = atendimentos.filter(a => a.status === 'cancelado').length;
+    const avulsos = atendimentos.filter(a => !a.clienteId).length;
 
     const porProf = {};
     const porCanal = {};
@@ -1915,7 +2081,7 @@ function renderRelatorios(root) {
     `;
 
     root.innerHTML = `
-        ${moduleHead('Relatórios', 'Indicadores consolidados da operação.')}
+        ${moduleHead('Relatórios', 'Indicadores consolidados da operação (inclui atendimentos avulsos).')}
 
         <div class="dashboard-grid">
             <div class="stat-card">
@@ -1929,6 +2095,10 @@ function renderRelatorios(root) {
             <div class="stat-card">
                 <div class="stat-icon stat-icon-danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
                 <div class="stat-content"><div class="stat-value stat-value-danger">${cancelados}</div><div class="stat-label">Cancelados</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon stat-icon-warning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M2 12h20"/></svg></div>
+                <div class="stat-content"><div class="stat-value stat-value-warning">${avulsos}</div><div class="stat-label">Avulsos</div></div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon stat-icon-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
@@ -1959,7 +2129,7 @@ function renderRelatorios(root) {
 }
 
 /* ============================================================
-   MÓDULO · CONFIGURAÇÕES (apenas restaurar dados)
+   MÓDULO · CONFIGURAÇÕES
    ============================================================ */
 function renderConfig(root) {
     root.innerHTML = `
