@@ -71,11 +71,9 @@ const modulosPrevBtn   = document.getElementById('modulosPrev');
 const modulosNextBtn   = document.getElementById('modulosNext');
 const modulosDots      = document.getElementById('modulosDots');
 
-// Guarda os 8 cards originais
 const originalModuloCards = Array.from(modulosTrack.children);
 const totalModulos = originalModuloCards.length;
 
-// Clona ANTES (buffer esquerdo) e DEPOIS (buffer direito)
 const beforeFrag = document.createDocumentFragment();
 originalModuloCards.forEach(card => beforeFrag.appendChild(card.cloneNode(true)));
 modulosTrack.insertBefore(beforeFrag, modulosTrack.firstChild);
@@ -84,8 +82,7 @@ const afterFrag = document.createDocumentFragment();
 originalModuloCards.forEach(card => afterFrag.appendChild(card.cloneNode(true)));
 modulosTrack.appendChild(afterFrag);
 
-// ── Estado do carrossel ──
-let cardIndex = totalModulos;                 // começa no 1º original
+let cardIndex = totalModulos;
 let modulosPerView = getModulosPerView();
 let autoModuloInterval = null;
 let modulosGap = 22;
@@ -110,32 +107,20 @@ function getCardWidth() {
   return card.getBoundingClientRect().width;
 }
 
-function getStep() {
-  return getCardWidth() + modulosGap;
-}
+function getStep() { return getCardWidth() + modulosGap; }
 
-// ── NORMALIZAÇÃO: mantém cardIndex SEMPRE no range válido ──
-// Range válido = [totalModulos, 2*totalModulos)
-// Se sair, corrige instantaneamente (sem animação) ANTES de mover.
 function normalizeIndex() {
   const lower = totalModulos;
   const upper = totalModulos * 2;
-
-  if (cardIndex >= upper) {
-    cardIndex -= totalModulos;
-  } else if (cardIndex < lower) {
-    cardIndex += totalModulos;
-  }
+  if (cardIndex >= upper) cardIndex -= totalModulos;
+  else if (cardIndex < lower) cardIndex += totalModulos;
 }
 
 function updateDots() {
   const totalDots = Math.ceil(totalModulos / modulosPerView);
   let rel = (cardIndex - totalModulos) % totalModulos;
   if (rel < 0) rel += totalModulos;
-  const activeDot = Math.min(
-    totalDots - 1,
-    Math.floor(rel / modulosPerView) % totalDots
-  );
+  const activeDot = Math.min(totalDots - 1, Math.floor(rel / modulosPerView) % totalDots);
   document.querySelectorAll('.modulos-carousel-dot').forEach((dot, i) => {
     dot.classList.toggle('active', i === activeDot);
   });
@@ -144,19 +129,12 @@ function updateDots() {
 function setTrackPosition(instant) {
   modulosGap = readCssGap();
   const step = getStep();
-
-  if (instant) {
-    modulosTrack.style.transition = 'none';
-  }
-
+  if (instant) modulosTrack.style.transition = 'none';
   modulosTrack.style.transform = `translateX(${-step * cardIndex}px)`;
-
   if (instant) {
-    // Força reflow para aplicar o "sem transição" antes de restaurar
     void modulosTrack.offsetHeight;
     modulosTrack.style.transition = '';
   }
-
   updateDots();
 }
 
@@ -177,34 +155,22 @@ function createModulosDots() {
   }
 }
 
-// ══════════════════════════════════════════════════════════
-// ── MECÂNICA DO CARROSSEL ──
-// A regra de ouro: ANTES de mover, normaliza o índice.
-// DEPOIS que a animação termina, normaliza de novo (instantâneo).
-// Assim cardIndex NUNCA fica fora do range e NUNCA vai pro vazio.
-// ══════════════════════════════════════════════════════════
-
 function afterTransition() {
   isAnimating = false;
   normalizeIndex();
-  setTrackPosition(true);   // reposiciona instantâneo se precisou normalizar
+  setTrackPosition(true);
 }
 
 function scheduleAfterTransition() {
   clearTimeout(wrapTimeout);
-  // 600ms > 500ms da transição CSS + margem de segurança
   wrapTimeout = setTimeout(afterTransition, 600);
 }
 
 function nextModulo() {
   if (isAnimating) return;
   isAnimating = true;
-
   modulosPerView = getModulosPerView();
-
-  // Normaliza ANTES de somar (garante que parte de um índice válido)
   normalizeIndex();
-
   cardIndex += modulosPerView;
   setTrackPosition(false);
   scheduleAfterTransition();
@@ -214,18 +180,14 @@ function nextModulo() {
 function prevModulo() {
   if (isAnimating) return;
   isAnimating = true;
-
   modulosPerView = getModulosPerView();
-
   normalizeIndex();
-
   cardIndex -= modulosPerView;
   setTrackPosition(false);
   scheduleAfterTransition();
   resetModulosAutoSlide();
 }
 
-// Também escuta o transitionend (redundância segura)
 modulosTrack.addEventListener('transitionend', (e) => {
   if (e.target !== modulosTrack) return;
   if (e.propertyName !== 'transform') return;
@@ -243,23 +205,13 @@ function stopModulosAutoSlide() {
   autoModuloInterval = null;
 }
 
-// ── Botões ──
-modulosPrevBtn.addEventListener('click', () => {
-  prevModulo();
-  resetModulosAutoSlide();
-});
+modulosPrevBtn.addEventListener('click', () => { prevModulo(); resetModulosAutoSlide(); });
+modulosNextBtn.addEventListener('click', () => { nextModulo(); resetModulosAutoSlide(); });
 
-modulosNextBtn.addEventListener('click', () => {
-  nextModulo();
-  resetModulosAutoSlide();
-});
-
-// ── Pausa no hover ──
 const carouselContainer = document.querySelector('.modulos-carousel-container');
 carouselContainer.addEventListener('mouseenter', stopModulosAutoSlide);
 carouselContainer.addEventListener('mouseleave', resetModulosAutoSlide);
 
-// ── Swipe ──
 let modTouchStartX = 0;
 let modIsSwiping = false;
 
@@ -275,13 +227,11 @@ modulosTrack.addEventListener('touchend', (e) => {
   const touchEndX = e.changedTouches[0].screenX;
   const diff = modTouchStartX - touchEndX;
   if (Math.abs(diff) > 40) {
-    if (diff > 0) nextModulo();
-    else prevModulo();
+    if (diff > 0) nextModulo(); else prevModulo();
   }
   resetModulosAutoSlide();
 });
 
-// ── Resize ──
 let modulosResizeTimeout;
 window.addEventListener('resize', () => {
   clearTimeout(modulosResizeTimeout);
@@ -298,241 +248,52 @@ window.addEventListener('resize', () => {
   }, 120);
 });
 
-// ── Init ──
 createModulosDots();
 setTimeout(() => {
   setTrackPosition(true);
   resetModulosAutoSlide();
 }, 150);
 
-// ── Clique nos cards (abre modal) ──
-modulosTrack.addEventListener('click', (e) => {
-  const infoBtn = e.target.closest('.modulo-info-btn');
-  if (infoBtn && infoBtn.dataset.modulo) {
-    openModal(infoBtn.dataset.modulo);
-  }
-});
-
 // ══════════════════════════════════════════════════════════
-// ── MODAL — SLIDER DE IMAGENS POR MÓDULO ──
+// ── "SAIBA MAIS" → WhatsApp com o nome do projeto ──
 // ══════════════════════════════════════════════════════════
-const WHATSAPP_NUMBER = '5527997099444';
+const WHATSAPP_NUMBER = '5527998201003';
 
-const modalData = {
-  'sistema-integrado': {
-    title: 'Sistema Integrado',
-    slides: [
-      { img: 'imagens/sistema-integrado/login.png',        caption: 'Tela de acesso ao sistema, com autenticação segura.' },
-      { img: 'imagens/sistema-integrado/carregamento.png', caption: 'Tela de carregamento e inicialização do painel.' },
-      { img: 'imagens/sistema-integrado/interface.png',    caption: 'Interface principal com visão geral dos módulos.' }
-    ]
-  },
-  'login-autenticacao': {
-    title: 'Login e Autenticação',
-    slides: [
-      { img: 'imagens/login-autenticacao/tela-login.png',    caption: 'Tela de login com validação de credenciais.' },
-      { img: 'imagens/login-autenticacao/carregamento.png',  caption: 'Carregamento e verificação de sessão.' }
-    ]
-  },
-  'relacionamentos': {
-    title: 'Relacionamentos',
-    slides: [
-      { img: 'imagens/relacionamentos/clientes.png',                   caption: 'Cadastro e listagem de clientes.' },
-      { img: 'imagens/relacionamentos/fornecedores.png',                caption: 'Cadastro e gestão de fornecedores.' },
-      { img: 'imagens/relacionamentos/historico-relacionamentos.png',   caption: 'Histórico completo de interações.' }
-    ]
-  },
-  'logistica': {
-    title: 'Logística',
-    slides: [
-      { img: 'imagens/logistica/transportadoras.png',       caption: 'Cadastro e gestão de transportadoras.' },
-      { img: 'imagens/logistica/cotacoes.png',              caption: 'Cotação e comparação de fretes.' },
-      { img: 'imagens/logistica/controle-frete.png',        caption: 'Acompanhamento de envios e prazos.' },
-      { img: 'imagens/logistica/relatorio-logistica.png',   caption: 'Relatórios de logística e desempenho.' }
-    ]
-  },
-  'controle-precos': {
-    title: 'Controle de Preços',
-    slides: [
-      { img: 'imagens/controle-precos/cotacoes.png',         caption: 'Registro de cotações de itens e produtos.' },
-      { img: 'imagens/controle-precos/tabela.png',           caption: 'Tabela comparativa de preços por fornecedor.' }
-    ]
-  },
-  'estoque': {
-    title: 'Estoque',
-    slides: [
-      { img: 'imagens/estoque/deposito.png',                 caption: 'Visão do depósito e itens disponíveis.' },
-      { img: 'imagens/estoque/relatorio-estoque.png',        caption: 'Relatório de movimentações e inventário.' }
-    ]
-  },
-  'compras': {
-    title: 'Compras',
-    slides: [
-      { img: 'imagens/compras/compras-registradas.png',      caption: 'Compras registradas no sistema.' },
-      { img: 'imagens/compras/compras-realizadas.png',       caption: 'Compras realizadas e concluídas.' },
-      { img: 'imagens/compras/relatorio-compra.png',         caption: 'Relatório detalhado de compras.' }
-    ]
-  },
-  'gestao-pagamentos': {
-    title: 'Gestão de Pagamentos',
-    slides: [
-      { img: 'imagens/gestao-pagamentos/contas-pagar.png',         caption: 'Contas a pagar e controle de vencimentos.' },
-      { img: 'imagens/gestao-pagamentos/contas-receber.png',       caption: 'Contas a receber e acompanhamento.' },
-      { img: 'imagens/gestao-pagamentos/registro-financeiro.png',  caption: 'Registro financeiro consolidado.' }
-    ]
-  }
+const projectTitles = {
+  'sistema-integrado':  'Sistema Integrado',
+  'login-autenticacao': 'Login e Autenticação',
+  'relacionamentos':    'Relacionamentos',
+  'logistica':          'Logística',
+  'controle-precos':    'Controle de Preços',
+  'estoque':            'Estoque',
+  'compras':            'Compras',
+  'gestao-pagamentos':  'Gestão de Pagamentos'
 };
 
-// ── Templates de mensagem por idioma ──
 const waMessageTemplates = {
-  pt: (title) => `Olá! Vi o sistema "${title}" no site da MALVSCODE e gostaria de algo parecido. Podemos conversar?`,
-  en: (title) => `Hi! I saw the "${title}" system on the MALVSCODE website and I'd like something similar. Can we talk?`,
-  es: (title) => `¡Hola! Vi el sistema "${title}" en el sitio de MALVSCODE y me gustaría algo parecido. ¿Podemos hablar?`
+  pt: (title) => `Olá! Vi o projeto "${title}" no site da MALVSCODE e gostaria de conversar sobre algo parecido.`,
+  en: (title) => `Hi! I saw the "${title}" project on the MALVSCODE website and I'd like to talk about something similar.`,
+  es: (title) => `¡Hola! Vi el proyecto "${title}" en el sitio de MALVSCODE y me gustaría hablar sobre algo parecido.`
 };
 
 let currentLang = 'pt';
 
-// ── Estado do slider do modal ──
-let modalSlides = [];
-let modalIndex = 0;
-let currentModalTitle = '';
-
-const modalOverlayEl     = document.getElementById('modalOverlay');
-const modalTrack         = document.getElementById('modalTrack');
-const modalDotsEl        = document.getElementById('modalDots');
-const modalCaptionEl     = document.getElementById('modalCaption');
-const modalPrevBtn       = document.getElementById('modalPrev');
-const modalNextBtn       = document.getElementById('modalNext');
-const modalTitleEl       = document.getElementById('modalTitle');
-const modalWhatsappBtn   = document.getElementById('modalWhatsappBtn');
-
-function updateWhatsappLink() {
-  if (!currentModalTitle) return;
+function openWhatsAppForProject(moduloId) {
+  const title = projectTitles[moduloId];
+  if (!title) return;
   const template = waMessageTemplates[currentLang] || waMessageTemplates.pt;
-  const msg = template(currentModalTitle);
-  modalWhatsappBtn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  const msg = template(title);
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank', 'noopener,noreferrer');
 }
 
-function renderModalSlide(instant) {
-  if (!modalSlides.length) return;
-  const step = modalTrack.parentElement.getBoundingClientRect().width;
-  if (instant) modalTrack.style.transition = 'none';
-  modalTrack.style.transform = `translateX(${-step * modalIndex}px)`;
-  if (instant) {
-    void modalTrack.offsetHeight;
-    modalTrack.style.transition = '';
-  }
-
-  modalCaptionEl.style.opacity = '0';
-  setTimeout(() => {
-    modalCaptionEl.textContent = modalSlides[modalIndex].caption;
-    modalCaptionEl.style.opacity = '1';
-  }, 100);
-
-  modalDotsEl.querySelectorAll('.modal-slider-dot').forEach((dot, i) => {
-    dot.classList.toggle('active', i === modalIndex);
-  });
-}
-
-function buildModalSlider(slides) {
-  modalTrack.innerHTML = '';
-  modalDotsEl.innerHTML = '';
-
-  slides.forEach((slide, i) => {
-    const div = document.createElement('div');
-    div.className = 'modal-slide';
-    const img = document.createElement('img');
-    img.src = slide.img;
-    img.alt = slide.caption;
-    img.loading = 'lazy';
-    div.appendChild(img);
-    modalTrack.appendChild(div);
-
-    const dot = document.createElement('button');
-    dot.className = 'modal-slider-dot' + (i === 0 ? ' active' : '');
-    dot.setAttribute('aria-label', 'Ir para slide ' + (i + 1));
-    dot.addEventListener('click', () => {
-      modalIndex = i;
-      renderModalSlide(false);
-    });
-    modalDotsEl.appendChild(dot);
-  });
-}
-
-function openModal(moduloId) {
-  const data = modalData[moduloId];
-  if (!data) return;
-
-  modalTitleEl.textContent = data.title;
-  modalSlides = data.slides.slice();
-  modalIndex = 0;
-  currentModalTitle = data.title;
-
-  buildModalSlider(modalSlides);
-  updateWhatsappLink();
-
-  modalOverlayEl.classList.add('active');
-  document.body.style.overflow = 'hidden';
-
-  requestAnimationFrame(() => {
-    modalTrack.style.transition = 'none';
-    modalTrack.style.transform = 'translateX(0px)';
-    requestAnimationFrame(() => {
-      modalTrack.style.transition = '';
-      modalCaptionEl.textContent = modalSlides[0].caption;
-    });
-  });
-}
-
-function closeModal() {
-  modalOverlayEl.classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-modalPrevBtn.addEventListener('click', () => {
-  if (!modalSlides.length) return;
-  modalIndex = (modalIndex - 1 + modalSlides.length) % modalSlides.length;
-  renderModalSlide(false);
-});
-modalNextBtn.addEventListener('click', () => {
-  if (!modalSlides.length) return;
-  modalIndex = (modalIndex + 1) % modalSlides.length;
-  renderModalSlide(false);
-});
-
-// Swipe no modal
-let modalTouchStartX = 0;
-modalTrack.addEventListener('touchstart', (e) => {
-  modalTouchStartX = e.changedTouches[0].screenX;
-}, { passive: true });
-modalTrack.addEventListener('touchend', (e) => {
-  const diff = modalTouchStartX - e.changedTouches[0].screenX;
-  if (Math.abs(diff) > 40) {
-    if (diff > 0) {
-      modalIndex = (modalIndex + 1) % modalSlides.length;
-    } else {
-      modalIndex = (modalIndex - 1 + modalSlides.length) % modalSlides.length;
-    }
-    renderModalSlide(false);
-  }
-});
-
-modalOverlayEl.addEventListener('click', closeModal);
-modalOverlayEl.querySelector('.modal-content').addEventListener('click', (e) => e.stopPropagation());
-document.querySelectorAll('.modal-close, .modal-close-btn').forEach(btn => {
-  btn.addEventListener('click', closeModal);
-});
-document.addEventListener('keydown', (e) => {
-  if (!modalOverlayEl.classList.contains('active')) return;
-  if (e.key === 'Escape') closeModal();
-  if (e.key === 'ArrowRight') modalNextBtn.click();
-  if (e.key === 'ArrowLeft')  modalPrevBtn.click();
-});
-
-window.addEventListener('resize', () => {
-  if (modalOverlayEl.classList.contains('active')) {
-    renderModalSlide(true);
-  }
+// Delegação de eventos — cobre clones do carrossel
+document.addEventListener('click', (e) => {
+  const saiba = e.target.closest('.modulo-saiba-mais');
+  if (!saiba) return;
+  e.preventDefault();
+  const moduloId = saiba.dataset.modulo;
+  if (moduloId) openWhatsAppForProject(moduloId);
 });
 
 // ══════════════════════════════════════════════════════════
@@ -576,8 +337,8 @@ const translations = {
     'modulo8-desc': 'Keep a complete purchase history organized by items, values, dates, payment methods, and suppliers. Easy to consult and compare.',
     'modulo3-nome': 'Payment Management',
     'modulo3-desc': 'Organize accounts payable and receivable, completed and overdue payments, plus history and financial reports. Get a clear view of your cash flow in one place.',
-    'saiba-mais': 'Learn more',
-    'quero-projeto': 'I want this project',
+    'ver-demo': 'View Demo',
+    'saiba-mais': 'Learn More',
     'sites-label': 'Developed Websites',
     'sites-title': 'Websites & <span>Interfaces</span>',
     'sites-sub': 'Published and in-development projects. New websites will be added soon.',
@@ -606,9 +367,7 @@ const translations = {
     'instagram-label': 'Instagram',
     'github-label': 'GitHub',
     'whatsapp': 'Call on WhatsApp',
-    'email-btn': 'Send E-mail',
-    'modal-note': 'Initial demonstration images. Adjustments can be made as needed.',
-    'fechar': 'Close'
+    'email-btn': 'Send E-mail'
   },
   es: {
     'nav-sistemas': 'Sistemas',
@@ -639,8 +398,8 @@ const translations = {
     'modulo8-desc': 'Mantenga un historial completo de sus compras organizado por artículos, valores, fechas, formas de pago y proveedores. Fácil de consultar y comparar.',
     'modulo3-nome': 'Gestión de Pagos',
     'modulo3-desc': 'Organice cuentas por pagar y por cobrar, pagos realizados y atrasados, además de historial e informes financieros. Tenga una visión clara de su flujo de caja en un solo lugar.',
-    'saiba-mais': 'Saber más',
-    'quero-projeto': 'Quiero este proyecto',
+    'ver-demo': 'Ver Demo',
+    'saiba-mais': 'Saber Más',
     'sites-label': 'Sitios desarrollados',
     'sites-title': 'Sitios web & <span>Interfaces</span>',
     'sites-sub': 'Proyectos publicados y en desarrollo. Pronto se agregarán nuevos sitios.',
@@ -669,9 +428,7 @@ const translations = {
     'instagram-label': 'Instagram',
     'github-label': 'GitHub',
     'whatsapp': 'Llamar por WhatsApp',
-    'email-btn': 'Enviar correo',
-    'modal-note': 'Imágenes de demostración inicial. Los ajustes se pueden realizar según sea necesario.',
-    'fechar': 'Cerrar'
+    'email-btn': 'Enviar correo'
   }
 };
 
@@ -680,7 +437,6 @@ const langLabels = { pt: 'PT-BR', en: 'EN', es: 'ES' };
 
 function applyLanguage(lang) {
   currentLang = lang;
-
   langCurrent.childNodes[0].textContent = langLabels[lang] + ' ';
 
   document.querySelectorAll('.lang-option').forEach(btn => {
@@ -689,19 +445,12 @@ function applyLanguage(lang) {
 
   document.querySelectorAll('[data-key]').forEach(el => {
     const key = el.dataset.key;
-
     if (lang === 'pt') {
-      if (ptOriginal[key] !== undefined) {
-        el.innerHTML = ptOriginal[key];
-      }
-    } else {
-      if (translations[lang] && translations[lang][key] !== undefined) {
-        el.innerHTML = translations[lang][key];
-      }
+      if (ptOriginal[key] !== undefined) el.innerHTML = ptOriginal[key];
+    } else if (translations[lang] && translations[lang][key] !== undefined) {
+      el.innerHTML = translations[lang][key];
     }
   });
-
-  if (currentModalTitle) updateWhatsappLink();
 }
 
 langCurrent.addEventListener('click', (e) => {
