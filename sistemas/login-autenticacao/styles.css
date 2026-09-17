@@ -47,7 +47,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 input { font-family: inherit; }
 
 /* ============================================================
-   BARRA DE DEMONSTRAÇÃO (back-link + demo-tag)
+   BOTÃO "VOLTAR AO SITE"
    ============================================================ */
 .back-link {
     position: fixed;
@@ -75,25 +75,6 @@ input { font-family: inherit; }
     color: var(--gray-900);
 }
 
-.demo-tag {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 100;
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--gray-500);
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-sm);
-    padding: 0.45rem 0.75rem;
-    white-space: nowrap;
-}
-
 /* ============================================================
    TELA DE LOGIN
    ============================================================ */
@@ -101,6 +82,7 @@ input { font-family: inherit; }
     display: grid;
     grid-template-columns: 1.05fr 1fr;
     height: 100vh;
+    height: 100dvh;
     background: var(--white);
 }
 
@@ -116,14 +98,12 @@ input { font-family: inherit; }
     overflow: hidden;
 }
 
-/* Linhas se movendo na vertical e horizontal */
 .login-aside .line {
     position: absolute;
     pointer-events: none;
     z-index: 1;
 }
 
-/* Linhas horizontais */
 .line-h {
     left: 0;
     width: 100%;
@@ -139,7 +119,6 @@ input { font-family: inherit; }
     animation: slideH linear infinite;
 }
 
-/* Linhas verticais */
 .line-v {
     top: 0;
     height: 100%;
@@ -165,7 +144,6 @@ input { font-family: inherit; }
     100% { transform: translateY(100%); }
 }
 
-/* Posições e tempos distintos para cada linha */
 .line-h:nth-child(1) { top: 18%;  animation-duration: 11s; animation-delay: 0s;   }
 .line-h:nth-child(2) { top: 42%;  animation-duration: 14s; animation-delay: -3s;  }
 .line-h:nth-child(3) { top: 68%;  animation-duration: 10s; animation-delay: -6s;  }
@@ -271,6 +249,7 @@ input { font-family: inherit; }
     justify-content: center;
     padding: 3rem;
     background: var(--white);
+    overflow-y: auto;
 }
 
 .login-form-wrapper {
@@ -400,13 +379,13 @@ input { font-family: inherit; }
 }
 
 /* ============================================================
-   SPLASH
+   SPLASH — TEMA CLARO, TEXTO ESCURO
    ============================================================ */
 .splash-screen {
     position: fixed;
     inset: 0;
-    background: var(--gray-950);
-    color: var(--white);
+    background: var(--gray-50);
+    color: var(--gray-900);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -416,20 +395,22 @@ input { font-family: inherit; }
 .splash-inner {
     text-align: center;
     animation: fadeUp 0.5s ease;
+    padding: 0 1.5rem;
 }
 
 .splash-greeting {
     font-size: 1.75rem;
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--white);
+    color: var(--gray-900);
     margin-bottom: 2rem;
 }
 
 .splash-progress {
     width: 220px;
+    max-width: 100%;
     height: 2px;
-    background: rgba(255,255,255,0.12);
+    background: var(--gray-200);
     border-radius: 2px;
     margin: 0 auto;
     overflow: hidden;
@@ -439,7 +420,7 @@ input { font-family: inherit; }
     display: block;
     height: 100%;
     width: 40%;
-    background: var(--blue-500);
+    background: var(--blue-600);
     border-radius: 2px;
     animation: progressSlide 1.6s ease-in-out infinite;
 }
@@ -452,17 +433,194 @@ input { font-family: inherit; }
 /* ============================================================
    RESPONSIVO
    ============================================================ */
-@media (max-width: 960px) {
-    .login-screen { grid-template-columns: 1fr; }
-    .login-aside { display: none; }
-    .login-form-side { padding: 2rem 1.5rem; }
 
-    .back-link,
-    .demo-tag {
-        top: 0.75rem;
-        font-size: 0.72rem;
-        padding: 0.4rem 0.7rem;
+/* Telas médias — 960px ou menos: empilha os painéis */
+@media (max-width: 960px) {
+    html, body { overflow-y: auto; }
+
+    .login-screen {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
     }
-    .back-link { left: 0.75rem; }
-    .demo-tag  { right: 0.75rem; }
+
+    .login-aside {
+        padding: 3.5rem 2rem 2.5rem;
+        min-height: auto;
+    }
+
+    .module-name {
+        font-size: 1.85rem;
+        margin-bottom: 1.75rem;
+    }
+
+    .login-features {
+        gap: 0.9rem;
+        margin-bottom: 1.75rem;
+    }
+
+    .feature-line { font-size: 0.85rem; }
+
+    .login-instructions {
+        padding-top: 1.25rem;
+    }
+
+    .login-aside-footer {
+        margin-top: 1.5rem;
+    }
+
+    .login-form-side {
+        padding: 2.5rem 1.75rem 3rem;
+    }
+
+    .logo-box {
+        width: 200px;
+        height: 80px;
+        margin-bottom: 2rem;
+    }
+}
+
+/* Telas pequenas — 600px ou menos */
+@media (max-width: 600px) {
+    .back-link {
+        top: 0.75rem;
+        left: 0.75rem;
+        padding: 0.45rem 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    .login-aside {
+        padding: 3.5rem 1.5rem 2rem;
+    }
+
+    .eyebrow {
+        font-size: 0.62rem;
+        margin-bottom: 1rem;
+    }
+
+    .module-name {
+        font-size: 1.55rem;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+    }
+
+    .feature-line {
+        font-size: 0.8rem;
+        gap: 0.75rem;
+    }
+
+    .feature-index { font-size: 0.62rem; }
+
+    .instructions-label {
+        font-size: 0.6rem;
+        letter-spacing: 0.18em;
+    }
+
+    .login-instructions p { font-size: 0.8rem; }
+
+    .login-aside-footer {
+        font-size: 0.6rem;
+        letter-spacing: 0.18em;
+    }
+
+    .login-form-side {
+        padding: 2rem 1.25rem 2.5rem;
+    }
+
+    .login-form-wrapper { max-width: 100%; }
+
+    .logo-box {
+        width: 180px;
+        height: 72px;
+        margin-bottom: 1.75rem;
+    }
+    .logo-box .corner { width: 14px; height: 14px; }
+    .logo-box-text { font-size: 0.68rem; letter-spacing: 0.18em; }
+
+    .login-form-header { margin-bottom: 1.75rem; }
+    .login-form-header p { font-size: 0.85rem; }
+
+    .field { margin-bottom: 1.1rem; }
+    .field label { font-size: 0.78rem; margin-bottom: 0.4rem; }
+    .field input { padding: 0.7rem 0.85rem; font-size: 0.9rem; }
+
+    .btn-primary { padding: 0.75rem 1rem; font-size: 0.875rem; }
+
+    .login-form-footer {
+        margin-top: 1.75rem;
+        font-size: 0.75rem;
+    }
+
+    .splash-greeting { font-size: 1.4rem; }
+    .splash-progress { width: 180px; }
+}
+
+/* Telas muito pequenas — 380px ou menos */
+@media (max-width: 380px) {
+    .login-aside { padding: 3.25rem 1.25rem 1.75rem; }
+
+    .module-name {
+        font-size: 1.35rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .feature-line { font-size: 0.75rem; }
+    .feature-line span:last-child { line-height: 1.4; }
+
+    .login-instructions p { font-size: 0.75rem; }
+
+    .login-form-side { padding: 1.75rem 1rem 2.25rem; }
+
+    .logo-box {
+        width: 160px;
+        height: 64px;
+        margin-bottom: 1.5rem;
+    }
+    .logo-box-text { font-size: 0.62rem; letter-spacing: 0.14em; }
+
+    .login-form-header p { font-size: 0.8rem; }
+
+    .field input { padding: 0.65rem 0.8rem; font-size: 0.875rem; }
+
+    .btn-primary { padding: 0.7rem 1rem; font-size: 0.85rem; }
+
+    .login-form-footer { font-size: 0.72rem; }
+
+    .splash-greeting { font-size: 1.2rem; margin-bottom: 1.5rem; }
+    .splash-progress { width: 150px; }
+}
+
+/* Telas em paisagem baixas — evita apertar demais em mobile horizontal */
+@media (max-height: 500px) and (orientation: landscape) {
+    .login-screen {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+        height: 100dvh;
+    }
+
+    .login-aside { padding: 2rem 1.75rem; }
+    .module-name { font-size: 1.4rem; margin-bottom: 1rem; }
+    .login-features { gap: 0.6rem; margin-bottom: 1rem; }
+    .feature-line { font-size: 0.75rem; }
+    .login-instructions { padding-top: 1rem; }
+    .login-aside-footer { margin-top: 0.75rem; }
+
+    .login-form-side {
+        padding: 1.5rem 1.5rem;
+        align-items: center;
+    }
+    .logo-box { width: 160px; height: 60px; margin-bottom: 1rem; }
+    .login-form-header { margin-bottom: 1rem; }
+    .login-form-header p { font-size: 0.78rem; }
+    .field { margin-bottom: 0.85rem; }
+    .login-form-footer { margin-top: 1rem; }
+}
+
+/* Ajustes finos em telas grandes — respiro extra */
+@media (min-width: 1440px) {
+    .login-aside { padding: 4rem 4.5rem; }
+    .module-name { font-size: 2.6rem; }
+    .login-form-wrapper { max-width: 420px; }
 }
