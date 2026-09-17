@@ -127,7 +127,6 @@ input { font-family: inherit; }
     color: #ffffff;
 }
 
-/* Sobre a tela clara, o back-link precisa de contraste */
 body:has(#loginScreen:not(.hidden)) .back-link {
     background: rgba(255,255,255,0.92);
     border-color: var(--gray-300);
@@ -293,36 +292,36 @@ body:has(#loginScreen:not(.hidden)) .back-link:hover {
 .btn-start svg { transition: transform 0.2s ease; }
 .btn-start:hover svg { transform: translateX(3px); }
 
+/* Rodapé informativo da introdução */
 .intro-footer {
     position: absolute;
     bottom: 1.75rem;
-    left: 0;
-    right: 0;
-    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 2;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 0.24em;
+    max-width: 640px;
+    width: calc(100% - 4rem);
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.01em;
 }
 
 /* ============================================================
    TELA 2 — LOGIN
-   ------------------------------------------------------------
-   Por padrão (mobile retrato), o painel azul NÃO é exibido.
-   Ele só aparece em viewports largos (≥ 900px) OU em paisagem
-   com altura mínima razoável.
    ============================================================ */
 .login-screen {
     display: grid;
-    grid-template-columns: 1fr;   /* mobile retrato: só o formulário */
+    grid-template-columns: 1fr;
     height: 100vh;
     height: 100dvh;
     background: var(--white);
     animation: introFadeIn 0.4s ease;
 }
 
-/* Painel azul escondido por padrão */
 .login-aside {
     display: none;
     position: relative;
@@ -330,19 +329,33 @@ body:has(#loginScreen:not(.hidden)) .back-link:hover {
     background: linear-gradient(155deg, var(--blue-900) 0%, var(--blue-800) 55%, var(--blue-700) 100%);
 }
 
+/* Mensagem centralizada no painel azul */
+.login-aside-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: calc(100% - 4rem);
+    max-width: 380px;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: rgba(255,255,255,0.9);
+}
+
 /* Mostrar painel azul em telas largas */
 @media (min-width: 900px) {
-    .login-screen {
-        grid-template-columns: 1.05fr 1fr;
-    }
+    .login-screen { grid-template-columns: 1.05fr 1fr; }
     .login-aside { display: block; }
 }
 
-/* Mostrar também em paisagem quando houver espaço vertical */
+/* Mostrar também em paisagem com espaço vertical */
 @media (orientation: landscape) and (min-height: 480px) and (min-width: 720px) {
-    .login-screen {
-        grid-template-columns: 1fr 1fr;
-    }
+    .login-screen { grid-template-columns: 1fr 1fr; }
     .login-aside { display: block; }
 }
 
@@ -534,9 +547,8 @@ body:has(#loginScreen:not(.hidden)) .back-link:hover {
    RESPONSIVO
    ============================================================ */
 
-/* Telas médias — ajusta introdução e formulário */
 @media (max-width: 960px) {
-    .intro-screen { padding: 5rem 1.75rem 4rem; }
+    .intro-screen { padding: 5rem 1.75rem 5.5rem; }
     .intro-title { font-size: clamp(1.75rem, 6vw, 2.5rem); margin-bottom: 2.25rem; }
     .intro-features { gap: 0.75rem; margin-bottom: 2rem; }
     .intro-features .feature-line { font-size: 0.85rem; }
@@ -544,11 +556,16 @@ body:has(#loginScreen:not(.hidden)) .back-link:hover {
     .intro-instructions p { font-size: 0.85rem; }
     .btn-start { padding: 0.85rem 1.5rem; font-size: 0.9rem; }
 
+    .intro-footer {
+        font-size: 0.74rem;
+        bottom: 1.5rem;
+        width: calc(100% - 3rem);
+    }
+
     .login-form-side { padding: 2.5rem 1.75rem 3rem; }
     .logo-box { width: 200px; height: 80px; margin-bottom: 2rem; }
 }
 
-/* Mobile retrato — sem painel azul, formulário ocupa tudo */
 @media (max-width: 899px) {
     html, body { overflow-y: auto; }
 
@@ -571,7 +588,7 @@ body:has(#loginScreen:not(.hidden)) .back-link:hover {
         font-size: 0.75rem;
     }
 
-    .intro-screen { padding: 4.5rem 1.25rem 4rem; }
+    .intro-screen { padding: 4.5rem 1.25rem 5rem; }
     .intro-inner .eyebrow { font-size: 0.62rem; margin-bottom: 1rem; }
     .intro-title { font-size: clamp(1.6rem, 8vw, 2.1rem); margin-bottom: 2rem; }
     .intro-features { gap: 0.65rem; margin-bottom: 1.75rem; max-width: 100%; }
@@ -581,6 +598,13 @@ body:has(#loginScreen:not(.hidden)) .back-link:hover {
     .intro-instructions .instructions-label { font-size: 0.6rem; letter-spacing: 0.18em; }
     .intro-instructions p { font-size: 0.8rem; }
     .btn-start { padding: 0.8rem 1.35rem; font-size: 0.88rem; width: 100%; justify-content: center; }
+
+    .intro-footer {
+        font-size: 0.68rem;
+        bottom: 1.25rem;
+        width: calc(100% - 2.5rem);
+        line-height: 1.5;
+    }
 
     .login-form-side { padding: 4rem 1.25rem 2.5rem; }
     .login-form-wrapper { max-width: 100%; }
@@ -607,49 +631,15 @@ body:has(#loginScreen:not(.hidden)) .back-link:hover {
 }
 
 @media (max-width: 380px) {
-    .intro-screen { padding: 4rem 1rem 3.5rem; }
+    .intro-screen { padding: 4rem 1rem 4.5rem; }
     .intro-title { font-size: 1.5rem; }
     .intro-features .feature-line { font-size: 0.75rem; }
     .btn-start { padding: 0.75rem 1.15rem; font-size: 0.85rem; }
+
+    .intro-footer { font-size: 0.64rem; }
 
     .login-form-side { padding: 3.5rem 1rem 2.25rem; }
     .logo-box { width: 160px; height: 64px; margin-bottom: 1.5rem; }
     .logo-box-text { font-size: 0.62rem; letter-spacing: 0.14em; }
 
     .login-form-header p { font-size: 0.8rem; }
-    .field input { padding: 0.65rem 0.8rem; font-size: 0.875rem; }
-    .btn-primary { padding: 0.7rem 1rem; font-size: 0.85rem; }
-    .login-form-footer { font-size: 0.72rem; }
-
-    .splash-greeting { font-size: 1.2rem; margin-bottom: 1.5rem; }
-    .splash-progress { width: 150px; }
-
-    .whatsapp-float { width: 46px; height: 46px; bottom: 14px; right: 14px; }
-    .whatsapp-float svg { width: 24px; height: 24px; }
-}
-
-/* Paisagem em telas baixas: mostra o painel azul novamente */
-@media (orientation: landscape) and (max-height: 500px) {
-    .intro-screen { padding: 4rem 1.5rem 2.5rem; justify-content: flex-start; }
-    .intro-title { font-size: 1.5rem; margin-bottom: 1rem; }
-    .intro-features { gap: 0.5rem; margin-bottom: 1rem; }
-    .intro-features .feature-line { font-size: 0.78rem; }
-    .intro-instructions { padding-top: 1rem; margin-bottom: 1.25rem; }
-    .btn-start { padding: 0.65rem 1.15rem; font-size: 0.82rem; }
-
-    .login-form-side { padding: 2rem 1.5rem; align-items: center; }
-    .logo-box { width: 160px; height: 60px; margin-bottom: 1rem; }
-    .login-form-header { margin-bottom: 1rem; }
-    .login-form-header p { font-size: 0.78rem; }
-    .field { margin-bottom: 0.85rem; }
-    .login-form-footer { margin-top: 1rem; }
-}
-
-/* Respiro extra em telas grandes */
-@media (min-width: 1440px) {
-    .intro-inner { max-width: 720px; }
-    .intro-title { font-size: 3.5rem; }
-    .intro-instructions p { font-size: 0.95rem; }
-
-    .login-form-wrapper { max-width: 420px; }
-}
