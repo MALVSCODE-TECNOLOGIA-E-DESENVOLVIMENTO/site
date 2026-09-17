@@ -47,7 +47,6 @@ if (startBtn) {
         introScreen.classList.add('hidden');
         loginScreen.classList.remove('hidden');
 
-        // Rola ao topo e foca no primeiro campo após a transição
         window.scrollTo({ top: 0, behavior: 'auto' });
         setTimeout(() => {
             if (usernameInput) usernameInput.focus();
