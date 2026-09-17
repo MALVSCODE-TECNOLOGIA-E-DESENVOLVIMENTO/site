@@ -57,16 +57,10 @@
     --btn-view:         #F59E0B;
     --btn-save:         #22C55E;
 
-    --status-pendente:        #6B7280;
-    --status-agendado:        #2563EB;
-    --status-em-atendimento:  #D97706;
-    --status-atendido:        #16A34A;
-    --status-cancelado:       #DC2626;
-    --status-nao-compareceu:  #7C3AED;
-
-    --prio-alta:   #DC2626;
-    --prio-normal: #D97706;
-    --prio-baixa:  #16A34A;
+    --status-pendente:  #6B7280;
+    --status-agendado:  #2563EB;
+    --status-atendido:  #16A34A;
+    --status-cancelado: #DC2626;
 
     --sidebar-w:        260px;
     --sidebar-w-mini:   72px;
@@ -114,19 +108,15 @@ input, select, textarea { font-family: inherit; }
 .hidden { display: none !important; }
 
 /* ============================================================
-   BACK LINK
+   BACK LINK (dentro do .main, acima do conteúdo)
    ============================================================ */
 .back-link {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 900;
     display: inline-flex;
     align-items: center;
+    align-self: flex-start;
+    margin: 1.5rem 2rem 0;
     padding: 0.5rem 0.9rem;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     color: var(--text-secondary);
@@ -136,7 +126,6 @@ input, select, textarea { font-family: inherit; }
     box-shadow: var(--card-shadow);
 }
 .back-link:hover {
-    background: #ffffff;
     border-color: var(--primary-border);
     color: var(--primary);
 }
@@ -163,29 +152,23 @@ input, select, textarea { font-family: inherit; }
 .whatsapp-float svg { width: 28px; height: 28px; }
 
 /* ============================================================
-   AMBIENTE DE DEMONSTRAÇÃO
+   AMBIENTE DE DEMONSTRAÇÃO (texto solto, sem bloco)
    ============================================================ */
 .demo-footer {
     position: fixed;
-    bottom: 1.25rem;
+    bottom: 1.4rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 700;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid var(--border-color);
-    border-radius: 100px;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     font-weight: 500;
     color: var(--text-secondary);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    box-shadow: var(--card-shadow);
     pointer-events: none;
     user-select: none;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
 }
 .demo-footer::before {
     content: '';
@@ -195,6 +178,12 @@ input, select, textarea { font-family: inherit; }
     background: var(--success-color);
     box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
     flex-shrink: 0;
+}
+
+/* Sobre a tela azul da intro, o texto precisa ficar claro */
+body:has(#introScreen:not(.hidden)) .demo-footer {
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: none;
 }
 
 /* ============================================================
@@ -222,7 +211,6 @@ input, select, textarea { font-family: inherit; }
     pointer-events: none;
     z-index: 1;
 }
-
 .intro-screen .line-h {
     left: 0;
     width: 100%;
@@ -281,7 +269,6 @@ input, select, textarea { font-family: inherit; }
     color: #93C5FD;
     margin-bottom: 1.5rem;
 }
-
 .intro-title {
     font-size: clamp(2rem, 5vw, 3.25rem);
     font-weight: 600;
@@ -289,7 +276,6 @@ input, select, textarea { font-family: inherit; }
     line-height: 1.1;
     margin-bottom: 3rem;
 }
-
 .intro-features {
     display: flex;
     flex-direction: column;
@@ -312,7 +298,6 @@ input, select, textarea { font-family: inherit; }
     color: #93C5FD;
     flex-shrink: 0;
 }
-
 .intro-instructions {
     border-top: 1px solid rgba(255, 255, 255, 0.12);
     padding-top: 1.75rem;
@@ -384,7 +369,7 @@ input, select, textarea { font-family: inherit; }
 .app:has(.sidebar:hover) { grid-template-columns: var(--sidebar-w) 1fr; }
 
 /* ============================================================
-   SIDEBAR
+   SIDEBAR (sem título, sem versão)
    ============================================================ */
 .sidebar {
     background: #0B1120;
@@ -397,34 +382,13 @@ input, select, textarea { font-family: inherit; }
     z-index: 100;
     overflow: hidden;
     border-right: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 1rem;
 }
-
-.sidebar-brand {
-    padding: 1.25rem 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    min-height: 76px;
-    justify-content: center;
-    white-space: nowrap;
-    overflow: hidden;
-}
-.brand-mark { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; color: #ffffff; }
-.brand-mark span { color: #93C5FD; }
-.brand-sub {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.4);
-}
-
 .sidebar-nav {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0.75rem 0.6rem;
+    padding: 0.5rem 0.6rem;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -493,18 +457,6 @@ input, select, textarea { font-family: inherit; }
 .app:has(.sidebar:hover) .nav-badge { opacity: 1; }
 .nav-item.active .nav-badge { background: rgba(255, 255, 255, 0.25); }
 
-.sidebar-foot {
-    padding: 0.9rem 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.15em;
-    color: rgba(255, 255, 255, 0.35);
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
 /* ============================================================
    MAIN
    ============================================================ */
@@ -516,7 +468,7 @@ input, select, textarea { font-family: inherit; }
 }
 .content {
     flex: 1;
-    padding: 1.75rem 2rem 2rem;
+    padding: 1.25rem 2rem 2rem;
     overflow-x: hidden;
 }
 
@@ -591,25 +543,20 @@ button:disabled { background: #9CA3AF; cursor: not-allowed; opacity: 0.5; }
 
 button.secondary  { background: #6B7280; }
 button.danger     { background: var(--btn-delete); }
-button.edit       { background: var(--btn-edit); }
-button.view       { background: var(--btn-view); }
 button.success,
 button.save,
 button[type="submit"] { background: var(--btn-save); }
 button.small      { padding: 8px 12px; font-size: 0.85rem; }
 
-.action-btn {
-    padding: 7px 12px;
-    font-size: 0.8rem;
-    margin: 0 3px;
-    min-width: 70px;
-    border-radius: 6px;
-    font-weight: 600;
+/* Modal em cor neutra: ações com fundo cinza padrão */
+.modal-neutral .modal-actions button.success,
+.modal-neutral .modal-actions button[type="submit"] {
+    background: var(--gray-700);
 }
-.action-btn.edit   { background: var(--btn-edit); }
-.action-btn.delete { background: var(--btn-delete); }
-.action-btn.view   { background: var(--btn-view); }
-.action-btn.success { background: var(--btn-save); }
+.modal-neutral .modal-actions button.success:hover,
+.modal-neutral .modal-actions button[type="submit"]:hover {
+    background: var(--gray-900);
+}
 
 .btn-icon {
     background: transparent;
@@ -798,11 +745,7 @@ button.small      { padding: 8px 12px; font-size: 0.85rem; }
     align-items: center;
     margin-bottom: 1.5rem;
 }
-.calendar-header h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0;
-}
+.calendar-header h3 { font-size: 1.5rem; font-weight: 700; margin: 0; }
 .calendar-year-nav {
     background: transparent;
     border: none;
@@ -900,16 +843,28 @@ button.small      { padding: 8px 12px; font-size: 0.85rem; }
     font-weight: 700;
     line-height: 1;
     margin-bottom: 0.25rem;
+    color: var(--text-primary);
 }
 .stat-value-success { color: #22C55E; }
 .stat-value-warning { color: #F59E0B; }
 .stat-value-info    { color: #3B82F6; }
 .stat-value-danger  { color: #EF4444; }
 .stat-value-primary { color: var(--primary); }
+
 .stat-label {
     font-size: 0.875rem;
     color: var(--text-secondary);
     font-weight: 500;
+}
+
+/* "Aguardando" pulsante em vermelho quando > 0 */
+.stat-value-pulse {
+    color: var(--status-cancelado);
+    animation: pulseAguardando 1.6s ease-in-out infinite;
+}
+@keyframes pulseAguardando {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.55; transform: scale(1.06); }
 }
 
 /* ============================================================
@@ -955,7 +910,6 @@ tbody tr.row-atendido {
 }
 tbody tr.row-atendido:hover { background: rgba(34, 197, 94, 0.18) !important; }
 tbody tr.row-cancelado { background: rgba(239, 68, 68, 0.06) !important; }
-tbody tr.row-nao-compareceu { background: rgba(124, 58, 237, 0.06) !important; }
 
 /* ============================================================
    CHECKBOX CUSTOMIZADO
@@ -1017,43 +971,11 @@ tbody tr.row-nao-compareceu { background: rgba(124, 58, 237, 0.06) !important; }
     display: inline-block;
     border: 1px solid;
 }
-.badge.pendente          { background: rgba(107, 114, 128, 0.1); color: var(--status-pendente);       border-color: rgba(107, 114, 128, 0.25); }
-.badge.agendado          { background: rgba(37, 99, 235, 0.1);   color: var(--status-agendado);       border-color: rgba(37, 99, 235, 0.25); }
-.badge.em_atendimento    { background: rgba(217, 119, 6, 0.1);   color: var(--status-em-atendimento); border-color: rgba(217, 119, 6, 0.25); }
-.badge.atendido          { background: rgba(22, 163, 74, 0.12);  color: var(--status-atendido);       border-color: rgba(22, 163, 74, 0.28); }
-.badge.cancelado         { background: rgba(220, 38, 38, 0.1);   color: var(--status-cancelado);      border-color: rgba(220, 38, 38, 0.25); }
-.badge.nao_compareceu    { background: rgba(124, 58, 237, 0.1);  color: var(--status-nao-compareceu); border-color: rgba(124, 58, 237, 0.25); }
-
-/* ============================================================
-   PRIORIDADE
-   ============================================================ */
-.prio {
-    padding: 4px 12px;
-    border-radius: 6px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-    display: inline-block;
-    border: 1px solid;
-}
-.prio.alta   { background: rgba(220, 38, 38, 0.1); color: var(--prio-alta);   border-color: rgba(220, 38, 38, 0.25); }
-.prio.normal { background: rgba(217, 119, 6, 0.1); color: var(--prio-normal); border-color: rgba(217, 119, 6, 0.25); }
-.prio.baixa  { background: rgba(22, 163, 74, 0.1); color: var(--prio-baixa);  border-color: rgba(22, 163, 74, 0.25); }
-
-/* Chip de canal */
-.chip {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 100px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    background: var(--input-bg);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-color);
-    white-space: nowrap;
-}
+.badge.pendente  { background: rgba(107, 114, 128, 0.1); color: var(--status-pendente);  border-color: rgba(107, 114, 128, 0.25); }
+.badge.agendado  { background: rgba(37, 99, 235, 0.1);   color: var(--status-agendado);  border-color: rgba(37, 99, 235, 0.25); }
+.badge.atendido  { background: rgba(22, 163, 74, 0.12);  color: var(--status-atendido);  border-color: rgba(22, 163, 74, 0.28); }
+.badge.cancelado { background: rgba(220, 38, 38, 0.1);   color: var(--status-cancelado); border-color: rgba(220, 38, 38, 0.25); }
+.badge.aguardando { background: rgba(220, 38, 38, 0.1);  color: var(--status-cancelado); border-color: rgba(220, 38, 38, 0.25); }
 
 /* ============================================================
    FORMULÁRIOS
@@ -1419,7 +1341,7 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
 }
 
 /* ============================================================
-   RELATÓRIOS (barras)
+   RELATÓRIOS
    ============================================================ */
 .report-bars { display: flex; flex-direction: column; gap: 0.75rem; }
 .report-bar {
@@ -1533,10 +1455,11 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
    ============================================================ */
 
 @media (max-width: 1100px) {
-    .content { padding: 1.5rem 1.5rem 2rem; }
+    .content { padding: 1rem 1.5rem 2rem; }
     .module-head-left h1 { font-size: 1.35rem; }
     .filter-dropdown-inline { min-width: 140px; }
     .month-navigation-inline { min-width: 140px; }
+    .back-link { margin: 1.25rem 1.5rem 0; }
 }
 
 @media (max-width: 900px) {
@@ -1553,11 +1476,9 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
     }
     .sidebar.open { transform: translateX(0); }
     .sidebar .nav-item .nav-label,
-    .sidebar .nav-badge,
-    .sidebar .brand-sub,
-    .sidebar .brand-mark span { opacity: 1; }
+    .sidebar .nav-badge { opacity: 1; }
 
-    .content { padding: 1.25rem 1rem 5.5rem; }
+    .content { padding: 1rem 1rem 5.5rem; }
     .module-head-left h1 { font-size: 1.2rem; }
 
     .search-bar {
@@ -1595,14 +1516,12 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
     .report-bar .value { text-align: left; }
 
     .back-link {
-        top: 0.75rem;
-        left: 0.75rem;
+        margin: 1rem 1rem 0;
         font-size: 0.75rem;
         padding: 0.4rem 0.75rem;
     }
     .demo-footer {
-        font-size: 0.68rem;
-        padding: 0.4rem 0.8rem;
+        font-size: 0.7rem;
         bottom: 1rem;
     }
     .whatsapp-float {
@@ -1615,7 +1534,7 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
 }
 
 @media (max-width: 640px) {
-    .content { padding: 1rem 0.75rem 5.5rem; }
+    .content { padding: 0.75rem 0.75rem 5.5rem; }
     .module-head-left h1 { font-size: 1.1rem; }
     .module-head-left p { font-size: 0.78rem; }
 
@@ -1630,7 +1549,7 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
     th { font-size: 0.7rem; letter-spacing: 0.3px; }
     td { font-size: 0.82rem; }
 
-    .badge, .prio { font-size: 0.65rem; padding: 3px 8px; }
+    .badge { font-size: 0.65rem; padding: 3px 8px; }
 
     .checkbox-label-styled { width: 32px; height: 32px; }
     .styled-checkbox { width: 32px; height: 32px; }
@@ -1639,7 +1558,12 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
     .tab-btn { font-size: 0.78rem; padding: 9px 12px; }
 
     .btn-new-order-header { padding: 0.55rem 1rem; font-size: 0.82rem; }
-    .action-btn { padding: 6px 10px; font-size: 0.72rem; min-width: 60px; }
+
+    .back-link {
+        margin: 0.75rem 0.75rem 0;
+        padding: 0.4rem 0.7rem;
+        font-size: 0.72rem;
+    }
 
     /* Intro em mobile */
     .intro-screen { padding: 5rem 1.25rem 5rem; }
@@ -1650,12 +1574,41 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
     .intro-instructions p { font-size: 0.8rem; }
     .btn-start { width: 100%; justify-content: center; padding: 0.85rem 1.35rem; font-size: 0.88rem; }
     .intro-footer { font-size: 0.68rem; bottom: 1.25rem; width: calc(100% - 2.5rem); }
+
+    .demo-footer { font-size: 0.65rem; bottom: 0.75rem; }
 }
 
 @media (max-width: 380px) {
     .dashboard-grid { grid-template-columns: 1fr; }
     .stat-card { padding: 0.75rem; }
     .stat-value { font-size: 1.2rem; }
-    .badge, .prio { font-size: 0.6rem; padding: 2px 7px; }
+    .badge { font-size: 0.6rem; padding: 2px 7px; }
     .demo-footer { display: none; }
+}
+
+/* ============================================================
+   PRINT — usado pelo Histórico (PDF via window.print)
+   ============================================================ */
+@media print {
+    .sidebar,
+    .back-link,
+    .whatsapp-float,
+    .demo-footer,
+    .search-bar-wrapper,
+    .module-head button,
+    .btn-icon,
+    .toast-stack,
+    .modal-overlay { display: none !important; }
+
+    .app { grid-template-columns: 1fr !important; }
+    .main { padding: 0 !important; }
+    .content { padding: 0 !important; }
+
+    body { background: #fff !important; }
+    .card, .table-card { box-shadow: none !important; border: 1px solid #ddd !important; }
+    .module-head { border-bottom: 1px solid #000; padding-bottom: 1rem; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #eee !important; color: #000 !important; border: 1px solid #999 !important; }
+    td { border: 1px solid #999 !important; }
+    tr { page-break-inside: avoid; }
 }
