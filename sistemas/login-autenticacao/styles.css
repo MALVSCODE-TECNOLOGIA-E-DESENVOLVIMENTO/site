@@ -643,3 +643,39 @@ body:has(#loginScreen:not(.hidden)) .back-link:hover {
     .logo-box-text { font-size: 0.62rem; letter-spacing: 0.14em; }
 
     .login-form-header p { font-size: 0.8rem; }
+    .field input { padding: 0.65rem 0.8rem; font-size: 0.875rem; }
+    .btn-primary { padding: 0.7rem 1rem; font-size: 0.85rem; }
+    .login-form-footer { font-size: 0.72rem; }
+
+    .splash-greeting { font-size: 1.2rem; margin-bottom: 1.5rem; }
+    .splash-progress { width: 150px; }
+
+    .whatsapp-float { width: 46px; height: 46px; bottom: 14px; right: 14px; }
+    .whatsapp-float svg { width: 24px; height: 24px; }
+}
+
+/* Paisagem em telas baixas */
+@media (orientation: landscape) and (max-height: 500px) {
+    .intro-screen { padding: 4rem 1.5rem 2.5rem; justify-content: flex-start; }
+    .intro-title { font-size: 1.5rem; margin-bottom: 1rem; }
+    .intro-features { gap: 0.5rem; margin-bottom: 1rem; }
+    .intro-features .feature-line { font-size: 0.78rem; }
+    .intro-instructions { padding-top: 1rem; margin-bottom: 1.25rem; }
+    .btn-start { padding: 0.65rem 1.15rem; font-size: 0.82rem; }
+
+    .login-form-side { padding: 2rem 1.5rem; align-items: center; }
+    .logo-box { width: 160px; height: 60px; margin-bottom: 1rem; }
+    .login-form-header { margin-bottom: 1rem; }
+    .login-form-header p { font-size: 0.78rem; }
+    .field { margin-bottom: 0.85rem; }
+    .login-form-footer { margin-top: 1rem; }
+}
+
+/* Respiro extra em telas grandes */
+@media (min-width: 1440px) {
+    .intro-inner { max-width: 720px; }
+    .intro-title { font-size: 3.5rem; }
+    .intro-instructions p { font-size: 0.95rem; }
+
+    .login-form-wrapper { max-width: 420px; }
+}
