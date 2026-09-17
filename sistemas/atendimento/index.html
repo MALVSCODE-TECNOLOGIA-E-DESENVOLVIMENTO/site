@@ -16,9 +16,7 @@
 </head>
 <body>
 
-    <!-- ============================================ -->
-    <!-- BACK LINK (visível nas duas telas)           -->
-    <!-- ============================================ -->
+    <!-- BACK LINK (visível nas duas telas) -->
     <a class="back-link" href="/#sistemas">Voltar ao site</a>
 
     <!-- ============================================ -->
@@ -55,7 +53,7 @@
 
             <div class="intro-instructions">
                 <div class="instructions-label">Como interagir</div>
-                <p>Explore os módulos pela barra lateral. Os dados desta demonstração são fictícios e podem ser restaurados a qualquer momento.</p>
+                <p>Todos os dados exibidos são fictícios e servem apenas para demonstração. Sinta-se à vontade para explorar os módulos livremente — você pode restaurar os dados originais a qualquer momento em Configurações.</p>
             </div>
 
             <button type="button" id="startBtn" class="btn-start">
@@ -95,98 +93,20 @@
         </main>
     </div>
 
-    <!-- ============================================ -->
-    <!-- AMBIENTE DE DEMONSTRAÇÃO (fixo, no rodapé)   -->
-    <!-- ============================================ -->
+    <!-- AMBIENTE DE DEMONSTRAÇÃO (fixo, no rodapé) -->
     <div class="demo-footer">Ambiente de demonstração</div>
 
-    <!-- ============================================ -->
-    <!-- WHATSAPP FLUTUANTE                           -->
-    <!-- ============================================ -->
+    <!-- WHATSAPP FLUTUANTE -->
     <a href="#" id="whatsappFloat" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Falar no WhatsApp">
         <svg viewBox="0 0 24 24" fill="white" aria-hidden="true">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
         </svg>
     </a>
 
-    <!-- ============================================ -->
-    <!-- RAIZ DE MODAIS + TOASTS                      -->
-    <!-- ============================================ -->
+    <!-- RAIZ DE MODAIS + TOASTS -->
     <div id="modalRoot"></div>
     <div id="toastStack" class="toast-stack" aria-live="polite"></div>
 
-    <!-- ============================================ -->
-    <!-- SCRIPTS                                      -->
-    <!-- ============================================ -->
     <script src="script.js"></script>
-    <script>
-    /* ============================================================
-       CALENDÁRIO — adaptado do modelo frete
-       ============================================================ */
-    (function () {
-        let calendarYear = new Date().getFullYear();
-
-        window.toggleCalendar = function () {
-            const modal = document.getElementById('calendarModal');
-            if (!modal) return;
-            if (modal.classList.contains('show')) {
-                modal.classList.remove('show');
-            } else {
-                const ref = (window.currentMonth instanceof Date)
-                    ? window.currentMonth
-                    : new Date();
-                calendarYear = ref.getFullYear();
-                updateCalendarView();
-                modal.classList.add('show');
-            }
-        };
-
-        window.changeCalendarYear = function (direction) {
-            calendarYear += direction;
-            updateCalendarView();
-        };
-
-        window.selectMonth = function (monthIndex) {
-            if (typeof window.setCurrentMonth === 'function') {
-                window.setCurrentMonth(new Date(calendarYear, monthIndex, 1));
-            }
-            toggleCalendar();
-        };
-
-        function updateCalendarView() {
-            const yearEl = document.getElementById('calendarYear');
-            const monthsEl = document.getElementById('calendarMonths');
-            if (!yearEl || !monthsEl) return;
-
-            yearEl.textContent = calendarYear;
-
-            const meses = [
-                'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-                'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
-            ];
-            const ref = (window.currentMonth instanceof Date)
-                ? window.currentMonth
-                : new Date();
-
-            monthsEl.innerHTML = meses.map((mes, index) => {
-                const isCurrent =
-                    index === ref.getMonth() &&
-                    calendarYear === ref.getFullYear();
-                return `<div class="calendar-month ${isCurrent ? 'current' : ''}"
-                             onclick="selectMonth(${index})">${mes}</div>`;
-            }).join('');
-        }
-
-        // Fecha o calendário ao clicar fora
-        document.addEventListener('click', (e) => {
-            const modal = document.getElementById('calendarModal');
-            const btn   = document.querySelector('.calendar-btn');
-            if (!modal || !modal.classList.contains('show')) return;
-            if (modal.contains(e.target)) return;
-            if (btn && btn.contains(e.target)) return;
-            modal.classList.remove('show');
-        });
-    })();
-    </script>
 </body>
 </html>
