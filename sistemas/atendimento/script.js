@@ -778,10 +778,15 @@ function renderAtendRows() {
         const rowClass  = concluido ? 'row-atendido' : cancelado ? 'row-cancelado' : '';
         const codigo    = codigoDoAtendimento(a);
         const nome      = nomeDoAtendimento(a);
-        /* Sem observações: ícone de chat. Com observações: ícone de alerta. */
         const obsIcon   = temObservacoes(a)
             ? `<button class="btn-icon alert" data-chat="${a.id}" title="Ver/Adicionar observações">${ICON_ALERT}</button>`
             : `<button class="btn-icon" data-chat="${a.id}" title="Adicionar observação">${ICON_CHAT}</button>`;
+
+        /* Cancelamento: apenas no Controle de Atendimento. */
+        let acaoCancelar = '';
+        if (!concluido && !cancelado) {
+            acaoCancelar = `<button class="btn-icon" data-cancel="${a.id}" title="Cancelar atendimento" style="color:#EF4444;">✕</button>`;
+        }
 
         const checkboxCell = cancelado
             ? `<td style="text-align:center;"></td>`
@@ -808,6 +813,7 @@ function renderAtendRows() {
                     <div style="display:flex;gap:4px;justify-content:flex-end;align-items:center;">
                         <button class="btn-icon" data-view="${a.id}" title="Ver detalhes">${ICON_DOC}</button>
                         ${obsIcon}
+                        ${acaoCancelar}
                     </div>
                 </td>
             </tr>
@@ -819,6 +825,7 @@ function renderAtendRows() {
     });
     tbody.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => viewAtendimento(b.dataset.view, 'dados')));
     tbody.querySelectorAll('[data-chat]').forEach(b => b.addEventListener('click', () => viewAtendimento(b.dataset.chat, 'obs')));
+    tbody.querySelectorAll('[data-cancel]').forEach(b => b.addEventListener('click', () => cancelarAtendimento(b.dataset.cancel)));
 }
 
 function toggleAtendimento(id, checked) {
@@ -835,6 +842,30 @@ function toggleAtendimento(id, checked) {
     }
     renderAtendRows();
     toast(checked ? 'Atendimento marcado como atendido.' : 'Atendimento reaberto.', 'success');
+}
+
+/* NOVO: cancelamento exclusivo do Controle de Atendimento */
+async function cancelarAtendimento(id) {
+    const ats = DB.getAtendimentos();
+    const idx = ats.findIndex(x => x.id === id);
+    if (idx < 0) return;
+    const a = ats[idx];
+    const ok = await confirmDialog('Cancelar este atendimento? O status será refletido no agendamento correspondente.');
+    if (!ok) return;
+
+    ats[idx].status = 'cancelado';
+    DB.setAtendimentos(ats);
+
+    if (a.agendamentoId) {
+        const ags = DB.getAgendamentos();
+        const iag = ags.findIndex(x => x.id === a.agendamentoId);
+        if (iag >= 0) {
+            ags[iag].status = 'cancelado';
+            DB.setAgendamentos(ags);
+        }
+    }
+    renderAtendRows();
+    toast('Atendimento cancelado.', 'error');
 }
 
 function viewAtendimento(id, abaAtiva = 'dados') {
@@ -903,9 +934,7 @@ function viewAtendimento(id, abaAtiva = 'dados') {
         });
         toast('Observação registrada.', 'success');
         overlay.remove();
-        /* Redesenha a tela atual */
         renderRoute();
-        /* Reabre o modal já na aba de observações */
         viewAtendimento(id, 'obs');
     });
 }
@@ -1159,7 +1188,6 @@ function openAgendamentoModal(editId) {
                     }
                 }
 
-                /* Nova observação eventualmente digitada na aba */
                 const novaObsTxt = ov.querySelector('#novaObsAg')?.value.trim() || '';
                 const novaObsObj = novaObsTxt ? [{ texto: novaObsTxt, autor: 'Sistema', timestamp: nowISO() }] : [];
 
@@ -1184,7 +1212,6 @@ function openAgendamentoModal(editId) {
                             observacoes: [...(ats[iat].observacoes || []), ...novaObsObj]
                         };
                     }
-                    /* Propaga também para o cliente */
                     if (clienteId && novaObsObj.length) {
                         const cs = DB.getClientes();
                         const ic = cs.findIndex(x => x.id === clienteId);
@@ -1212,7 +1239,6 @@ function openAgendamentoModal(editId) {
                         status: 'agendado',
                         observacoes: [...novaObsObj]
                     });
-                    /* Propaga para o cliente também na criação */
                     if (clienteId && novaObsObj.length) {
                         const cs = DB.getClientes();
                         const ic = cs.findIndex(x => x.id === clienteId);
