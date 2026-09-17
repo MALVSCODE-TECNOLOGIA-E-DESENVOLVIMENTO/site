@@ -1,7 +1,5 @@
 /* ============================================================
    Sistema de Atendimento · MALVSCODE
-   Proporções base = login-autenticacao (16px)
-   Layout adaptado para telas pequenas sem encolher a tipografia
    ============================================================ */
 
 :root {
@@ -71,8 +69,6 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-/* Base fixa em 16px para todas as telas */
 html { font-size: 16px; }
 
 html, body {
@@ -141,7 +137,7 @@ input, select, textarea { font-family: inherit; }
 .whatsapp-float svg { width: 30px; height: 30px; }
 
 /* ============================================================
-   INTRO — mesmas proporções do login-autenticacao
+   INTRO
    ============================================================ */
 .intro-screen {
     position: relative;
@@ -386,7 +382,7 @@ input, select, textarea { font-family: inherit; }
     flex-direction: column;
     min-width: 0;
     padding-bottom: 5rem;
-    padding-top: 4.5rem; /* espaço para o botão "Voltar ao site" */
+    padding-top: 4.5rem;
 }
 .content {
     flex: 1;
@@ -737,7 +733,7 @@ button.small      { padding: 8px 12px; font-size: 0.85rem; }
 }
 
 /* ============================================================
-   TABELAS
+   TABELAS — desktop/tablet
    ============================================================ */
 .card {
     background: var(--bg-card);
@@ -1173,9 +1169,8 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
 @keyframes slideInBottom { from { opacity: 0; transform: translateY(100px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ============================================================
-   RESPONSIVO
+   RESPONSIVO — TABLET
    ============================================================ */
-
 @media (max-width: 1100px) {
     .content { padding: 0 1.5rem 2rem; }
     .filter-dropdown-inline { min-width: 140px; }
@@ -1183,11 +1178,8 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
     .module-head-left h1 { font-size: 1.35rem; }
 }
 
-/* Tablet: sidebar vira gaveta, conteúdo ocupa tudo */
 @media (max-width: 900px) {
-    .app {
-        grid-template-columns: 1fr;
-    }
+    .app,
     .app:has(.sidebar:hover) {
         grid-template-columns: 1fr;
     }
@@ -1200,47 +1192,25 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
         transform: translateX(-100%);
         transition: transform 0.25s ease;
         box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
-        padding-top: 4.5rem;
     }
     .sidebar.open { transform: translateX(0); }
-
-    /* Quando a sidebar está aberta em mobile, todos os textos aparecem */
     .sidebar .nav-item .nav-label,
     .sidebar .nav-badge { opacity: 1; }
 
-    .main {
-        padding-top: 4.5rem;
-        padding-bottom: 5rem;
-    }
-    .content {
-        padding: 0 1.25rem 1.5rem;
-    }
+    .main { padding-top: 4.5rem; padding-bottom: 5rem; }
+    .content { padding: 0 1.25rem 1.5rem; }
 
-    .module-head {
-        flex-direction: column;
-        align-items: stretch;
-    }
+    .module-head { flex-direction: column; align-items: stretch; }
     .module-head-left h1 { font-size: 1.4rem; }
     .btn-new-order-header { width: 100%; justify-content: center; }
 
-    .search-bar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.6rem;
-    }
+    .search-bar { flex-direction: column; align-items: stretch; gap: 0.6rem; }
     .search-bar input { width: 100%; min-width: unset; }
-    .search-bar-filters {
-        width: 100%;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
+    .search-bar-filters { width: 100%; flex-direction: column; gap: 0.5rem; }
     .filter-dropdown-inline { width: 100%; }
     .month-navigation-inline { width: 100%; justify-content: space-between; }
 
-    .dashboard-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
+    .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
     .form-grid { grid-template-columns: 1fr; }
 
     .modal-content {
@@ -1249,28 +1219,27 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
         max-width: 100% !important;
         border-radius: 12px;
     }
-    .modal-actions {
-        flex-direction: column-reverse;
-    }
+    .modal-actions { flex-direction: column-reverse; }
     .modal-actions button { width: 100%; }
 
     .tabs-nav { flex-wrap: nowrap; overflow-x: auto; }
     .tab-btn { font-size: 0.85rem; padding: 11px 16px; }
 
-    .report-bar {
-        grid-template-columns: 1fr;
-        gap: 0.4rem;
-    }
+    .report-bar { grid-template-columns: 1fr; gap: 0.4rem; }
     .report-bar .value { text-align: left; }
 }
 
-/* Mobile: dashboards em coluna única, botões full-width, botão voltar menor */
+/* ============================================================
+   MOBILE — TABELAS VIRAM CARDS
+   Só as tabelas dentro de .table-card são afetadas.
+   O resto (dashboards, menu, botões, modais) permanece como está.
+   ============================================================ */
 @media (max-width: 640px) {
-    .main {
-        padding-top: 4rem;
-        padding-bottom: 6rem;
-    }
+
+    /* Ajustes gerais leves — nada de encolher tipografia */
+    .main { padding-top: 4rem; padding-bottom: 6rem; }
     .sidebar { padding-top: 4rem; width: 260px; }
+    .content { padding: 0 0.85rem 1.25rem; }
 
     .back-link {
         top: 0.75rem;
@@ -1278,8 +1247,6 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
         font-size: 0.78rem;
         padding: 0.45rem 0.75rem;
     }
-
-    .content { padding: 0 0.85rem 1.25rem; }
 
     .module-head-left h1 { font-size: 1.2rem; }
     .module-head-left p { font-size: 0.8rem; }
@@ -1289,30 +1256,9 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
         gap: 0.6rem;
     }
 
-    table {
-        font-size: 0.82rem;
-        min-width: 560px; /* força scroll horizontal quando não couber */
-    }
-    th, td { padding: 10px 10px; }
-    th { font-size: 0.7rem; }
-
-    .table-card { overflow-x: auto; }
-
-    .badge { font-size: 0.68rem; padding: 3px 9px; }
-
-    .checkbox-label-styled { width: 32px; height: 32px; }
-    .styled-checkbox { width: 32px; height: 32px; }
-    .styled-checkbox:checked + .checkbox-label-styled::after { font-size: 0.9rem; }
-
-    .action-btn { padding: 6px 10px; font-size: 0.75rem; min-width: 60px; }
-    .btn-icon { padding: 5px; }
-    .btn-icon svg { width: 15px; height: 15px; }
-
     .modal-title { font-size: 1.1rem; }
     .modal-content { padding: 1.25rem; }
-    .tab-btn { font-size: 0.8rem; padding: 10px 13px; }
-
-    .report-bar { font-size: 0.8rem; }
+    .tab-btn { font-size: 0.82rem; padding: 10px 14px; }
 
     .whatsapp-float {
         width: 50px; height: 50px;
@@ -1320,7 +1266,112 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
     }
     .whatsapp-float svg { width: 26px; height: 26px; }
 
-    /* Intro mobile: mantém a mesma proporção do login-autenticacao mobile */
+    /* ============================================================
+       TABELAS — transformação em cards
+       ============================================================ */
+    .table-card {
+        overflow: visible;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
+    .table-card > div {
+        overflow-x: visible !important;
+    }
+
+    .table-card table {
+        display: block;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    /* Esconde o cabeçalho original — os rótulos passam para o td */
+    .table-card thead {
+        display: none;
+    }
+
+    .table-card tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .table-card tbody tr {
+        display: flex;
+        flex-direction: column;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0.5rem 0.75rem;
+        box-shadow: var(--card-shadow);
+        position: relative;
+    }
+    .table-card tbody tr:nth-child(even) { background: var(--bg-card); }
+
+    .table-card tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.55rem 0;
+        border-bottom: 1px dashed var(--border-color);
+        font-size: 0.88rem;
+        text-align: right;
+    }
+    .table-card tbody td:last-child {
+        border-bottom: none;
+        padding-bottom: 0.25rem;
+    }
+
+    /* Rótulo à esquerda — preenchido pelo data-label do HTML */
+    .table-card tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: var(--text-secondary);
+        text-align: left;
+        flex-shrink: 0;
+        margin-right: auto;
+    }
+
+    /* Coluna de checkbox + ações fica sem rótulo visual */
+    .table-card tbody td[data-label=""]::before { content: ''; }
+
+    /* Ajustes para o conteúdo interno das células */
+    .table-card tbody td .badge,
+    .table-card tbody td .chip,
+    .table-card tbody td .checkbox-wrapper,
+    .table-card tbody td > div {
+        justify-content: flex-end;
+    }
+
+    /* Botão primário que fica dentro de células (Rara ocorrência) */
+    .table-card tbody td button {
+        width: auto;
+    }
+
+    /* Preserva cor de linha atendida / cancelada, mesmo como card */
+    .table-card tbody tr.row-atendido {
+        border-color: #22C55E;
+        background: rgba(34, 197, 94, 0.08);
+    }
+    .table-card tbody tr.row-cancelado {
+        opacity: 0.65;
+    }
+}
+
+/* ============================================================
+   TELAS MUITO ESTREITAS
+   ============================================================ */
+@media (max-width: 420px) {
+    .content { padding: 0 0.65rem 1rem; }
+    .module-head-left h1 { font-size: 1.1rem; }
+    .stat-value { font-size: 1.5rem; }
+    .badge { font-size: 0.65rem; padding: 3px 9px; }
+
+    /* Intro — mantém a mesma escala do login-autenticacao mobile */
     .intro-screen { padding: 4.5rem 1.25rem 5rem; }
     .intro-title { font-size: clamp(1.75rem, 7vw, 2.25rem); margin-bottom: 2rem; }
     .intro-features { gap: 0.75rem; margin-bottom: 1.75rem; max-width: 100%; }
@@ -1329,14 +1380,6 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
     .intro-instructions p { font-size: 0.85rem; }
     .btn-start { width: 100%; justify-content: center; padding: 0.85rem 1.35rem; font-size: 0.9rem; }
     .intro-footer { font-size: 0.7rem; bottom: 1.25rem; width: calc(100% - 2.5rem); }
-}
-
-/* Telas muito estreitas */
-@media (max-width: 420px) {
-    .content { padding: 0 0.65rem 1rem; }
-    .module-head-left h1 { font-size: 1.1rem; }
-    .stat-value { font-size: 1.5rem; }
-    .badge { font-size: 0.62rem; padding: 2px 7px; }
 }
 
 /* ============================================================
@@ -1353,8 +1396,10 @@ input::placeholder, textarea::placeholder { color: var(--text-secondary); opacit
     body { background: #fff !important; }
     .card, .table-card { box-shadow: none !important; border: 1px solid #ddd !important; }
     .module-head { border-bottom: 1px solid #000; padding-bottom: 1rem; margin-bottom: 1rem; }
-    table { width: 100%; border-collapse: collapse; }
+    table { width: 100%; border-collapse: collapse; display: table; }
+    thead { display: table-header-group !important; }
     th { background: #eee !important; color: #000 !important; border: 1px solid #999 !important; }
-    td { border: 1px solid #999 !important; }
-    tr { page-break-inside: avoid; }
+    td { border: 1px solid #999 !important; display: table-cell !important; }
+    td::before { content: '' !important; }
+    tr { page-break-inside: avoid; display: table-row !important; }
 }
