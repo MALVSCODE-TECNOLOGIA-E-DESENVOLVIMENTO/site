@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Atendimento · MALVSCODE</title>
+<style>
+  html, body {
+    height: 100%; margin: 0;
+    background: #0E0E10;
+    color: #F5F5F7;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .loader { text-align: center; }
+  .loader-dot {
+    display: inline-block;
+    width: 8px; height: 8px; margin: 0 4px;
+    border-radius: 50%;
+    background: #2563EB;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  .loader-dot:nth-child(2) { animation-delay: 0.15s; }
+  .loader-dot:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.9); }
+    50%      { opacity: 1;   transform: scale(1.1); }
+  }
+</style>
+<script>
+(function () {
+  // Detecta mobile: user-agent OU tela pequena com toque
+  const ua = navigator.userAgent.toLowerCase();
+  const uaMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(ua);
+  const smallTouch = window.innerWidth <= 900 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  const isMobile = uaMobile || smallTouch;
+
+  const target = isMobile ? 'mobile/index.html' : 'desktop/index.html';
+
+  // Redireciona imediatamente (o loader aparece por fração de segundo)
+  window.location.replace(target);
+})();
+</script>
+</head>
+<body>
+  <div class="loader">
+    <span class="loader-dot"></span>
+    <span class="loader-dot"></span>
+    <span class="loader-dot"></span>
+  </div>
+</body>
+</html>
