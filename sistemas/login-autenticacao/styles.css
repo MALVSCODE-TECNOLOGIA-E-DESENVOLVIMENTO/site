@@ -72,48 +72,58 @@ input { font-family: inherit; }
 .hidden { display: none !important; }
 
 /* ============================================================
-   VOLTAR AO SITE — igual ao Atendimento desktop
+   VOLTAR AO SITE — flutuante, igual ao Atendimento
    ============================================================ */
 .back-link {
     position: fixed;
-    top: 1.25rem;
-    left: 1.25rem;
+    top: calc(var(--safe-top) + 0.75rem);
+    left: 0.75rem;
     z-index: 950;
     display: inline-flex;
     align-items: center;
-    padding: 0.55rem 1rem;
+    padding: 0.5rem 0.9rem;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     color: var(--text-secondary);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 500;
     transition: all 0.15s ease;
     box-shadow: var(--card-shadow);
+    white-space: nowrap;
 }
 .back-link:hover {
     background: #ffffff;
     border-color: var(--primary-border);
     color: var(--primary);
 }
-.back-link svg { width: 16px; height: 16px; flex-shrink: 0; }
-.back-link span { white-space: nowrap; }
+.back-link:active {
+    transform: scale(0.97);
+    background: #ffffff;
+    border-color: var(--primary);
+    color: var(--primary);
+}
 
 @media (prefers-color-scheme: dark) {
     .back-link {
         background: rgba(20, 20, 22, 0.95);
     }
-    .back-link:hover {
+    .back-link:hover,
+    .back-link:active {
         background: #1C1C1F;
     }
 }
 
-/* Em telas muito pequenas, esconde o texto */
-@media (max-width: 360px) {
-    .back-link span { display: none; }
-    .back-link { padding: 0.55rem; }
+/* Em telas largas, o botão fica um pouco maior */
+@media (min-width: 900px) {
+    .back-link {
+        top: 1.25rem;
+        left: 1.25rem;
+        padding: 0.55rem 1rem;
+        font-size: 0.85rem;
+    }
 }
 
 /* ============================================================
@@ -153,7 +163,7 @@ input { font-family: inherit; }
     color: #ffffff;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    padding: calc(4rem + var(--safe-top)) 1.5rem 2.5rem;
+    padding: calc(4.5rem + var(--safe-top)) 1.5rem 2.5rem;
     overflow: hidden;
 }
 @keyframes introFadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -301,7 +311,7 @@ input { font-family: inherit; }
     padding: 3rem 1.5rem;
     background: var(--bg-card);
     overflow-y: auto;
-    padding-top: calc(4rem + var(--safe-top));
+    padding-top: calc(4.5rem + var(--safe-top));
 }
 
 .login-form-wrapper {
@@ -488,7 +498,7 @@ input { font-family: inherit; }
    ============================================================ */
 @media (max-width: 899px) {
     .login-form-side {
-        padding: calc(4rem + var(--safe-top)) 1.5rem calc(2.5rem + var(--safe-bottom));
+        padding: calc(4.5rem + var(--safe-top)) 1.5rem calc(2.5rem + var(--safe-bottom));
     }
 }
 @media (min-width: 900px) {
@@ -503,7 +513,7 @@ input { font-family: inherit; }
 }
 @media (orientation: landscape) and (max-height: 500px) and (max-width: 899px) {
     .intro-screen {
-        padding: 3rem 1.5rem 2rem;
+        padding: 3.5rem 1.5rem 2rem;
         justify-content: flex-start;
     }
     .intro-title { font-size: 1.5rem; margin-bottom: 1rem; }
