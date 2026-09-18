@@ -77,13 +77,14 @@ input, select, textarea { font-family: inherit; }
 img, svg { display: block; max-width: 100%; }
 
 /* ============================================================
-   VOLTAR AO SITE — flutuante, igual ao desktop
+   VOLTAR AO SITE — flutuante, sobrepõe o conteúdo
+   Fica ABAIXO do header, à esquerda, sempre visível
    ============================================================ */
 .back-link {
     position: fixed;
-    top: calc(var(--safe-top) + 0.75rem);
+    top: calc(var(--header-h) + var(--safe-top) + 0.75rem);
     left: 0.75rem;
-    z-index: 950;
+    z-index: 500;
     display: inline-flex;
     align-items: center;
     padding: 0.5rem 0.9rem;
@@ -96,8 +97,9 @@ img, svg { display: block; max-width: 100%; }
     font-size: 0.82rem;
     font-weight: 500;
     transition: all 0.15s ease;
-    box-shadow: var(--card-shadow);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
     white-space: nowrap;
+    will-change: transform;
 }
 .back-link:hover {
     background: #ffffff;
@@ -111,9 +113,15 @@ img, svg { display: block; max-width: 100%; }
     color: var(--primary);
 }
 
+/* Na intro (fundo azul), sobe o botão para o topo, porque não há header */
+body:has(#introScreen:not(.hidden)) .back-link {
+    top: calc(var(--safe-top) + 0.75rem);
+}
+
 @media (prefers-color-scheme: dark) {
     .back-link {
         background: rgba(20, 20, 22, 0.95);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
     }
     .back-link:hover,
     .back-link:active {
@@ -244,7 +252,8 @@ img, svg { display: block; max-width: 100%; }
     -webkit-backdrop-filter: blur(14px) saturate(180%);
     border-top: 1px solid var(--border-soft);
     display: flex; align-items: stretch;
-    z-index: 100;
+    z-index: 900;
+    pointer-events: auto;
 }
 @media (prefers-color-scheme: dark) {
     .bottom-nav { background: rgba(14, 14, 16, 0.94); }
@@ -267,8 +276,16 @@ img, svg { display: block; max-width: 100%; }
     background: transparent;
     border: none;
     font-family: inherit;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
 }
-.bottom-nav-item svg { width: 22px; height: 22px; }
+.bottom-nav-item svg {
+    width: 22px; height: 22px;
+    pointer-events: none;
+}
+.bottom-nav-item span {
+    pointer-events: none;
+}
 .bottom-nav-item:active { color: var(--primary); }
 .bottom-nav-item.active { color: var(--primary); }
 .bottom-nav-item.active::before {
@@ -277,6 +294,7 @@ img, svg { display: block; max-width: 100%; }
     width: 32px; height: 3px;
     background: var(--primary);
     border-radius: 0 0 3px 3px;
+    pointer-events: none;
 }
 
 .bottom-nav-badge {
@@ -292,6 +310,7 @@ img, svg { display: block; max-width: 100%; }
     display: flex; align-items: center; justify-content: center;
     padding: 0 4px;
     line-height: 1;
+    pointer-events: none;
 }
 
 /* ── DRAWER ── */
@@ -395,7 +414,7 @@ img, svg { display: block; max-width: 100%; }
    PÁGINAS / CONTEÚDO
    ============================================================ */
 .page {
-    padding: 1rem 0.9rem 1.5rem;
+    padding: 4rem 0.9rem 1.5rem;
     animation: pageIn 0.25s ease;
 }
 @keyframes pageIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
