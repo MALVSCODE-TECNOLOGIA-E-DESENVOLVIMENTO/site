@@ -77,7 +77,7 @@ input, select, textarea { font-family: inherit; }
 img, svg { display: block; max-width: 100%; }
 
 /* ============================================================
-   VOLTAR AO SITE — igual ao desktop do Atendimento
+   VOLTAR AO SITE — flutuante, igual ao desktop
    ============================================================ */
 .back-link {
     position: fixed;
@@ -86,8 +86,7 @@ img, svg { display: block; max-width: 100%; }
     z-index: 950;
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.5rem 0.85rem;
+    padding: 0.5rem 0.9rem;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -98,6 +97,7 @@ img, svg { display: block; max-width: 100%; }
     font-weight: 500;
     transition: all 0.15s ease;
     box-shadow: var(--card-shadow);
+    white-space: nowrap;
 }
 .back-link:hover {
     background: #ffffff;
@@ -110,8 +110,6 @@ img, svg { display: block; max-width: 100%; }
     border-color: var(--primary);
     color: var(--primary);
 }
-.back-link svg { width: 15px; height: 15px; flex-shrink: 0; }
-.back-link span { white-space: nowrap; }
 
 @media (prefers-color-scheme: dark) {
     .back-link {
@@ -121,12 +119,6 @@ img, svg { display: block; max-width: 100%; }
     .back-link:active {
         background: #1C1C1F;
     }
-}
-
-/* Em telas muito pequenas, esconde o texto */
-@media (max-width: 360px) {
-    .back-link span { display: none; }
-    .back-link { padding: 0.55rem; }
 }
 
 /* ============================================================
