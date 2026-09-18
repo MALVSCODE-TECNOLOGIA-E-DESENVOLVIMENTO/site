@@ -36,9 +36,11 @@
   const smallTouch = window.innerWidth <= 900 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
   const isMobile = uaMobile || smallTouch;
 
-  const target = isMobile ? 'mobile/index.html' : 'desktop/index.html';
+  // ✅ CAMINHO ABSOLUTO — sempre resolve corretamente
+  const target = isMobile
+    ? '/sistemas/atendimento/mobile/index.html'
+    : '/sistemas/atendimento/desktop/index.html';
 
-  // Redireciona imediatamente (o loader aparece por fração de segundo)
   window.location.replace(target);
 })();
 </script>
