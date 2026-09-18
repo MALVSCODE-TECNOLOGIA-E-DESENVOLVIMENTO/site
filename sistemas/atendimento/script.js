@@ -137,7 +137,6 @@ function seed() {
         observacoes: [{ texto: 'Cliente solicitou cancelamento.', autor: 'Recepção', timestamp: nowISO() }]
     });
 
-    /* Cliente Carla acumula observações dos seus atendimentos */
     const clientesRef = clientes;
     const carla = clientesRef.find(c => c.id === 'ME-0003');
     carla.observacoes = [
@@ -287,7 +286,6 @@ function openModal({ title, bodyHTML, actions = [], size = '', neutral = false, 
         });
     });
 
-    /* Ativa as abas automaticamente se houver */
     overlay.querySelectorAll('.tabs-nav .tab-btn').forEach(tab => {
         tab.addEventListener('click', () => {
             overlay.querySelectorAll('.tabs-nav .tab-btn').forEach(t => t.classList.remove('active'));
@@ -497,7 +495,6 @@ function encontrarClienteExistente({ nome, contato, email }) {
     return null;
 }
 
-/* Propaga uma observação nova para todos os lugares relacionados */
 function propagarObservacao({ agendamentoId, atendimentoId, clienteId, texto, autor = 'Operador' }) {
     const nova = { texto, autor, timestamp: nowISO() };
     if (atendimentoId) {
@@ -534,7 +531,7 @@ function renderProfissionais(root) {
     root.innerHTML = `
         ${moduleHead('Profissionais','Responsáveis pelos atendimentos.',`<button class="btn-new-order-header" id="btnNovoProf">Novo profissional</button>`)}
         <div class="card table-card">
-            <div style="overflow-x: auto;">
+            <div class="table-scroll">
                 <table>
                     <thead><tr><th>Nome</th><th>Usuário</th><th>Contato</th><th>Especialidades</th><th>Disponibilidade</th><th>Status</th><th style="text-align:right;">Ações</th></tr></thead>
                     <tbody id="profBody"></tbody>
@@ -623,7 +620,6 @@ function openProfissionalModal(editId) {
                 const list = DB.getProfissionais();
                 if (p) {
                     const i = list.findIndex(x => x.id === p.id);
-                    /* Preserva observações existentes */
                     list[i] = { ...list[i], ...data, observacoes: list[i].observacoes || [] };
                 } else {
                     list.push({ id: uid('pr'), ...data, observacoes: [] });
@@ -741,7 +737,7 @@ function renderAtendimentos(root) {
         </div>
 
         <div class="card table-card">
-            <div style="overflow-x: auto;">
+            <div class="table-scroll">
                 <table>
                     <thead>
                         <tr>
@@ -782,7 +778,6 @@ function renderAtendRows() {
             ? `<button class="btn-icon alert" data-chat="${a.id}" title="Ver/Adicionar observações">${ICON_ALERT}</button>`
             : `<button class="btn-icon" data-chat="${a.id}" title="Adicionar observação">${ICON_CHAT}</button>`;
 
-        /* Cancelamento: apenas no Controle de Atendimento. */
         let acaoCancelar = '';
         if (!concluido && !cancelado) {
             acaoCancelar = `<button class="btn-icon" data-cancel="${a.id}" title="Cancelar atendimento" style="color:#EF4444;">✕</button>`;
@@ -844,7 +839,6 @@ function toggleAtendimento(id, checked) {
     toast(checked ? 'Atendimento marcado como atendido.' : 'Atendimento reaberto.', 'success');
 }
 
-/* NOVO: cancelamento exclusivo do Controle de Atendimento */
 async function cancelarAtendimento(id) {
     const ats = DB.getAtendimentos();
     const idx = ats.findIndex(x => x.id === id);
@@ -940,7 +934,7 @@ function viewAtendimento(id, abaAtiva = 'dados') {
 }
 
 /* ============================================================
-   MÓDULO · AGENDAMENTOS (com abas no modal)
+   MÓDULO · AGENDAMENTOS
    ============================================================ */
 let agFilters = { status: '', clienteId: '', profissionalId: '', q: '' };
 
@@ -1014,7 +1008,7 @@ function renderAgendamentos(root) {
         </div>
 
         <div class="card table-card">
-            <div style="overflow-x: auto;">
+            <div class="table-scroll">
                 <table>
                     <thead><tr>
                         <th>ID</th><th>Data</th><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Profissional</th><th>Canal</th>
@@ -1365,7 +1359,7 @@ function renderCanais(root) {
         </div>
 
         <div class="card table-card">
-            <div style="overflow-x: auto;">
+            <div class="table-scroll">
                 <table>
                     <thead>
                         <tr>
@@ -1559,7 +1553,7 @@ function openComunicacaoModal(editId) {
 }
 
 /* ============================================================
-   MÓDULO · CLIENTES (com abas no modal + acumula observações)
+   MÓDULO · CLIENTES
    ============================================================ */
 let cliQ = '';
 
@@ -1575,7 +1569,7 @@ function renderClientes(root) {
         </div>
 
         <div class="card table-card">
-            <div style="overflow-x: auto;">
+            <div class="table-scroll">
                 <table>
                     <thead><tr>
                         <th>ID</th><th>Nome</th><th>Contato</th><th>E-mail</th><th>Último atendimento</th><th>Cadastro</th>
@@ -1826,7 +1820,7 @@ function renderHistorico(root) {
         </div>
 
         <div class="card table-card">
-            <div style="overflow-x: auto;">
+            <div class="table-scroll">
                 <table>
                     <thead>
                         <tr>
