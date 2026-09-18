@@ -1,15 +1,10 @@
-import { rewrite } from '@vercel/functions';
-
 /* ============================================================
    Middleware global — detecta desktop vs. mobile
-   ------------------------------------------------------------
-   Para cada sistema cadastrado em SISTEMAS, quando o usuário
-   acessa a rota raiz (ex: /sistemas/atendimento/), o middleware
-   reescreve internamente para /desktop/index.html ou
-   /mobile/index.html conforme o User-Agent.
-
-   A URL visível NÃO muda.
    ============================================================ */
+
+export const config = {
+  matcher: '/sistemas/:path*',
+};
 
 const SISTEMAS = [
   '/sistemas/atendimento',
@@ -26,26 +21,17 @@ export default function middleware(request) {
   const url = new URL(request.url);
   const { pathname } = url;
 
-  // Verifica se a rota atual é a raiz de algum sistema cadastrado
   const sistema = SISTEMAS.find(s =>
     pathname === s ||
     pathname === `${s}/` ||
     pathname === `${s}/index.html`
   );
 
-  if (sistema) {
-    // Rewrite interno — URL visível permanece a mesma
-    url.pathname = isMobile
-      ? `${sistema}/mobile/index.html`
-      : `${sistema}/desktop/index.html`;
+  if (!sistema) return;
 
-    return rewrite(url);
-  }
+  url.pathname = isMobile
+    ? `${sistema}/mobile/index.html`
+    : `${sistema}/desktop/index.html`;
 
-  // Qualquer outra rota segue o fluxo normal
-  return;
+  return Response.rewrite(url);
 }
-
-export const config = {
-  matcher: '/sistemas/:path*',
-};
