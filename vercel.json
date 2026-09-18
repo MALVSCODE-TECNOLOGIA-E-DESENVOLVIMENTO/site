@@ -1,0 +1,10 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/sistemas/atendimento/desktop/:path*",
+      "destination": "/sistemas/atendimento/desktop/:path*"
+    }
+  ]
+}
