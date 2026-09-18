@@ -7,7 +7,7 @@
     --primary:          #1E40AF;
     --primary-hover:    #2563EB;
     --primary-light:    rgba(37, 99, 235, 0.1);
-    --primary-border:   rgba(37, 99, 235, 0.22);
+    --primary-border:   rgba(37, 99, 235, 0.2);
 
     --blue-900:         #0F1E3D;
     --blue-800:         #142A57;
@@ -24,6 +24,7 @@
     --border-color:     #E5E7EB;
     --border-soft:      #EEF0F3;
     --input-bg:         #F7F8FA;
+    --card-shadow:      0 1px 2px rgba(15, 23, 42, 0.04);
 
     --success-color:    #22C55E;
     --warning-color:    #F59E0B;
@@ -75,7 +76,62 @@ input, select, textarea { font-family: inherit; }
 .hidden { display: none !important; }
 img, svg { display: block; max-width: 100%; }
 
-/* INTRO */
+/* ============================================================
+   VOLTAR AO SITE — igual ao desktop do Atendimento
+   ============================================================ */
+.back-link {
+    position: fixed;
+    top: calc(var(--safe-top) + 0.75rem);
+    left: 0.75rem;
+    z-index: 950;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.85rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    box-shadow: var(--card-shadow);
+}
+.back-link:hover {
+    background: #ffffff;
+    border-color: var(--primary-border);
+    color: var(--primary);
+}
+.back-link:active {
+    transform: scale(0.97);
+    background: #ffffff;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.back-link svg { width: 15px; height: 15px; flex-shrink: 0; }
+.back-link span { white-space: nowrap; }
+
+@media (prefers-color-scheme: dark) {
+    .back-link {
+        background: rgba(20, 20, 22, 0.95);
+    }
+    .back-link:hover,
+    .back-link:active {
+        background: #1C1C1F;
+    }
+}
+
+/* Em telas muito pequenas, esconde o texto */
+@media (max-width: 360px) {
+    .back-link span { display: none; }
+    .back-link { padding: 0.55rem; }
+}
+
+/* ============================================================
+   INTRO
+   ============================================================ */
 .intro-screen {
     position: relative;
     min-height: 100vh;
@@ -84,7 +140,7 @@ img, svg { display: block; max-width: 100%; }
     color: #fff;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    padding: calc(2.5rem + var(--safe-top)) 1.5rem 2.5rem;
+    padding: calc(4.5rem + var(--safe-top)) 1.5rem 2.5rem;
     overflow: hidden;
 }
 
@@ -126,7 +182,9 @@ img, svg { display: block; max-width: 100%; }
 }
 .btn-start:active { transform: scale(0.98); background: #E8EDF5; }
 
-/* APP SHELL */
+/* ============================================================
+   APP SHELL
+   ============================================================ */
 .app {
     display: flex; flex-direction: column;
     min-height: 100vh;
@@ -134,7 +192,7 @@ img, svg { display: block; max-width: 100%; }
     background: var(--bg-secondary);
 }
 
-/* HEADER */
+/* ── HEADER ── */
 .app-header {
     position: fixed; top: 0; left: 0; right: 0;
     height: calc(var(--header-h) + var(--safe-top));
@@ -151,6 +209,8 @@ img, svg { display: block; max-width: 100%; }
 @media (prefers-color-scheme: dark) {
     .app-header { background: rgba(14, 14, 16, 0.92); }
 }
+
+.header-spacer { width: 44px; height: 44px; flex-shrink: 0; }
 
 .header-btn {
     width: 44px; height: 44px;
@@ -173,7 +233,7 @@ img, svg { display: block; max-width: 100%; }
     padding: 0 0.5rem;
 }
 
-/* MAIN */
+/* ── MAIN ── */
 .app-main {
     flex: 1;
     padding-top: calc(var(--header-h) + var(--safe-top));
@@ -182,7 +242,7 @@ img, svg { display: block; max-width: 100%; }
     min-height: 100dvh;
 }
 
-/* BOTTOM NAV */
+/* ── BOTTOM NAV ── */
 .bottom-nav {
     position: fixed; bottom: 0; left: 0; right: 0;
     height: calc(var(--bottom-nav-h) + var(--safe-bottom));
@@ -212,6 +272,9 @@ img, svg { display: block; max-width: 100%; }
     text-decoration: none;
     cursor: pointer;
     padding: 0.4rem 0;
+    background: transparent;
+    border: none;
+    font-family: inherit;
 }
 .bottom-nav-item svg { width: 22px; height: 22px; }
 .bottom-nav-item:active { color: var(--primary); }
@@ -239,7 +302,7 @@ img, svg { display: block; max-width: 100%; }
     line-height: 1;
 }
 
-/* DRAWER */
+/* ── DRAWER ── */
 .drawer-overlay {
     position: fixed; inset: 0;
     background: rgba(15, 23, 42, 0.5);
@@ -321,20 +384,7 @@ img, svg { display: block; max-width: 100%; }
     text-align: center;
 }
 
-.drawer-back {
-    display: flex; align-items: center; gap: 0.6rem;
-    padding: 1rem 1.25rem;
-    border-top: 1px solid var(--border-soft);
-    font-size: 0.88rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-    min-height: 56px;
-    flex-shrink: 0;
-}
-.drawer-back svg { width: 18px; height: 18px; }
-.drawer-back:active { background: var(--input-bg); }
-
-/* WHATSAPP */
+/* ── WHATSAPP ── */
 .whatsapp-float {
     position: fixed;
     bottom: calc(var(--bottom-nav-h) + var(--safe-bottom) + 1rem);
@@ -349,7 +399,9 @@ img, svg { display: block; max-width: 100%; }
 .whatsapp-float:active { transform: scale(0.94); }
 .whatsapp-float svg { width: 26px; height: 26px; }
 
-/* PÁGINAS */
+/* ============================================================
+   PÁGINAS / CONTEÚDO
+   ============================================================ */
 .page {
     padding: 1rem 0.9rem 1.5rem;
     animation: pageIn 0.25s ease;
@@ -363,7 +415,7 @@ img, svg { display: block; max-width: 100%; }
     line-height: 1.55;
 }
 
-/* STATS */
+/* ── STATS ── */
 .stats-strip {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
@@ -400,7 +452,7 @@ img, svg { display: block; max-width: 100%; }
 .stat-mini.warning .stat-mini-value { color: #D97706; }
 .stat-mini.default .stat-mini-value { color: var(--text-primary); }
 
-/* SEARCH + FILTER */
+/* ── SEARCH + FILTER ── */
 .search-row {
     display: flex; align-items: center; gap: 0.5rem;
     margin-bottom: 0.75rem;
@@ -518,7 +570,7 @@ img, svg { display: block; max-width: 100%; }
     border: 1px solid var(--border-soft);
 }
 
-/* MONTH NAV */
+/* ── MONTH NAV ── */
 .month-nav {
     display: flex; align-items: center; justify-content: space-between;
     background: var(--bg-card);
@@ -549,7 +601,7 @@ img, svg { display: block; max-width: 100%; }
     text-overflow: ellipsis;
 }
 
-/* CARDS LIST */
+/* ── CARDS LIST ── */
 .cards-list {
     display: flex; flex-direction: column;
     gap: 0.65rem;
@@ -702,7 +754,7 @@ img, svg { display: block; max-width: 100%; }
     color: var(--danger-color);
 }
 
-/* EMPTY */
+/* ── EMPTY ── */
 .empty-state {
     text-align: center;
     padding: 3rem 1.25rem;
@@ -730,7 +782,7 @@ img, svg { display: block; max-width: 100%; }
     line-height: 1.55;
 }
 
-/* BADGE */
+/* ── BADGE ── */
 .badge {
     padding: 3px 9px;
     border-radius: 6px;
@@ -747,7 +799,7 @@ img, svg { display: block; max-width: 100%; }
 .badge.atendido  { background: rgba(22, 163, 74, 0.1);   color: var(--status-atendido);  border-color: rgba(22, 163, 74, 0.26); }
 .badge.cancelado { background: rgba(220, 38, 38, 0.1);   color: var(--status-cancelado); border-color: rgba(220, 38, 38, 0.24); }
 
-/* RELATÓRIO */
+/* ── RELATÓRIO ── */
 .report-section {
     background: var(--bg-card);
     border: 1px solid var(--border-soft);
@@ -789,7 +841,7 @@ img, svg { display: block; max-width: 100%; }
     transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* MODAL */
+/* ── MODAL ── */
 .modal-overlay {
     display: none;
     position: fixed; inset: 0;
@@ -920,7 +972,7 @@ img, svg { display: block; max-width: 100%; }
 .confirm-modal-actions button.confirm-sim { background: var(--success-color); color: #fff; }
 .confirm-modal-actions button.confirm-nao { background: var(--input-bg); color: var(--text-primary); border: 1px solid var(--border-soft); }
 
-/* Form dentro do modal */
+/* ── FORM dentro do modal ── */
 .form-group {
     margin-bottom: 0.95rem;
 }
@@ -964,7 +1016,7 @@ img, svg { display: block; max-width: 100%; }
     box-shadow: 0 0 0 3px var(--primary-light);
 }
 
-/* TABS */
+/* ── TABS ── */
 .tabs-nav {
     display: flex;
     background: var(--input-bg);
@@ -993,7 +1045,7 @@ img, svg { display: block; max-width: 100%; }
 .tab-content { display: none; }
 .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
 
-/* INFO SECTION */
+/* ── INFO SECTION ── */
 .info-section {
     background: var(--bg-card);
     border: 1px solid var(--border-soft);
@@ -1030,7 +1082,7 @@ img, svg { display: block; max-width: 100%; }
     word-break: break-word;
 }
 
-/* OBSERVAÇÕES */
+/* ── OBSERVAÇÕES ── */
 .obs-item {
     background: var(--input-bg);
     border-radius: 10px;
@@ -1086,7 +1138,7 @@ img, svg { display: block; max-width: 100%; }
 }
 .obs-add-btn svg { width: 16px; height: 16px; }
 
-/* SLOTS */
+/* ── SLOTS ── */
 .slots-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
@@ -1120,7 +1172,7 @@ img, svg { display: block; max-width: 100%; }
     opacity: 0.85;
 }
 
-/* TOAST */
+/* ── TOAST ── */
 .toast-stack {
     position: fixed;
     left: 50%;
